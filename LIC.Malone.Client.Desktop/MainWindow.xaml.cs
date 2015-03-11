@@ -44,6 +44,8 @@ namespace LIC.Malone.Client.Desktop
 				return;
 
 			Url.Text = request.Url;
+			Method.SelectedValue = request.Method;
+
 		}
 
 		private bool ShouldSkipHistory(Request request)
