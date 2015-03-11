@@ -1,0 +1,41 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LIC.Malone.Client.Desktop", "LIC.Malone.Client.Desktop\LIC.Malone.Client.Desktop.csproj", "{9ACE4E4D-84AD-4A0A-8923-8B90F33D5F0B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LIC.Malone.Client.CommandLine", "LIC.Malone.Client.CommandLine\LIC.Malone.Client.CommandLine.csproj", "{8C35C59E-8DCA-47F1-8AD9-450B4901571B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LIC.Malone.Core", "LIC.Malone.Core\LIC.Malone.Core.csproj", "{453F4149-6290-46EB-8CBE-02F9414146A7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{C56C1516-D4CC-4FF8-8CD8-0B9EDC0CF0BD}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9ACE4E4D-84AD-4A0A-8923-8B90F33D5F0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9ACE4E4D-84AD-4A0A-8923-8B90F33D5F0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9ACE4E4D-84AD-4A0A-8923-8B90F33D5F0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9ACE4E4D-84AD-4A0A-8923-8B90F33D5F0B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C35C59E-8DCA-47F1-8AD9-450B4901571B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C35C59E-8DCA-47F1-8AD9-450B4901571B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C35C59E-8DCA-47F1-8AD9-450B4901571B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C35C59E-8DCA-47F1-8AD9-450B4901571B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{453F4149-6290-46EB-8CBE-02F9414146A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{453F4149-6290-46EB-8CBE-02F9414146A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{453F4149-6290-46EB-8CBE-02F9414146A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{453F4149-6290-46EB-8CBE-02F9414146A7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
