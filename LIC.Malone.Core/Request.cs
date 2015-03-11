@@ -4,6 +4,8 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using DotNetOpenAuth.OAuth2;
+using Newtonsoft.Json;
 
 namespace LIC.Malone.Core
 {
@@ -11,6 +13,7 @@ namespace LIC.Malone.Core
 	{
 		public string Url { get; set; }
 		public string Method { get; set; }
+		public string Token { get; set; }
 
 		public HttpWebRequest ToHttpWebRequest()
 		{
@@ -28,6 +31,10 @@ namespace LIC.Malone.Core
 			request.AllowAutoRedirect = true;
 			//request.Accept = accept;
 			request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+
+			var authState = JsonConvert.DeserializeObject<AuthorizationState>(Token);
+
+			request.Headers.Add(HttpRequestHeader.Authorization, string.Concat("Bearer ", authState.AccessToken));
 
 			return request;
 		}

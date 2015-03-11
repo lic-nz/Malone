@@ -16,9 +16,6 @@ using LIC.Malone.Core;
 
 namespace LIC.Malone.Client.Desktop
 {
-	/// <summary>
-	/// Interaction logic for MainWindow.xaml
-	/// </summary>
 	public partial class MainWindow : Window
 	{
 		private List<Request> _history { get; set; }
@@ -29,8 +26,7 @@ namespace LIC.Malone.Client.Desktop
 
 			_history = new List<Request>
 			{
-				new Request { Method = "GET", Url = "http://google.co.nz" },
-				new Request { Method = "POST", Url = "http://lic.co.nz" },
+				new Request { Method = "GET", Url = "http://localhost:1444/services/onfarmautomation/v2/shed/1" }
 			};
 
 			History.ItemsSource = _history;
@@ -79,11 +75,14 @@ namespace LIC.Malone.Client.Desktop
 			var request = new Request
 			{
 				Url = Url.Text,
-				Method = Method.SelectedValue.ToString()
+				Method = Method.SelectedValue.ToString(),
+				Token = Token.Text
 			};
 
 			var client = new ApiClient();
-			client.Send(request);
+			var response = client.Send(request);
+
+			Response.Text = response;
 
 			AddToHistory(request);
 		}
