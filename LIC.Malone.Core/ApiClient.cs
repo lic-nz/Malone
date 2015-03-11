@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace LIC.Malone.Core
 {
-    public class ApiClient
-    {
-        public bool Send(Request request)
-        {
-            return false;
-        }
-    }
+	public class ApiClient
+	{
+		public bool Send(Request request)
+		{
+			return false;
+		}
+	}
 }

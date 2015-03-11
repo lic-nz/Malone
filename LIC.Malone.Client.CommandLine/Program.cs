@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace LIC.Malone.Client.CommandLine
 {
-    class Program
-    {
-        static void Main(string[] args)
-        {
-        }
-    }
+	class Program
+	{
+		static void Main(string[] args)
+		{
+		}
+	}
 }
