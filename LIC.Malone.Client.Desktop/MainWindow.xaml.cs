@@ -21,19 +21,19 @@ namespace LIC.Malone.Client.Desktop
 	/// </summary>
 	public partial class MainWindow : Window
 	{
-		public List<Request> History { get; set; }
+		private List<Request> _history { get; set; }
 
 		public MainWindow()
 		{
 			InitializeComponent();
 
-			History = new List<Request>
+			_history = new List<Request>
 			{
 				new Request { Method = "GET", Url = "http://google.co.nz" },
 				new Request { Method = "POST", Url = "http://lic.co.nz" },
 			};
 
-			HistoryListBox.ItemsSource = History;
+			History.ItemsSource = _history;
 		}
 
 		private void History_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -44,6 +44,38 @@ namespace LIC.Malone.Client.Desktop
 				return;
 
 			Url.Text = request.Url;
+		}
+
+		private bool ShouldSkipHistory(Request request)
+		{
+			if (!_history.Any())
+				return false;
+
+			var latestRequest = _history[0];
+
+			return
+				request.Url == latestRequest.Url
+				&& request.Method == latestRequest.Method;
+		}
+
+		private void Send_Click(object sender, RoutedEventArgs e)
+		{
+			if (string.IsNullOrWhiteSpace(Url.Text))
+				return;
+
+			var request = new Request
+			{
+				Url = Url.Text,
+				Method = Method.SelectedValue.ToString()
+			};
+
+			if (ShouldSkipHistory(request))
+				return;
+			
+			_history.Insert(0, request);
+
+			History.ItemsSource = null;
+			History.ItemsSource = _history;
 		}
 	}
 }
