@@ -60,6 +60,17 @@ namespace LIC.Malone.Client.Desktop
 				&& request.Method == latestRequest.Method;
 		}
 
+		private void AddToHistory(Request request)
+		{
+			if (ShouldSkipHistory(request))
+				return;
+
+			_history.Insert(0, request);
+
+			History.ItemsSource = null;
+			History.ItemsSource = _history;
+		}
+
 		private void Send_Click(object sender, RoutedEventArgs e)
 		{
 			if (string.IsNullOrWhiteSpace(Url.Text))
@@ -71,13 +82,10 @@ namespace LIC.Malone.Client.Desktop
 				Method = Method.SelectedValue.ToString()
 			};
 
-			if (ShouldSkipHistory(request))
-				return;
-			
-			_history.Insert(0, request);
+			var client = new ApiClient();
+			client.Send(request);
 
-			History.ItemsSource = null;
-			History.ItemsSource = _history;
+			AddToHistory(request);
 		}
 	}
 }
