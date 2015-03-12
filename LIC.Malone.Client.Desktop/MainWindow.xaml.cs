@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using DotNetOpenAuth.OAuth2;
 using LIC.Malone.Core;
 using LIC.Malone.Core.Authentication.OAuth;
 using Newtonsoft.Json;
@@ -27,6 +28,8 @@ namespace LIC.Malone.Client.Desktop
 		private List<OAuthApplication> _applications;
 		private List<Uri> _authenticationUrls;
 
+		public List<IAuthorizationState> Tokens { get; set; }
+
 		public MainWindow()
 		{
 			InitializeComponent();
@@ -39,6 +42,7 @@ namespace LIC.Malone.Client.Desktop
 			};
 
 			History.ItemsSource = _history;
+			Tokens = new List<IAuthorizationState>();
 
 			ManageTokens_Click(null, null);
 		}
@@ -124,7 +128,7 @@ namespace LIC.Malone.Client.Desktop
 		private void ManageTokens_Click(object sender, RoutedEventArgs e)
 		{
 			Hide();
-			new ManageTokensWindow(_authenticationUrls, _applications).Show();
+			new ManageTokensWindow(this, _authenticationUrls, _applications).Show();
 		}
 	}
 }

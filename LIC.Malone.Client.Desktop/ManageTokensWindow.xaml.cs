@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using DotNetOpenAuth.OAuth2;
 using LIC.Malone.Core.Authentication.OAuth;
 using Newtonsoft.Json;
 
@@ -18,8 +19,12 @@ namespace LIC.Malone.Client.Desktop
 {
 	public partial class ManageTokensWindow : Window
 	{
-		public ManageTokensWindow(List<Uri> authenticationUrls, List<OAuthApplication> applications)
+		private readonly MainWindow _mainWindow;
+		private IAuthorizationState _state;
+
+		public ManageTokensWindow(MainWindow mainWindow, List<Uri> authenticationUrls, List<OAuthApplication> applications)
 		{
+			_mainWindow = mainWindow;
 			InitializeComponent();
 
 			AuthenticationUrls.ItemsSource = authenticationUrls;
@@ -39,6 +44,16 @@ namespace LIC.Malone.Client.Desktop
 			AuthResponse.Text = result.HasError
 				? result.Error
 				: JsonConvert.SerializeObject(result.AuthorizationState, Formatting.Indented);
+
+			_state = result.AuthorizationState;
+		}
+
+		private void SaveToken_Click(object sender, RoutedEventArgs e)
+		{
+			_mainWindow.Tokens.Add(_state);
+			_mainWindow.TokensListBox.ItemsSource = new List<IAuthorizationState> { _state };
+			Close();
+			_mainWindow.Show();
 		}
 	}
 }

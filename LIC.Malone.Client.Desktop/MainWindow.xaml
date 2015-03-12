@@ -38,6 +38,22 @@
 		<Button Name="ManageTokens" Content="Manage Tokens" Grid.Column="1" HorizontalAlignment="Left" Margin="67,102,0,0" VerticalAlignment="Top" Width="185" Click="ManageTokens_Click"/>
 
 
+		<ListBox Name="TokensListBox" VerticalAlignment="Top" HorizontalAlignment="Stretch" SelectionChanged="History_SelectionChanged" SelectionMode="Single" Margin="0,100,0,0" Height="115">
+			<ListBox.ItemTemplate>
+				<DataTemplate>
+					<Grid Margin="5,5">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="35" />
+							<ColumnDefinition Width="*" />
+						</Grid.ColumnDefinitions>
+						<TextBlock Grid.Column="0" Text="{Binding AccessToken}" />
+						<TextBlock Grid.Column="1" Text="{Binding AccessToken}" />
+					</Grid>
+				</DataTemplate>
+			</ListBox.ItemTemplate>
+		</ListBox>
+
+
 
 
 	</Grid>
