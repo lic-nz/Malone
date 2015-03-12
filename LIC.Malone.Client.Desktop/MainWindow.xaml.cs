@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,16 +15,23 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using LIC.Malone.Core;
+using LIC.Malone.Core.Authentication.OAuth;
+using Newtonsoft.Json;
+using Path = System.IO.Path;
 
 namespace LIC.Malone.Client.Desktop
 {
 	public partial class MainWindow : Window
 	{
 		private List<Request> _history { get; set; }
+		private List<OAuthApplication> _applications { get; set; }
+		private List<string> _authenticationUrls { get; set; }
 
 		public MainWindow()
 		{
 			InitializeComponent();
+
+			LoadConfig();
 
 			_history = new List<Request>
 			{
@@ -30,6 +39,26 @@ namespace LIC.Malone.Client.Desktop
 			};
 
 			History.ItemsSource = _history;
+		}
+
+		private void LoadConfig()
+		{
+			_applications = new List<OAuthApplication>();
+
+			var configLocation = ConfigurationManager.AppSettings["ConfigLocation"];
+
+			if (string.IsNullOrWhiteSpace(configLocation))
+				return;
+
+			var applicationsJsonPath = Path.Combine(configLocation, "oauth-applications.json");
+
+			if (File.Exists(applicationsJsonPath))
+				_applications = JsonConvert.DeserializeObject<List<OAuthApplication>>(File.ReadAllText(applicationsJsonPath));
+
+			var authenticationUrlsJsonPath = Path.Combine(configLocation, "oauth-authentication-urls.json");
+
+			if (File.Exists(authenticationUrlsJsonPath))
+				_authenticationUrls = JsonConvert.DeserializeObject<List<string>>(File.ReadAllText(authenticationUrlsJsonPath));
 		}
 
 		private void History_SelectionChanged(object sender, SelectionChangedEventArgs e)
