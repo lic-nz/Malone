@@ -38,8 +38,7 @@ namespace LIC.Malone.Client.Desktop
 
 			AuthResponse.Text = result.HasError
 				? result.Error
-				: JsonConvert.SerializeObject(result.AuthorizationState);
-
+				: JsonConvert.SerializeObject(result.AuthorizationState, Formatting.Indented);
 		}
 	}
 }
