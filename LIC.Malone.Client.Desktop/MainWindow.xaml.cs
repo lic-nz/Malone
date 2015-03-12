@@ -16,6 +16,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using DotNetOpenAuth.OAuth2;
 using LIC.Malone.Core;
+using LIC.Malone.Core.Authentication;
 using LIC.Malone.Core.Authentication.OAuth;
 using Newtonsoft.Json;
 using Path = System.IO.Path;
@@ -27,6 +28,7 @@ namespace LIC.Malone.Client.Desktop
 		private List<Request> _history;
 		private List<OAuthApplication> _applications;
 		private List<Uri> _authenticationUrls;
+		private UserCredentials _userCredentials;
 
 		public List<IAuthorizationState> Tokens { get; set; }
 
@@ -56,18 +58,23 @@ namespace LIC.Malone.Client.Desktop
 			if (string.IsNullOrWhiteSpace(configLocation))
 				return;
 
-			var applicationsJsonPath = Path.Combine(configLocation, "oauth-applications.json");
+			var path = Path.Combine(configLocation, "oauth-applications.json");
 
-			if (File.Exists(applicationsJsonPath))
-				_applications = JsonConvert.DeserializeObject<List<OAuthApplication>>(File.ReadAllText(applicationsJsonPath));
+			if (File.Exists(path))
+				_applications = JsonConvert.DeserializeObject<List<OAuthApplication>>(File.ReadAllText(path));
 
-			var authenticationUrlsJsonPath = Path.Combine(configLocation, "oauth-authentication-urls.json");
+			path = Path.Combine(configLocation, "oauth-authentication-urls.json");
 
-			if (File.Exists(authenticationUrlsJsonPath))
+			if (File.Exists(path))
 				_authenticationUrls = JsonConvert
-					.DeserializeObject<List<string>>(File.ReadAllText(authenticationUrlsJsonPath))
+					.DeserializeObject<List<string>>(File.ReadAllText(path))
 					.Select(url => new Uri(url))
 					.ToList();
+
+			path = Path.Combine(configLocation, "oauth-user-credentials.json");
+
+			if (File.Exists(path))
+				_userCredentials = JsonConvert.DeserializeObject<UserCredentials>(File.ReadAllText(path));
 		}
 
 		private void History_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -128,7 +135,7 @@ namespace LIC.Malone.Client.Desktop
 		private void ManageTokens_Click(object sender, RoutedEventArgs e)
 		{
 			Hide();
-			new ManageTokensWindow(this, _authenticationUrls, _applications).Show();
+			new ManageTokensWindow(this, _authenticationUrls, _applications, _userCredentials).Show();
 		}
 	}
 }
