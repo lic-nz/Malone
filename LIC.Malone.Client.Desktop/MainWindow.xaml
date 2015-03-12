@@ -1,15 +1,14 @@
-﻿<Window
+﻿<Window x:Class="LIC.Malone.Client.Desktop.MainWindow"
 		  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 		  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-		  xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" x:Class="LIC.Malone.Client.Desktop.MainWindow"
 		  Title="Malone" Height="350" Width="989">
 	<Grid>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="235*"/>
 			<ColumnDefinition Width="352*"/>
 		</Grid.ColumnDefinitions>
-		<Label Content="History" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-		<ListBox Grid.Column="0" x:Name="History" VerticalAlignment="Top" HorizontalAlignment="Stretch" SelectionChanged="History_SelectionChanged" SelectionMode="Single" Margin="0,32,0,0">
+
+		<ListBox Name="History" VerticalAlignment="Top" HorizontalAlignment="Stretch" SelectionChanged="History_SelectionChanged" SelectionMode="Single">
 			<ListBox.ItemTemplate>
 				<DataTemplate>
 					<Grid Margin="5,5">
@@ -26,17 +25,17 @@
 
 
 		<Label Content="URL" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Grid.Column="1" Height="26" Width="51"/>
-		<TextBox x:Name="Url" HorizontalAlignment="Left" Height="23" Margin="10,36,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="405" Grid.Column="1"/>
-		<Button x:Name="Send" Click="Send_Click"  Content="Send" HorizontalAlignment="Left" Margin="10,59,0,0" VerticalAlignment="Top" Width="75" Grid.Column="1" Height="22"/>
-		<ComboBox x:Name="Method" SelectedValuePath="Content" Grid.Column="1" HorizontalAlignment="Left" Margin="420,36,0,0" VerticalAlignment="Top" Width="47">
-			<ComboBoxItem IsSelected="True" Content="GET"/>
-			<ComboBoxItem Content="POST"/>
+		<TextBox Name="Url" HorizontalAlignment="Left" Height="23" Margin="10,36,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="405" Grid.Column="1"/>
+		<Button Name="Send" Click="Send_Click"  Content="Send" HorizontalAlignment="Left" Margin="10,59,0,0" VerticalAlignment="Top" Width="75" Grid.Column="1" Height="22"/>
+		<ComboBox Name="Method" SelectedValuePath="Content" Grid.Column="1" HorizontalAlignment="Left" Margin="420,36,0,0" VerticalAlignment="Top" Width="47">
+			<ComboBoxItem IsSelected="True">GET</ComboBoxItem>
+			<ComboBoxItem>POST</ComboBoxItem>
 		</ComboBox>
-		<TextBlock x:Name="Response" Grid.Column="1" HorizontalAlignment="Left" Height="71" Margin="12,235,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="510"/>
+		<TextBlock Name="Response" Grid.Column="1" HorizontalAlignment="Left" Height="71" Margin="12,235,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="510"/>
 		<Label Content="Response" Grid.Column="1" HorizontalAlignment="Left" Margin="12,209,0,0" VerticalAlignment="Top"/>
 		<Label Content="Token" Grid.Column="1" HorizontalAlignment="Left" Margin="12,100,0,0" VerticalAlignment="Top"/>
-		<TextBox x:Name="Token" Grid.Column="1" HorizontalAlignment="Left" Height="73" Margin="12,131,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="455"/>
-
+		<TextBox Name="Token" Grid.Column="1" HorizontalAlignment="Left" Height="73" Margin="12,131,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="455"/>
+		<Button Name="ManageTokens" Content="Manage Tokens" Grid.Column="1" HorizontalAlignment="Left" Margin="67,102,0,0" VerticalAlignment="Top" Width="185" Click="ManageTokens_Click"/>
 
 
 

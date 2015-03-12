@@ -34,24 +34,5 @@ namespace LIC.Malone.Core
 
 			return s;
 		}
-
-		private IAuthorizationState Auth()
-		{
-			var authenticationUrl = "url";
-			var app = new OAuthApplication("xxxx", "yyyy", "zzzz");
-
-			// Can be null?
-			var authServer = new AuthorizationServerDescription
-			{
-				AuthorizationEndpoint = null,
-				TokenEndpoint = new Uri(authenticationUrl)
-			};
-
-			var client = new UserAgentClient(authServer, app.ClientIdentifier, ClientCredentialApplicator.PostParameter(app.ClientSecret));
-
-			var state = client.ExchangeUserCredentialForToken("1111", "222");
-
-			return state;
-		}
 	}
 }

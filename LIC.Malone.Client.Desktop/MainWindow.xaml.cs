@@ -23,9 +23,9 @@ namespace LIC.Malone.Client.Desktop
 {
 	public partial class MainWindow : Window
 	{
-		private List<Request> _history { get; set; }
-		private List<OAuthApplication> _applications { get; set; }
-		private List<string> _authenticationUrls { get; set; }
+		private List<Request> _history;
+		private List<OAuthApplication> _applications;
+		private List<Uri> _authenticationUrls;
 
 		public MainWindow()
 		{
@@ -39,6 +39,8 @@ namespace LIC.Malone.Client.Desktop
 			};
 
 			History.ItemsSource = _history;
+
+			ManageTokens_Click(null, null);
 		}
 
 		private void LoadConfig()
@@ -58,7 +60,10 @@ namespace LIC.Malone.Client.Desktop
 			var authenticationUrlsJsonPath = Path.Combine(configLocation, "oauth-authentication-urls.json");
 
 			if (File.Exists(authenticationUrlsJsonPath))
-				_authenticationUrls = JsonConvert.DeserializeObject<List<string>>(File.ReadAllText(authenticationUrlsJsonPath));
+				_authenticationUrls = JsonConvert
+					.DeserializeObject<List<string>>(File.ReadAllText(authenticationUrlsJsonPath))
+					.Select(url => new Uri(url))
+					.ToList();
 		}
 
 		private void History_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -114,6 +119,12 @@ namespace LIC.Malone.Client.Desktop
 			Response.Text = response;
 
 			AddToHistory(request);
+		}
+
+		private void ManageTokens_Click(object sender, RoutedEventArgs e)
+		{
+			Hide();
+			new ManageTokensWindow(_authenticationUrls, _applications).Show();
 		}
 	}
 }
