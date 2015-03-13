@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,6 +29,8 @@ namespace LIC.Malone.Client.Desktop
 			_mainWindow = mainWindow;
 			InitializeComponent();
 
+			Closing += OnClosing;
+
 			AuthenticationUrls.ItemsSource = authenticationUrls;
 			AuthenticationUrls.SelectedIndex = 0;
 			
@@ -38,6 +41,11 @@ namespace LIC.Malone.Client.Desktop
 			Password.Text = userCredentials.Password;
 		}
 
+		private void OnClosing(object sender, CancelEventArgs cancelEventArgs)
+		{
+			_mainWindow.Show();
+		}
+
 		private void Authenticate_Click(object sender, RoutedEventArgs e)
 		{
 			var app = (OAuthApplication) Applications.SelectedItem;
@@ -45,19 +53,34 @@ namespace LIC.Malone.Client.Desktop
 
 			var result = app.Authorize(url, Username.Text, Password.Text);
 
-			AuthResponse.Text = result.HasError
-				? result.Error
-				: JsonConvert.SerializeObject(result.AuthorizationState, Formatting.Indented);
+			if (result.HasError)
+			{
+				AuthResponse.Text = result.Error;
+				_state = null;
+				return;
+			}
 
+			AuthResponse.Text = JsonConvert.SerializeObject(result.AuthorizationState, Formatting.Indented);
 			_state = result.AuthorizationState;
 		}
 
 		private void SaveToken_Click(object sender, RoutedEventArgs e)
 		{
-			_mainWindow.Tokens.Add(_state);
-			_mainWindow.TokensListBox.ItemsSource = new List<IAuthorizationState> { _state };
-			Close();
-			_mainWindow.Show();
+			if (string.IsNullOrWhiteSpace(TokenName.Text))
+				return;
+
+			var token = new NamedAuthorizationState(TokenName.Text, _state);
+			
+			_mainWindow.Tokens.Add(token);
+
+			_mainWindow.TokensListBox.ItemsSource = null;
+			_mainWindow.TokensListBox.ItemsSource = _mainWindow.Tokens;
+
+			_mainWindow.TokenComboBox.ItemsSource = null;
+			_mainWindow.TokenComboBox.ItemsSource = _mainWindow.Tokens;
+
+			Tokens.ItemsSource = null;
+			Tokens.ItemsSource = _mainWindow.Tokens;
 		}
 	}
 }

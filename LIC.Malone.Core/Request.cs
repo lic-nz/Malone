@@ -32,9 +32,7 @@ namespace LIC.Malone.Core
 			//request.Accept = accept;
 			request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
 
-			var authState = JsonConvert.DeserializeObject<AuthorizationState>(Token);
-
-			request.Headers.Add(HttpRequestHeader.Authorization, string.Concat("Bearer ", authState.AccessToken));
+			request.Headers.Add(HttpRequestHeader.Authorization, string.Concat("Bearer ", Token));
 
 			return request;
 		}

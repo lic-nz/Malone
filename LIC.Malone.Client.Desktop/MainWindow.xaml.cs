@@ -30,7 +30,7 @@ namespace LIC.Malone.Client.Desktop
 		private List<Uri> _authenticationUrls;
 		private UserCredentials _userCredentials;
 
-		public List<IAuthorizationState> Tokens { get; set; }
+		public List<NamedAuthorizationState> Tokens { get; set; }
 
 		public MainWindow()
 		{
@@ -44,7 +44,7 @@ namespace LIC.Malone.Client.Desktop
 			};
 
 			History.ItemsSource = _history;
-			Tokens = new List<IAuthorizationState>();
+			Tokens = new List<NamedAuthorizationState>();
 
 			ManageTokens_Click(null, null);
 		}
@@ -136,6 +136,12 @@ namespace LIC.Malone.Client.Desktop
 		{
 			Hide();
 			new ManageTokensWindow(this, _authenticationUrls, _applications, _userCredentials).Show();
+		}
+
+		private void TokenComboBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			var state = (NamedAuthorizationState) TokenComboBox.SelectedItem;
+			Token.Text = state.AuthorizationState.AccessToken;
 		}
 	}
 }

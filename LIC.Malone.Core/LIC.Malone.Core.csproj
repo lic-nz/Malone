@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="ApiClient.cs" />
     <Compile Include="Authentication\OAuth\AuthorizeResult.cs" />
+    <Compile Include="Authentication\OAuth\NamedAuthorizationState.cs" />
     <Compile Include="Authentication\OAuth\OAuthApplication.cs" />
     <Compile Include="Authentication\UserCredentials.cs" />
     <Compile Include="Request.cs" />
