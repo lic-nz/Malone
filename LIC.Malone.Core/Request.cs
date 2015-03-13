@@ -29,7 +29,7 @@ namespace LIC.Malone.Core
 			request.Method = Method;
 			//request.ContentType = contentType;
 			request.AllowAutoRedirect = true;
-			//request.Accept = accept;
+			request.Accept = "text/xml";
 			request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
 
 			request.Headers.Add(HttpRequestHeader.Authorization, string.Concat("Bearer ", Token));

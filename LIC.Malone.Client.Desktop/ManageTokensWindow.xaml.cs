@@ -73,9 +73,6 @@ namespace LIC.Malone.Client.Desktop
 			
 			_mainWindow.Tokens.Add(token);
 
-			_mainWindow.TokensListBox.ItemsSource = null;
-			_mainWindow.TokensListBox.ItemsSource = _mainWindow.Tokens;
-
 			_mainWindow.TokenComboBox.ItemsSource = null;
 			_mainWindow.TokenComboBox.ItemsSource = _mainWindow.Tokens;
 
