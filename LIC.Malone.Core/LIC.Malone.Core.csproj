@@ -39,6 +39,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="RestSharp">
+      <HintPath>..\packages\RestSharp.105.0.1\lib\net4\RestSharp.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -54,6 +57,7 @@
     <Compile Include="Authentication\OAuth\NamedAuthorizationState.cs" />
     <Compile Include="Authentication\OAuth\OAuthApplication.cs" />
     <Compile Include="Authentication\UserCredentials.cs" />
+    <Compile Include="MaloneRestRequest.cs" />
     <Compile Include="Request.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

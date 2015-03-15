@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
-using DotNetOpenAuth.OAuth2;
-using Newtonsoft.Json;
+using RestSharp;
 
 namespace LIC.Malone.Core
 {
@@ -15,24 +9,28 @@ namespace LIC.Malone.Core
 		public string Method { get; set; }
 		public string Token { get; set; }
 
-		public HttpWebRequest ToHttpWebRequest()
+		private Method GetRestSharpMethod()
+		{
+			switch (Method)
+			{
+				case "POST":
+					return RestSharp.Method.POST;
+				default:
+					return RestSharp.Method.GET;
+			}
+		}
+
+		public MaloneRestRequest ToMaloneRestRequest()
 		{
 			Uri url;
 			if (!Uri.TryCreate(Url, UriKind.Absolute, out url))
 				throw new Exception(string.Format("Failed to create a URI from the string '{0}'.", Url));
+			
+			var request = new MaloneRestRequest(url, GetRestSharpMethod());
 
-			var request = (HttpWebRequest)WebRequest.Create(url);
-
-			if (request == null)
-				throw new Exception("Failed to create HttpWebRequest.");
-
-			request.Method = Method;
-			//request.ContentType = contentType;
-			request.AllowAutoRedirect = true;
-			request.Accept = "text/xml";
-			request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
-
-			request.Headers.Add(HttpRequestHeader.Authorization, string.Concat("Bearer ", Token));
+			request.AddHeader("Accept", "text/xml");
+			request.AddHeader("Accept-Encoding", "gzip,deflate");
+			request.AddHeader("Authorization", string.Concat("Bearer ", Token));
 
 			return request;
 		}

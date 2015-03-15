@@ -127,7 +127,7 @@ namespace LIC.Malone.Client.Desktop
 			var client = new ApiClient();
 			var response = client.Send(request);
 
-			Response.Text = System.Xml.Linq.XDocument.Parse(response).ToString(); //JsonConvert.SerializeObject(response, Formatting.Indented);
+			Response.Text = System.Xml.Linq.XDocument.Parse(response.Content).ToString(); //JsonConvert.SerializeObject(response, Formatting.Indented);
 
 			AddToHistory(request);
 		}
