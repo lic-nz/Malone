@@ -1,4 +1,14 @@
-﻿using Caliburn.Micro;
+﻿using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.IO;
+using System.Linq;
+using Caliburn.Micro;
+using LIC.Malone.Client.Desktop.Messages;
+using LIC.Malone.Core.Authentication;
+using LIC.Malone.Core.Authentication.OAuth;
+using Newtonsoft.Json;
+using Path = System.IO.Path;
 
 namespace LIC.Malone.Client.Desktop.ViewModels
 {
@@ -14,12 +24,48 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			MainViewModel = new MainViewModel(bus);
 			TokensViewModel = new TokensViewModel(bus);
 
+			LoadConfig(bus);
 			ShowMainScreen();
+		}
+
+		private void LoadConfig(EventAggregator bus)
+		{
+			var configLocation = ConfigurationManager.AppSettings["ConfigLocation"];
+
+			// TODO: Handle the case of no config.
+			if (string.IsNullOrWhiteSpace(configLocation))
+				return;
+
+			var applications = new List<OAuthApplication>();
+			var authenticationUrls = new List<Uri>();
+			UserCredentials userCredentials = null;
+
+			var path = Path.Combine(configLocation, "oauth-applications.json");
+
+			if (File.Exists(path))
+				applications = JsonConvert.DeserializeObject<List<OAuthApplication>>(File.ReadAllText(path));
+
+			path = Path.Combine(configLocation, "oauth-authentication-urls.json");
+
+			if (File.Exists(path))
+				authenticationUrls = JsonConvert
+					.DeserializeObject<List<string>>(File.ReadAllText(path))
+					.Select(url => new Uri(url))
+					.ToList();
+
+			path = Path.Combine(configLocation, "oauth-user-credentials.json");
+
+			if (File.Exists(path))
+				userCredentials = JsonConvert.DeserializeObject<UserCredentials>(File.ReadAllText(path));
+
+			bus.PublishOnUIThread(new ConfigurationLoaded(applications, authenticationUrls, userCredentials));
 		}
 
 		public void ShowMainScreen()
 		{
-			ActivateItem(MainViewModel);
+			ActivateItem(TokensViewModel);
 		}
+
+
 	}
 }
