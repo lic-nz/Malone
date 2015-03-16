@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Configuration;
 using System.Linq;
 using System.Text;
@@ -98,6 +99,28 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			}
 		}
 
+		private string _tokenName;
+		public string TokenName
+		{
+			get { return _tokenName; }
+			set
+			{
+				_tokenName = value;
+				NotifyOfPropertyChange(() => TokenName);
+			}
+		}
+
+		private IObservableCollection<NamedAuthorizationState> _tokens = new BindableCollection<NamedAuthorizationState>();
+		public IObservableCollection<NamedAuthorizationState> Tokens
+		{
+			get { return _tokens; }
+			set
+			{
+				_tokens = value;
+				NotifyOfPropertyChange(() => Tokens);
+			}
+		}
+
 		#endregion
 
 		public TokensViewModel(IEventAggregator bus)
@@ -118,7 +141,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			Password = message.UserCredentials.Password;
 		}
 
-		public void Authenticate(object sender, RoutedEventArgs e)
+		public void Authenticate()
 		{
 			var app = SelectedApplication;
 			var url = SelectedAuthenticationUrl;
@@ -134,6 +157,16 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 			Response = JsonConvert.SerializeObject(result.AuthorizationState, Formatting.Indented);
 			_authorizationState = result.AuthorizationState;
+		}
+
+		public void SaveToken()
+		{
+			if (string.IsNullOrWhiteSpace(TokenName))
+				return;
+
+			var token = new NamedAuthorizationState(TokenName, _authorizationState);
+
+			Tokens.Add(token);
 		}
 	}
 }

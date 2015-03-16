@@ -31,7 +31,7 @@
 		<syntaxControl:SyntaxHighlightBox x:Name="Response" Text="" Margin="13,270,0,0" Height="295" VerticalAlignment="Top" HorizontalAlignment="Left" Width="637"/>
 		<Label Content="Token Name" HorizontalAlignment="Left" Margin="13,577,0,0" VerticalAlignment="Top"/>
 		<TextBox Name="TokenName" HorizontalAlignment="Left" Height="23" Margin="13,603,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="252"/>
-		<Button Content="Save Token" HorizontalAlignment="Left" Margin="13,635,0,0" VerticalAlignment="Top" Width="87"/>
+		<Button Name="SaveToken" Content="Save Token" HorizontalAlignment="Left" Margin="13,635,0,0" VerticalAlignment="Top" Width="87"/>
 		<ListBox Name="Tokens" Height="510" Margin="665,55,31,0" VerticalAlignment="Top">
 			<ListBox.ItemTemplate>
 				<DataTemplate>
