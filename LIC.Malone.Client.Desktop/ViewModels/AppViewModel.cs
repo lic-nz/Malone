@@ -74,5 +74,11 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 		{
 			ActivateItem(TokensViewModel);
 		}
+
+		public void ManageTokens()
+		{
+			//_bus.BeginPublishOnUIThread(new ShowTokensScreen());
+			ActivateItem(TokensViewModel);
+		}
 	}
 }

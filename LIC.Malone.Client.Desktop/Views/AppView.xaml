@@ -5,6 +5,7 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:cal="http://www.caliburnproject.org"
 	mc:Ignorable="d"
 	Title="Malone"
 	GlowBrush="{DynamicResource AccentColorBrush}"
@@ -13,21 +14,7 @@
 
 	<Controls:MetroWindow.RightWindowCommands>
 		<Controls:WindowCommands>
-			<Button Content="settings" />
-			<Button>
-				<StackPanel Orientation="Horizontal">
-					<Rectangle Width="20" Height="20"
-                   Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
-						<!--<Rectangle.OpacityMask>
-							<VisualBrush Stretch="Fill"
-                         Visual="{StaticResource appbar_cupcake}" />
-						</Rectangle.OpacityMask>-->
-					</Rectangle>
-					<TextBlock Margin="4 0 0 0"
-                   VerticalAlignment="Center"
-                   Text="deploy cupcakes" />
-				</StackPanel>
-			</Button>
+			<Button Content="Manage tokens" cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action ManageTokens()]" />
 		</Controls:WindowCommands>
 	</Controls:MetroWindow.RightWindowCommands>
 

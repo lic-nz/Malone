@@ -101,6 +101,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			_bus.Subscribe(this);
 
 			History.Add(new Request { Method = "GET", Url = "http://localhost:1444/services/onfarmautomation/v2/shed/1" });
+			History.Add(new Request { Method = "GET", Url = "http://wah" });
 		}
 
 		public void ManageTokens()
