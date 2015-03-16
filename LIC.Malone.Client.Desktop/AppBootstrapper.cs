@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Collections.Generic;
+using System.Windows;
 using Caliburn.Micro;
 using LIC.Malone.Client.Desktop.ViewModels;
 
@@ -22,7 +23,8 @@ namespace LIC.Malone.Client.Desktop
 
 		protected override void OnStartup(object sender, StartupEventArgs e)
 		{
-			DisplayRootViewFor<AppViewModel>();
+			var settings = new Dictionary<string, object> {{"Title", "Malone"}};
+			DisplayRootViewFor<AppViewModel>(settings);
 		}
 	}
 }
