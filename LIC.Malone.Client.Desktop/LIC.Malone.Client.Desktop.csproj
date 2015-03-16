@@ -80,6 +80,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Messages\ConfigurationLoaded.cs" />
+    <Compile Include="Messages\ShowMainScreen.cs" />
+    <Compile Include="Messages\ShowTokensScreen.cs" />
     <Compile Include="ViewModels\AppViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\TokensViewModel.cs" />

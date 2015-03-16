@@ -48,5 +48,7 @@
 				</DataTemplate>
 			</ListBox.ItemTemplate>
 		</ListBox>
+		<Button Name="Back" Content="Back" Margin="365,586,220,31" />
 	</Grid>
+	
 </UserControl>

@@ -12,20 +12,24 @@ using Path = System.IO.Path;
 
 namespace LIC.Malone.Client.Desktop.ViewModels
 {
-	public class AppViewModel : Conductor<object>
+	public class AppViewModel : Conductor<object>, IHandle<ShowMainScreen>, IHandle<ShowTokensScreen>
 	{
+		private EventAggregator _bus;
+
 		public MainViewModel MainViewModel { get; set; }
 		public TokensViewModel TokensViewModel { get; set; }
 
 		public AppViewModel()
 		{
-			var bus = IoC.Get<EventAggregator>();
+			_bus = IoC.Get<EventAggregator>();
+			_bus.Subscribe(this);
 
-			MainViewModel = new MainViewModel(bus);
-			TokensViewModel = new TokensViewModel(bus);
+			MainViewModel = new MainViewModel(_bus);
+			TokensViewModel = new TokensViewModel(_bus);
 
-			LoadConfig(bus);
-			ShowMainScreen();
+			LoadConfig(_bus);
+			
+			Handle(new ShowTokensScreen());
 		}
 
 		private void LoadConfig(EventAggregator bus)
@@ -61,11 +65,14 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			bus.PublishOnUIThread(new ConfigurationLoaded(applications, authenticationUrls, userCredentials));
 		}
 
-		public void ShowMainScreen()
+		public void Handle(ShowMainScreen message)
+		{
+			ActivateItem(MainViewModel);
+		}
+
+		public void Handle(ShowTokensScreen message)
 		{
 			ActivateItem(TokensViewModel);
 		}
-
-
 	}
 }

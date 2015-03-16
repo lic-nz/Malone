@@ -168,5 +168,10 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 			Tokens.Add(token);
 		}
+
+		public void Back()
+		{
+			_bus.BeginPublishOnUIThread(new ShowMainScreen());
+		}
 	}
 }
