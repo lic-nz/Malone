@@ -29,7 +29,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 			LoadConfig(_bus);
 			
-			Handle(new ShowTokensScreen());
+			Handle(new ShowMainScreen());
 		}
 
 		private void LoadConfig(EventAggregator bus)
