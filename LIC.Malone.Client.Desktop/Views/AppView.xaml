@@ -1,23 +1,98 @@
-﻿<Controls:MetroWindow
+﻿<metro:MetroWindow
 	x:Class="LIC.Malone.Client.Desktop.Views.AppView"
-	xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+	xmlns:metro="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:cal="http://www.caliburnproject.org"
+	xmlns:syntaxControl="clr-namespace:AurelienRibon.Ui.SyntaxHighlightBox;assembly=AurelienRibon.Ui.SyntaxHighlightBox"
 	mc:Ignorable="d"
 	Title="Malone"
 	GlowBrush="{DynamicResource AccentColorBrush}"
 	WindowStartupLocation="CenterScreen"
-	Height="750" Width="1000">
+	MinWidth="1000" MinHeight="800"
+	Width="1000" Height="800">
 
-	<Controls:MetroWindow.RightWindowCommands>
-		<Controls:WindowCommands>
+	<!--<DockPanel LastChildFill="True">
+		<Border MinWidth="400" Background="SkyBlue" BorderBrush="Black" BorderThickness="1" DockPanel.Dock="Left">
+			<TextBlock Foreground="Black">Dock = "Left"</TextBlock>
+		</Border>
+		<Border Width="Auto" Background="SkyBlue" BorderBrush="Black" BorderThickness="1" DockPanel.Dock="Right">
+			<TextBlock Foreground="Black">Dock = "Right"</TextBlock>
+		</Border>
+		-->
+	<!----><!--
+	</DockPanel>-->
+
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="300" MinWidth="300" />
+			<ColumnDefinition Width="2" />
+			<ColumnDefinition Width="*" MinWidth="500" />
+		</Grid.ColumnDefinitions>
+
+		<StackPanel Grid.Column="0" Orientation="Vertical">
+
+			<TextBlock HorizontalAlignment="Left" TextWrapping="NoWrap" Text="History" VerticalAlignment="Top"/>
+			<ListBox x:Name="History" VerticalAlignment="Top" HorizontalAlignment="Stretch" SelectionMode="Single"
+				cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action HistoryClicked($executionContext)]" Height="164">
+
+				<ListBox.ItemTemplate>
+					<DataTemplate>
+						<Grid Margin="5,5">
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="35" />
+								<ColumnDefinition Width="*" />
+							</Grid.ColumnDefinitions>
+							<TextBlock Grid.Column="0" Text="{Binding Method}" />
+							<TextBlock Grid.Column="1" Text="{Binding Url}" />
+						</Grid>
+					</DataTemplate>
+				</ListBox.ItemTemplate>
+
+			</ListBox>
+
+		</StackPanel>
+
+		<GridSplitter Grid.Column="1" Width="2" HorizontalAlignment="Stretch" />
+
+		<Canvas Grid.Column="2">
+			<TextBox x:Name="Url" metro:TextBoxHelper.Watermark="URL" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="405" Canvas.Left="10" Canvas.Top="36" />
+			<Button x:Name="Send" Content="Send" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Height="22" Canvas.Top="67" Canvas.Left="10"/>
+			<ComboBox x:Name="Method" SelectedValuePath="Content" HorizontalAlignment="Left" VerticalAlignment="Top" Width="63" Canvas.Left="420" Canvas.Top="36">
+				<ComboBoxItem IsSelected="True" Content="GET"/>
+				<ComboBoxItem Content="POST"/>
+			</ComboBox>
+			<Label Content="Response" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="10" Canvas.Top="225"/>
+			<Label Content="Token" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="10" Canvas.Top="105"/>
+			<TextBox x:Name="Token" HorizontalAlignment="Left" Height="73" TextWrapping="Wrap" VerticalAlignment="Top" Width="473" Canvas.Left="10" Canvas.Top="136"/>
+			<Button x:Name="ManageTokens" Content="Manage Tokens" HorizontalAlignment="Left" VerticalAlignment="Top" Width="105" Canvas.Left="182" Canvas.Top="105"/>
+
+			<ComboBox x:Name="Tokens" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" Canvas.Left="57" Canvas.Top="105">
+				<ComboBox.ItemTemplate>
+					<DataTemplate>
+						<TextBlock Text="{Binding Name}" />
+					</DataTemplate>
+				</ComboBox.ItemTemplate>
+			</ComboBox>
+
+			<syntaxControl:SyntaxHighlightBox x:Name="Response" Text="SyntaxHighlightBox" Canvas.Left="10" Canvas.Top="256" Height="229" Width="473"/>
+
+		</Canvas>
+	</Grid>
+
+	<metro:MetroWindow.RightWindowCommands>
+		<metro:WindowCommands>
 			<Button Content="Manage tokens" cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action ManageTokens()]" />
-		</Controls:WindowCommands>
-	</Controls:MetroWindow.RightWindowCommands>
+		</metro:WindowCommands>
+	</metro:MetroWindow.RightWindowCommands>
 
-	<ContentControl Name="ActiveItem"></ContentControl>
+	<metro:MetroWindow.Flyouts>
+		<metro:FlyoutsControl Name="AceControl">
+			<metro:Flyout Header="Flyout Boomshackalacka" Position="Right" Width="400" IsOpen="{Binding AceControlIsOpen}">
+			</metro:Flyout>
+		</metro:FlyoutsControl>
+	</metro:MetroWindow.Flyouts>
 
-</Controls:MetroWindow>
+</metro:MetroWindow>

@@ -171,7 +171,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 		public void Back()
 		{
-			_bus.BeginPublishOnUIThread(new ShowMainScreen());
+			//_bus.BeginPublishOnUIThread(new ShowMainScreen());
 		}
 	}
 }
