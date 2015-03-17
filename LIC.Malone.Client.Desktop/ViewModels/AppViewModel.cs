@@ -4,6 +4,7 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using Caliburn.Micro;
+using DotNetOpenAuth.OAuth2;
 using LIC.Malone.Client.Desktop.Messages;
 using LIC.Malone.Core;
 using LIC.Malone.Core.Authentication;
@@ -13,13 +14,12 @@ using Path = System.IO.Path;
 
 namespace LIC.Malone.Client.Desktop.ViewModels
 {
-	public class AppViewModel : Conductor<object>, IHandle<ShowTokensScreen>
+	// TODO: Actually conduct the flyout.
+	public class AppViewModel : Conductor<object>, IHandle<ConfigurationLoaded>
 	{
 		private EventAggregator _bus;
-		private bool _aceControlIsOpen;
 
-		public MainViewModel MainViewModel { get; set; }
-		public TokensViewModel TokensViewModel { get; set; }
+		private IAuthorizationState _authorizationState;
 
 		#region Databound properties
 
@@ -100,6 +100,122 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			}
 		}
 
+		private bool _showAddTokenFlyout;
+		public bool ShowAddTokenFlyout
+		{
+			get { return _showAddTokenFlyout; }
+			set
+			{
+				_showAddTokenFlyout = value;
+				NotifyOfPropertyChange(() => ShowAddTokenFlyout);
+			}
+		}
+
+		#endregion
+		
+		// TODO: Move these to view model for flyout.
+		#region Databound properties for flyout
+
+		private IObservableCollection<Uri> _authenticationUrls = new BindableCollection<Uri>();
+		public IObservableCollection<Uri> AuthenticationUrls
+		{
+			get { return _authenticationUrls; }
+			set
+			{
+				_authenticationUrls = value;
+				NotifyOfPropertyChange(() => AuthenticationUrls);
+			}
+		}
+
+		private Uri _selectedAuthenticationUrl;
+		public Uri SelectedAuthenticationUrl
+		{
+			get { return _selectedAuthenticationUrl; }
+			set
+			{
+				_selectedAuthenticationUrl = value;
+				NotifyOfPropertyChange(() => SelectedAuthenticationUrl);
+			}
+
+		}
+
+		private IObservableCollection<OAuthApplication> _applications = new BindableCollection<OAuthApplication>();
+		public IObservableCollection<OAuthApplication> Applications
+		{
+			get { return _applications; }
+			set
+			{
+				_applications = value;
+				NotifyOfPropertyChange(() => Applications);
+			}
+		}
+
+		private OAuthApplication _selectedApplication;
+		public OAuthApplication SelectedApplication
+		{
+			get { return _selectedApplication; }
+			set
+			{
+				_selectedApplication = value;
+				NotifyOfPropertyChange(() => SelectedApplication);
+			}
+		}
+
+		private string _username;
+		public string Username
+		{
+			get { return _username; }
+			set
+			{
+				_username = value;
+				NotifyOfPropertyChange(() => Username);
+			}
+		}
+
+		private string _password;
+		public string Password
+		{
+			get { return _password; }
+			set
+			{
+				_password = value;
+				NotifyOfPropertyChange(() => Password);
+			}
+		}
+
+		private string _authResponse;
+		public string AuthResponse
+		{
+			get { return _authResponse; }
+			set
+			{
+				_authResponse = value;
+				NotifyOfPropertyChange(() => AuthResponse);
+			}
+		}
+
+		private string _tokenName;
+		public string TokenName
+		{
+			get { return _tokenName; }
+			set
+			{
+				_tokenName = value;
+				NotifyOfPropertyChange(() => TokenName);
+			}
+		}
+
+		//private IObservableCollection<NamedAuthorizationState> _tokens = new BindableCollection<NamedAuthorizationState>();
+		//public IObservableCollection<NamedAuthorizationState> Tokens
+		//{
+		//	get { return _tokens; }
+		//	set
+		//	{
+		//		_tokens = value;
+		//		NotifyOfPropertyChange(() => Tokens);
+		//	}
+		//}
+
 		#endregion
 
 		public AppViewModel()
@@ -107,15 +223,10 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			_bus = IoC.Get<EventAggregator>();
 			_bus.Subscribe(this);
 
-			MainViewModel = new MainViewModel(_bus);
-			TokensViewModel = new TokensViewModel(_bus);
-
 			LoadConfig(_bus);
 
 			History.Add(new Request { Method = "GET", Url = "http://localhost:1444/services/onfarmautomation/v2/shed/1" });
 			History.Add(new Request { Method = "POST", Url = "http://wah" });
-
-			ActivateItem(MainViewModel);
 		}
 
 		private void LoadConfig(EventAggregator bus)
@@ -151,15 +262,9 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			bus.PublishOnUIThread(new ConfigurationLoaded(applications, authenticationUrls, userCredentials));
 		}
 
-		public void Handle(ShowTokensScreen message)
-		{
-			ActivateItem(TokensViewModel);
-		}
-
 		public void ManageTokens()
 		{
-			//AceControlIsOpen = true;
-			//ActivateItem(TokensViewModel);
+			ShowAddTokenFlyout = true;
 		}
 
 		private bool ShouldSkipHistory(Request request)
@@ -208,5 +313,56 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			if (SelectedHistory != null)
 				Url = SelectedHistory.Url;
 		}
+
+		// TODO: Move to own view model.
+		#region Add token flyout methods
+		public void Handle(ConfigurationLoaded message)
+		{
+			AuthenticationUrls = new BindableCollection<Uri>(message.AuthenticationUrls);
+			SelectedAuthenticationUrl = AuthenticationUrls.First();
+
+			Applications = new BindableCollection<OAuthApplication>(message.Applications);
+			SelectedApplication = Applications.First();
+
+			Username = message.UserCredentials.Username;
+			Password = message.UserCredentials.Password;
+		}
+
+		public void Authenticate()
+		{
+			var app = SelectedApplication;
+			var url = SelectedAuthenticationUrl;
+
+			var result = app.Authorize(url, Username, Password);
+
+			if (result.HasError)
+			{
+				Response = result.Error;
+				_authorizationState = null;
+				return;
+			}
+
+			AuthResponse = JsonConvert.SerializeObject(result.AuthorizationState, Formatting.Indented);
+			_authorizationState = result.AuthorizationState;
+		}
+
+		public void SaveToken()
+		{
+			if (string.IsNullOrWhiteSpace(TokenName))
+				return;
+
+			var token = new NamedAuthorizationState(TokenName, _authorizationState);
+
+			Tokens.Add(token);
+			SelectedToken = SelectedToken ?? Tokens.First();
+
+			ShowAddTokenFlyout = false;
+
+			// Reset.
+			_authorizationState = null;
+			AuthResponse = null;
+			TokenName = null;
+		}
+		#endregion
 	}
 }
