@@ -226,7 +226,9 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			LoadConfig(_bus);
 
 			History.Add(new Request { Method = "GET", Url = "http://localhost:1444/services/onfarmautomation/v2/shed/1" });
-			History.Add(new Request { Method = "POST", Url = "http://wah" });
+			History.Add(new Request { Method = "POST", Url = "http://wah/api/clients/new" });
+			History.Add(new Request { Method = "GET", Url = "http://zomg/gimme/api" });
+			History.Add(new Request { Method = "GET", Url = "http://zomg/gimme/api/key/5bc5afe6-f873-40b3-b0b0-0d6585935067/some-really-long-url" });
 		}
 
 		private void LoadConfig(EventAggregator bus)
