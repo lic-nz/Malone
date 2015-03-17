@@ -205,7 +205,8 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 		public void HistoryClicked(object e)
 		{
 			// Rebind.
-			Url = SelectedHistory.Url;
+			if (SelectedHistory != null)
+				Url = SelectedHistory.Url;
 		}
 	}
 }

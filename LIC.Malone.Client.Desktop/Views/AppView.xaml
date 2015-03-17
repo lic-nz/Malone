@@ -32,11 +32,11 @@
 			<ColumnDefinition Width="*" MinWidth="500" />
 		</Grid.ColumnDefinitions>
 
-		<StackPanel Grid.Column="0" Orientation="Vertical">
+		<Grid Grid.Column="0">
 
 			<TextBlock HorizontalAlignment="Left" TextWrapping="NoWrap" Text="History" VerticalAlignment="Top"/>
-			<ListBox x:Name="History" VerticalAlignment="Top" HorizontalAlignment="Stretch" SelectionMode="Single"
-				cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action HistoryClicked($executionContext)]" Height="164">
+			<ListBox x:Name="History" HorizontalAlignment="Stretch" SelectionMode="Single"
+				cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action HistoryClicked($executionContext)]" Margin="0,21,0,0">
 
 				<ListBox.ItemTemplate>
 					<DataTemplate>
@@ -53,7 +53,7 @@
 
 			</ListBox>
 
-		</StackPanel>
+		</Grid>
 
 		<GridSplitter Grid.Column="1" Width="2" HorizontalAlignment="Stretch" />
 
