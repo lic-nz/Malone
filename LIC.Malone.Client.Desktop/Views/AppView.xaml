@@ -52,6 +52,8 @@
 
 		<GridSplitter Grid.Column="1" Width="2" HorizontalAlignment="Stretch" />
 
+		<TextBlock Grid.Column="2" Height="40" Style="{StaticResource H1}" VerticalAlignment="Top" HorizontalAlignment="Left" Text="Request" Margin="8,0,0,0"/>
+
 		<Grid Name="CurrentRequestGrid" Grid.Column="2" Margin="8,50,0,0">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="100" />
@@ -88,7 +90,7 @@
 			<Button Grid.Row="3" Grid.Column="1" x:Name="Send" Content="Send" HorizontalAlignment="Left" VerticalAlignment="Top" Width="70"/>
 
 			<Label Grid.Row="4" Grid.Column="0" VerticalAlignment="Top" Content="Response"/>
-			<syntaxControl:SyntaxHighlightBox Grid.Row="4" Grid.Column="1" Name="Response" Margin="0,0,15,15" />
+			<syntaxControl:SyntaxHighlightBox Grid.Row="4" Grid.Column="1" Name="Response" Margin="0,0,15,15" IsReadOnly="True" />
 		</Grid>
 
 		<!--<Canvas Grid.Column="2">
