@@ -5,6 +5,11 @@
 	xmlns:local="clr-namespace:LIC.Malone.Client.Desktop">
 	<Application.Resources>
 		<ResourceDictionary>
+			<Style x:Key="H1" TargetType="TextBlock">
+				<Setter Property="FontFamily" Value="Segoe UI Light" />
+				<Setter Property="FontSize" Value="24" />
+				<Setter Property="Foreground" Value="{DynamicResource AccentColorBrush}" />
+			</Style>
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary>
 					<local:AppBootstrapper x:Key="bootstrapper" />

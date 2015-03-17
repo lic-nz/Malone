@@ -23,9 +23,9 @@
 
 		<Grid Grid.Column="0">
 
-			<TextBlock HorizontalAlignment="Left" TextWrapping="NoWrap" Text="History" VerticalAlignment="Top"/>
+			<TextBlock Style="{StaticResource H1}" HorizontalAlignment="Left" TextWrapping="NoWrap" Text="History" VerticalAlignment="Top" Margin="8,0,0,0"/>
 			<ListBox x:Name="History" HorizontalAlignment="Stretch" SelectionMode="Single"
-				cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action HistoryClicked($executionContext)]" Margin="0,21,0,0">
+				cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action HistoryClicked($executionContext)]" Margin="0,32,0,0">
 
 				<ListBox.ItemTemplate>
 					<DataTemplate>
