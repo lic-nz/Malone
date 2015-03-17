@@ -21,11 +21,12 @@
 			<ColumnDefinition Width="*" MinWidth="500" />
 		</Grid.ColumnDefinitions>
 
-		<Grid Grid.Column="0">
+		<DockPanel Grid.Column="0" LastChildFill="True">
 
-			<TextBlock Style="{StaticResource H1}" HorizontalAlignment="Left" TextWrapping="NoWrap" Text="History" VerticalAlignment="Top" Margin="8,0,0,0"/>
+			<TextBlock DockPanel.Dock="Top" Height="40" Style="{StaticResource H1}" HorizontalAlignment="Left" Text="History" Margin="8,0,0,0"/>
+			
 			<ListBox x:Name="History" HorizontalAlignment="Stretch" SelectionMode="Single"
-				cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action HistoryClicked($executionContext)]" Margin="0,35,0,0">
+				cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action HistoryClicked($executionContext)]">
 
 				<ListBox.ItemTemplate>
 					<DataTemplate>
@@ -40,30 +41,30 @@
 							</Grid.RowDefinitions>
 							<TextBlock Grid.Column="0" Grid.RowSpan="2" Text="{Binding Method}" Style="{StaticResource History.Method}" />
 							<TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding BaseUrl}" Style="{StaticResource History.BaseUrl}" />
-							<TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding ResourcePath}" Style="{StaticResource History.ResourcePath}"/>
+							<TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding ResourcePath}" Style="{StaticResource History.ResourcePath}" />
 						</Grid>
 					</DataTemplate>
 				</ListBox.ItemTemplate>
 
 			</ListBox>
 
-		</Grid>
+		</DockPanel>
 
 		<GridSplitter Grid.Column="1" Width="2" HorizontalAlignment="Stretch" />
 
 		<Canvas Grid.Column="2">
-			<TextBox x:Name="Url" metro:TextBoxHelper.Watermark="URL" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="405" Canvas.Left="10" Canvas.Top="36" />
-			<Button x:Name="Send" Content="Send" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Height="22" Canvas.Top="67" Canvas.Left="10"/>
-			<ComboBox x:Name="Method" SelectedValuePath="Content" HorizontalAlignment="Left" VerticalAlignment="Top" Width="63" Canvas.Left="420" Canvas.Top="36">
+			<TextBox x:Name="Url" metro:TextBoxHelper.Watermark="URL" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="405" Canvas.Left="196" Canvas.Top="285" />
+			<Button x:Name="Send" Content="Send" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Height="22" Canvas.Top="316" Canvas.Left="196"/>
+			<ComboBox x:Name="Method" SelectedValuePath="Content" HorizontalAlignment="Left" VerticalAlignment="Top" Width="63" Canvas.Left="606" Canvas.Top="285">
 				<ComboBoxItem IsSelected="True" Content="GET"/>
 				<ComboBoxItem Content="POST"/>
 			</ComboBox>
-			<Label Content="Response" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="10" Canvas.Top="225"/>
-			<Label Content="Token" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="10" Canvas.Top="105"/>
-			<TextBox x:Name="Token" HorizontalAlignment="Left" Height="73" TextWrapping="Wrap" VerticalAlignment="Top" Width="473" Canvas.Left="10" Canvas.Top="136"/>
-			<Button x:Name="ManageTokens" Content="Manage Tokens" HorizontalAlignment="Left" VerticalAlignment="Top" Width="105" Canvas.Left="182" Canvas.Top="105"/>
+			<Label Content="Response" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="196" Canvas.Top="474"/>
+			<Label Content="Token" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="196" Canvas.Top="354"/>
+			<TextBox x:Name="Token" HorizontalAlignment="Left" Height="73" TextWrapping="Wrap" VerticalAlignment="Top" Width="473" Canvas.Left="196" Canvas.Top="385"/>
+			<Button x:Name="ManageTokens" Content="Manage Tokens" HorizontalAlignment="Left" VerticalAlignment="Top" Width="105" Canvas.Left="368" Canvas.Top="354"/>
 
-			<ComboBox x:Name="Tokens" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" Canvas.Left="57" Canvas.Top="105">
+			<ComboBox x:Name="Tokens" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" Canvas.Left="243" Canvas.Top="354">
 				<ComboBox.ItemTemplate>
 					<DataTemplate>
 						<TextBlock Text="{Binding Name}" />
@@ -71,7 +72,7 @@
 				</ComboBox.ItemTemplate>
 			</ComboBox>
 
-			<syntaxControl:SyntaxHighlightBox x:Name="Response" Text="SyntaxHighlightBox" Canvas.Left="10" Canvas.Top="256" Height="229" Width="473"/>
+			<syntaxControl:SyntaxHighlightBox x:Name="Response" Text="SyntaxHighlightBox" Canvas.Left="196" Canvas.Top="505" Height="229" Width="473"/>
 			<TextBlock Style="{StaticResource H1}" HorizontalAlignment="Left" TextWrapping="NoWrap" Text="Current Request" VerticalAlignment="Top" Canvas.Left="8"/>
 
 		</Canvas>
@@ -104,20 +105,20 @@
 
 					<Label Content="Username" HorizontalAlignment="Left" Margin="10,90,0,0" VerticalAlignment="Top"/>
 					<TextBox x:Name="Username" Text="{Binding Username}"  HorizontalAlignment="Left" Height="23" Margin="140,90,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="200"/>
-					
+
 					<Label Content="Password" HorizontalAlignment="Left" Margin="10,130,0,0" VerticalAlignment="Top"/>
 					<TextBox x:Name="Password" Text="{Binding Password}" HorizontalAlignment="Left" Height="23" Margin="140,130,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="200"/>
-					
+
 					<Button x:Name="Authenticate" Content="Authenticate" cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action Authenticate()]"
 						HorizontalAlignment="Left" Margin="140,170,0,0" VerticalAlignment="Top" Width="95" />
-					
+
 					<Label Content="Response" HorizontalAlignment="Left" Margin="10,210,0,0" VerticalAlignment="Top"/>
 					<syntaxControl:SyntaxHighlightBox x:Name="AuthResponse" Text="{Binding AuthResponse}"
 						Margin="15,240,0,0" Height="300" VerticalAlignment="Top" HorizontalAlignment="Left" Width="570"/>
-					
+
 					<Label Content="Token name" HorizontalAlignment="Left" Margin="10,560,0,0" VerticalAlignment="Top"/>
 					<TextBox Name="TokenName" Text="{Binding TokenName}" HorizontalAlignment="Left" Height="23" Margin="145,560,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="252"/>
-					
+
 					<Button Name="SaveToken" Content="Save Token" cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action SaveToken()]"
 						HorizontalAlignment="Left" Margin="145,600,0,0" VerticalAlignment="Top" Width="87"/>
 				</Grid>
