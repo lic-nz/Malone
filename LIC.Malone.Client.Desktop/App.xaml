@@ -5,6 +5,7 @@
 	xmlns:local="clr-namespace:LIC.Malone.Client.Desktop">
 	<Application.Resources>
 		<ResourceDictionary>
+			
 			<Style x:Key="H1" TargetType="TextBlock">
 				<Setter Property="FontFamily" Value="Segoe UI Light" />
 				<Setter Property="FontSize" Value="24" />
@@ -20,6 +21,22 @@
 				<Setter Property="FontSize" Value="14" />
 				<Setter Property="Foreground" Value="#111111" />
 			</Style>
+
+			<Style TargetType="ListBoxItem">
+				<Style.Triggers>
+					<Trigger Property="IsMouseOver" Value="True">
+						<Setter Property="Background" Value="{DynamicResource AccentColorBrush4}" />
+					</Trigger>
+					<Trigger Property="IsSelected" Value="True">
+						<Setter Property="Background" Value="GreenYellow" />
+						<Setter Property="Foreground" Value="Black" />
+					</Trigger>
+				</Style.Triggers>
+				<Style.Resources>
+					<SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#f6f6f6"/>
+				</Style.Resources>
+			</Style>
+
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary>
 					<local:AppBootstrapper x:Key="bootstrapper" />
