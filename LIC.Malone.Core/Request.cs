@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Windows.Media;
 using RestSharp;
 
 namespace LIC.Malone.Core
 {
 	public class Request
 	{
+		private Color _getColor = new Color();
+
 		public string Url { get; set; }
 		public string Method { get; set; }
 		public string Token { get; set; }
@@ -17,6 +20,16 @@ namespace LIC.Malone.Core
 		public string ResourcePath
 		{
 			get { return GetResourcePath(); }
+		}
+
+		public Color MethodColor
+		{
+			get
+			{
+				return GetRestSharpMethod() == RestSharp.Method.GET
+					? new Color()
+					: new Color();
+			}
 		}
 
 		private Method GetRestSharpMethod()

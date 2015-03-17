@@ -37,6 +37,20 @@
 				</Style.Resources>
 			</Style>
 
+			<Style x:Key="History.Method" TargetType="TextBlock">
+				<!--<Setter Property="FontFamily" Value="Calibri" />-->
+				<!--<Setter Property="FontSize" Value="12" />-->
+				<!--<Setter Property="FontWeight" Value="Bold" />-->
+				<Style.Triggers>
+					<DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=Text}" Value="GET">
+						<Setter Property="Foreground" Value="Green"/>
+					</DataTrigger>
+					<DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=Text}" Value="POST">
+						<Setter Property="Foreground" Value="OrangeRed"/>
+					</DataTrigger>
+				</Style.Triggers>
+			</Style>
+
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary>
 					<local:AppBootstrapper x:Key="bootstrapper" />
