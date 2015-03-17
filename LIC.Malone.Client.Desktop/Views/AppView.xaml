@@ -34,8 +34,13 @@
 								<ColumnDefinition Width="35" />
 								<ColumnDefinition Width="*" />
 							</Grid.ColumnDefinitions>
+							<Grid.RowDefinitions>
+								<RowDefinition />
+								<RowDefinition />
+							</Grid.RowDefinitions>
 							<TextBlock Grid.Column="0" Text="{Binding Method}" />
-							<TextBlock Grid.Column="1" Text="{Binding Url}" />
+							<TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding BaseUrl}" Style="{StaticResource History.BaseUrl}" />
+							<TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding ResourcePath}" Style="{StaticResource History.ResourcePath}"/>
 						</Grid>
 					</DataTemplate>
 				</ListBox.ItemTemplate>
