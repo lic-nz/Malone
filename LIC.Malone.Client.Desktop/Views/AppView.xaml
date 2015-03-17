@@ -14,17 +14,6 @@
 	MinWidth="1000" MinHeight="800"
 	Width="1000" Height="800">
 
-	<!--<DockPanel LastChildFill="True">
-		<Border MinWidth="400" Background="SkyBlue" BorderBrush="Black" BorderThickness="1" DockPanel.Dock="Left">
-			<TextBlock Foreground="Black">Dock = "Left"</TextBlock>
-		</Border>
-		<Border Width="Auto" Background="SkyBlue" BorderBrush="Black" BorderThickness="1" DockPanel.Dock="Right">
-			<TextBlock Foreground="Black">Dock = "Right"</TextBlock>
-		</Border>
-		-->
-	<!----><!--
-	</DockPanel>-->
-
 	<Grid>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="300" MinWidth="300" />
