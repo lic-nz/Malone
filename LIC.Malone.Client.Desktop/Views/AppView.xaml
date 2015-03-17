@@ -59,31 +59,28 @@
 			</Grid.ColumnDefinitions>
 
 			<Label Grid.Column="0" VerticalAlignment="Top" Content="Method"/>
-
 			<ComboBox Grid.Column="1" x:Name="Method" SelectedValuePath="Content" HorizontalAlignment="Left" VerticalAlignment="Top" Width="63">
 				<ComboBoxItem IsSelected="True" Content="GET"/>
 				<ComboBoxItem Content="POST"/>
 			</ComboBox>
 
-
-
 			<Label Grid.Column="0" VerticalAlignment="Top" Content="URL" Margin="0,40,0,0"/>
 			<TextBox Grid.Column="1" x:Name="Url" metro:TextBoxHelper.Watermark="Enter URL or choose from history" HorizontalAlignment="Left" VerticalAlignment="Top" Width="560"
 				FontFamily="Calibri" FontSize="14" Margin="0,40,0,0"/>
-
-
-		</Grid>
-
-		<Canvas Grid.Column="2">
-
-
-			<ComboBox Grid.Column="1" x:Name="Tokens" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" Canvas.Left="353" Canvas.Top="285">
+			
+			<Label Grid.Column="0" VerticalAlignment="Top" Content="Token" Margin="0,80,0,0"/>
+			<ComboBox Grid.Column="1" x:Name="Tokens" HorizontalAlignment="Left" VerticalAlignment="Top" Width="200" Margin="0,80,0,0">
 				<ComboBox.ItemTemplate>
 					<DataTemplate>
 						<TextBlock Text="{Binding Name}" />
 					</DataTemplate>
 				</ComboBox.ItemTemplate>
 			</ComboBox>
+
+
+		</Grid>
+
+		<Canvas Grid.Column="2">
 
 			<Button x:Name="Send" Content="Send" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Height="22" Canvas.Top="316" Canvas.Left="196"/>
 			<Label Content="Response" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="196" Canvas.Top="474"/>
