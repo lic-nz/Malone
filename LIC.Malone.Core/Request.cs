@@ -6,8 +6,8 @@ namespace LIC.Malone.Core
 {
 	public class Request
 	{
-		public string Url { get; set; }
-		public Method Method { get; set; }
+		public string Url { get; private set; }
+		public Method Method { get; private set; }
 		public string Token { get; set; }
 
 		public string BaseUrl
@@ -18,6 +18,17 @@ namespace LIC.Malone.Core
 		public string ResourcePath
 		{
 			get { return GetResourcePath(); }
+		}
+
+		public Request(string url) : this(url, Method.GET)
+		{
+			
+		}
+
+		public Request(string url, Method method)
+		{
+			Url = url;
+			Method = method;
 		}
 
 		public MaloneRestRequest ToMaloneRestRequest()

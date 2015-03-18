@@ -102,6 +102,17 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			}
 		}
 
+		private string _responseStatusError;
+		public string ResponseStatusError
+		{
+			get { return _responseStatusError; }
+			set
+			{
+				_responseStatusError = value;
+				NotifyOfPropertyChange(() => ResponseStatusError);
+			}
+		}
+
 		private string _response;
 		public string Response
 		{
@@ -250,10 +261,10 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 				Method.PUT
 			};
 
-			History.Add(new Request { Method = Method.GET, Url = "http://localhost:1444/services/onfarmautomation/v2/shed/1" });
-			History.Add(new Request { Method = Method.PUT, Url = "http://wah/api/clients/new" });
-			History.Add(new Request { Method = Method.GET, Url = "http://zomg/gimme/api" });
-			History.Add(new Request { Method = Method.POST, Url = "http://zomg/gimme/api/key/5bc5afe6-f873-40b3-b0b0-0d6585935067/some-really-long-url" });
+			History.Add(new Request("http://localhost:1444/services/onfarmautomation/v2/shed/1"));
+			History.Add(new Request("http://wah/api/clients/new", Method.PUT));
+			History.Add(new Request("http://zomg/gimme/api"));
+			History.Add(new Request("http://zomg/gimme/api/key/5bc5afe6-f873-40b3-b0b0-0d6585935067/some-really-long-url", Method.POST));
 		}
 
 		private void LoadConfig(EventAggregator bus)
@@ -319,19 +330,41 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			if (string.IsNullOrWhiteSpace(Url))
 				return;
 
-			var request = new Request
-			{
-				Url = Url,
-				Method = SelectedMethod,
-				Token = SelectedToken.AuthorizationState.AccessToken
-			};
+			var request = new Request(Url, SelectedMethod);
+
+			if (SelectedToken != null)
+				request.Token = SelectedToken.AuthorizationState.AccessToken;
+
+			AddToHistory(request);
 
 			var client = new ApiClient();
 			var response = client.Send(request);
 
-			Response = System.Xml.Linq.XDocument.Parse(response.Content).ToString(); //JsonConvert.SerializeObject(response, Formatting.Indented);
+			ResponseStatusError = GetResponseStatusError(response.ResponseStatus);
 
-			AddToHistory(request);
+			if (ResponseStatusError != null)
+				return;
+
+			Response = System.Xml.Linq.XDocument.Parse(response.Content).ToString(); //JsonConvert.SerializeObject(response, Formatting.Indented);
+		}
+
+		private string GetResponseStatusError(ResponseStatus status)
+		{
+			switch (status)
+			{
+				case ResponseStatus.None:
+					return "Uh, not sure what happened. Didn't get a response?";
+				case ResponseStatus.Completed:
+					return null;
+				case ResponseStatus.Error:
+					return "Error";
+				case ResponseStatus.TimedOut:
+					return "Timed out";
+				case ResponseStatus.Aborted:
+					return "Aborted";
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
 		}
 
 		public void HistoryClicked(object e)
