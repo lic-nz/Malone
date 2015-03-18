@@ -105,6 +105,17 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			}
 		}
 
+		private HttpStatusViewModel _responseHttpStatus;
+		public HttpStatusViewModel ResponseHttpStatus
+		{
+			get { return _responseHttpStatus; }
+			set
+			{
+				_responseHttpStatus = value;
+				NotifyOfPropertyChange(() => ResponseHttpStatus);
+			}
+		}
+
 		private string _responseStatusError;
 		public string ResponseStatusError
 		{
@@ -285,6 +296,8 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 				Method.POST,
 				Method.PUT
 			};
+
+			ResponseHttpStatus = new HttpStatusViewModel(HttpStatusCode.BadGateway);
 
 			History.Add(new Request("http://localhost:1444/services/onfarmautomation/v2/shed/1"));
 			History.Add(new Request("http://wah/api/clients/new", Method.PUT));

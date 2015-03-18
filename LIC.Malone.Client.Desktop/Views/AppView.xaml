@@ -7,6 +7,7 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:cal="http://www.caliburnproject.org"
 	xmlns:syntaxControl="clr-namespace:AurelienRibon.Ui.SyntaxHighlightBox;assembly=AurelienRibon.Ui.SyntaxHighlightBox"
+	xmlns:views="clr-namespace:LIC.Malone.Client.Desktop.Views"
 	mc:Ignorable="d"
 	Title="Malone"
 	TitleCaps="False"
@@ -19,9 +20,9 @@
 
 	<Grid>
 		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="300" MinWidth="300" />
+			<ColumnDefinition Width="1*" MinWidth="300" />
 			<ColumnDefinition Width="2" />
-			<ColumnDefinition Width="*" MinWidth="500" />
+			<ColumnDefinition Width="5*" MinWidth="500" />
 		</Grid.ColumnDefinitions>
 
 		<DockPanel Grid.Column="0" LastChildFill="True">
@@ -57,12 +58,14 @@
 
 		<TextBlock Grid.Column="2" Height="40" Style="{StaticResource H1}" VerticalAlignment="Top" HorizontalAlignment="Left" Text="Request" Margin="8,0,0,0"/>
 
-		<Grid Name="CurrentRequestGrid" Grid.Column="2" Margin="8,50,0,0">
+		<Grid Name="RequestGrid" Grid.Column="2" Margin="8,50,0,0">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="100" />
 				<ColumnDefinition Width="*" />
 			</Grid.ColumnDefinitions>
 			<Grid.RowDefinitions>
+				<RowDefinition Height="40" />
+				<RowDefinition Height="40" />
 				<RowDefinition Height="40" />
 				<RowDefinition Height="40" />
 				<RowDefinition Height="40" />
@@ -88,12 +91,30 @@
 			<Button Grid.Row="2" Grid.Column="1" x:Name="ManageTokens" Content="Manage Tokens" HorizontalAlignment="Left" VerticalAlignment="Top" Width="110" Margin="230,0,0,0" />
 
 			<Button Grid.Row="3" Grid.Column="1" x:Name="Send" Content="Send" HorizontalAlignment="Left" VerticalAlignment="Top" Width="70"/>
-			<TextBlock Grid.Row="3" Grid.Column="1" x:Name="ResponseStatusError" Text="ResponseStatusError"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="125" FontFamily="Calibri" FontSize="14" Height="26" Margin="75,0,0,0" />
-			<TextBlock Grid.Row="3" Grid.Column="1" x:Name="ResponseHttpStatusCode" Text="ResponseHttpStatusCode"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="70" FontFamily="Calibri" FontSize="14" Height="26" Margin="205,0,0,0" />
-			<TextBlock Grid.Row="3" Grid.Column="1" x:Name="ResponseHttpStatusCodeDescription" Text="ResponseHttpStatusCodeDescription" HorizontalAlignment="Left" VerticalAlignment="Top" Width="215" FontFamily="Calibri" FontSize="14" Height="26" Margin="295,0,0,0" />
 
-			<Label Grid.Row="4" Grid.Column="0" VerticalAlignment="Top" Content="Response"/>
-			<syntaxControl:SyntaxHighlightBox Grid.Row="4" Grid.Column="1" Name="Response" Margin="0,0,15,15" IsReadOnly="True" />
+			<TextBlock Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Height="40" Style="{StaticResource H1}" VerticalAlignment="Bottom" HorizontalAlignment="Left" Text="Response"/>
+
+			<Label Grid.Row="5" Grid.Column="0" VerticalAlignment="Top" Content="HTTP Status"/>
+			<ContentControl Grid.Row="5" Grid.Column="1" x:Name="ResponseHttpStatus" />
+
+			<!--<ContentControl Grid.Row="5" Grid.Column="1" cal:View.Model="{Binding ResponseHttpStatusCode}" x:Name="RedddsponseHttpStatusCode">
+				<ContentControl.DataContext></ContentControl.DataContext>
+			</ContentControl>-->
+
+			<!--<TextBlock Grid.Column="1" x:Name="ResponseHttpStatusCode" Text="ResponseHttpStatusCode" HorizontalAlignment="Left" VerticalAlignment="Top" Width="70" FontFamily="Calibri" FontSize="14" Height="26" />
+			<TextBlock Grid.Column="2" x:Name="ResponseHttpStatusCodeDescription" Text="ResponseHttpStatusCodeDescription" HorizontalAlignment="Left" VerticalAlignment="Top" Width="215" FontFamily="Calibri" FontSize="14" Height="26" />
+
+			<TextBlock Grid.Row="5" Grid.Column="1" x:Name="ResponseStatusError" Text="ResponseStatusError"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="125" FontFamily="Calibri" FontSize="14" Height="26" Margin="75,0,0,0" />-->
+
+
+
+
+
+
+
+
+			<Label Grid.Row="6" Grid.Column="0" VerticalAlignment="Top" Content="Content"/>
+			<syntaxControl:SyntaxHighlightBox Grid.Row="6" Grid.Column="1" Name="Response" Margin="0,0,15,15" IsReadOnly="True" />
 		</Grid>
 
 		<!--<Canvas Grid.Column="2">
