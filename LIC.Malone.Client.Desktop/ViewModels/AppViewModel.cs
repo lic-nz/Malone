@@ -54,6 +54,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			{
 				_url = value;
 				NotifyOfPropertyChange(() => Url);
+				NotifyOfPropertyChange(() => CanSend);
 			}
 		}
 
@@ -121,6 +122,11 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 				_showAddTokenFlyout = value;
 				NotifyOfPropertyChange(() => ShowAddTokenFlyout);
 			}
+		}
+
+		public bool CanSend
+		{
+			get { return !string.IsNullOrWhiteSpace(Url); }
 		}
 
 		#endregion
