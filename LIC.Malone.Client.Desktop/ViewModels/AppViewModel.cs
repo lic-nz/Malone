@@ -127,36 +127,14 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			}
 		}
 
-		private int _responseHttpStatusCode;
-		public int ResponseHttpStatusCode
+		private string _content;
+		public string Content
 		{
-			get { return _responseHttpStatusCode; }
+			get { return _content; }
 			set
 			{
-				_responseHttpStatusCode = value;
-				NotifyOfPropertyChange(() => ResponseHttpStatusCode);
-			}
-		}
-
-		private string _responseHttpStatusCodeDescription;
-		public string ResponseHttpStatusCodeDescription
-		{
-			get { return _responseHttpStatusCodeDescription; }
-			set
-			{
-				_responseHttpStatusCodeDescription = value;
-				NotifyOfPropertyChange(() => ResponseHttpStatusCodeDescription);
-			}
-		}
-
-		private string _response;
-		public string Response
-		{
-			get { return _response; }
-			set
-			{
-				_response = value;
-				NotifyOfPropertyChange(() => Response);
+				_content = value;
+				NotifyOfPropertyChange(() => Content);
 			}
 		}
 
@@ -363,10 +341,10 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 		public void Send()
 		{
-			Response = null;
-			HttpStatusCode = null; // TODO: make nullable.
-			ResponseHttpStatusCode = 0; // TODO: make nullable.
-			ResponseHttpStatusCodeDescription = null;
+			// Reset.
+			Content = null;
+			ResponseStatusError = null;
+			HttpStatusCode = null;
 
 			if (string.IsNullOrWhiteSpace(Url))
 				return;
@@ -388,10 +366,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 			HttpStatusCode = new HttpStatusCodeViewModel(response.StatusCode);
 
-			ResponseHttpStatusCode = (int)response.StatusCode;
-			ResponseHttpStatusCodeDescription = HttpWorkerRequest.GetStatusDescription(ResponseHttpStatusCode);
-
-			Response = XDocument.Parse(response.Content).ToString(); //JsonConvert.SerializeObject(response, Formatting.Indented);
+			Content = XDocument.Parse(response.Content).ToString(); //JsonConvert.SerializeObject(response, Formatting.Indented);
 		}
 
 		private string GetResponseStatusError(ResponseStatus status)
@@ -446,7 +421,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 			if (result.HasError)
 			{
-				Response = result.Error;
+				Content = result.Error;
 				_authorizationState = null;
 				return;
 			}

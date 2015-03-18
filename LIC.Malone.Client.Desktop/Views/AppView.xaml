@@ -97,24 +97,8 @@
 			<Label Grid.Row="5" Grid.Column="0" VerticalAlignment="Top" Content="HTTP Status"/>
 			<ContentControl Grid.Row="5" Grid.Column="1" x:Name="HttpStatusCode" />
 
-			<!--<ContentControl Grid.Row="5" Grid.Column="1" cal:View.Model="{Binding ResponseHttpStatusCode}" x:Name="RedddsponseHttpStatusCode">
-				<ContentControl.DataContext></ContentControl.DataContext>
-			</ContentControl>-->
-
-			<!--<TextBlock Grid.Column="1" x:Name="ResponseHttpStatusCode" Text="ResponseHttpStatusCode" HorizontalAlignment="Left" VerticalAlignment="Top" Width="70" FontFamily="Calibri" FontSize="14" Height="26" />
-			<TextBlock Grid.Column="2" x:Name="ResponseHttpStatusCodeDescription" Text="ResponseHttpStatusCodeDescription" HorizontalAlignment="Left" VerticalAlignment="Top" Width="215" FontFamily="Calibri" FontSize="14" Height="26" />
-
-			<TextBlock Grid.Row="5" Grid.Column="1" x:Name="ResponseStatusError" Text="ResponseStatusError"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="125" FontFamily="Calibri" FontSize="14" Height="26" Margin="75,0,0,0" />-->
-
-
-
-
-
-
-
-
 			<Label Grid.Row="6" Grid.Column="0" VerticalAlignment="Top" Content="Content"/>
-			<syntaxControl:SyntaxHighlightBox Grid.Row="6" Grid.Column="1" Name="Response" Margin="0,0,15,15" IsReadOnly="True" />
+			<syntaxControl:SyntaxHighlightBox Grid.Row="6" Grid.Column="1" Name="Content" Margin="0,0,15,15" IsReadOnly="True" />
 		</Grid>
 
 		<!--<Canvas Grid.Column="2">

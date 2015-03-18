@@ -20,8 +20,8 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 		private SolidColorBrush GetBackgroundColor(HttpStatusCode code)
 		{
-			var ok = new SolidColorBrush(Color.FromRgb(4, 200, 4));
-			var maybe = new SolidColorBrush(Color.FromRgb(250, 140, 50));
+			var ok = new SolidColorBrush(Color.FromRgb(4, 150, 4));
+			var maybe = new SolidColorBrush(Color.FromRgb(245, 113, 25));
 			var nope = new SolidColorBrush(Color.FromRgb(235, 40, 34));
 
 			switch (code)
