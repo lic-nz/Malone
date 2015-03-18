@@ -86,6 +86,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Extensions\HttpStatusCodeExtensions.cs" />
     <Compile Include="Messages\ConfigurationLoaded.cs" />
     <Compile Include="ViewModels\AppViewModel.cs" />
     <Compile Include="App.cs">
@@ -143,6 +144,7 @@
   <ItemGroup>
     <Resource Include="Malone.ico" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

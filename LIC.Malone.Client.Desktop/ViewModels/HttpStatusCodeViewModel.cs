@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Web;
 using System.Windows.Media;
+using LIC.Malone.Client.Desktop.Extensions;
 
 namespace LIC.Malone.Client.Desktop.ViewModels
 {
@@ -14,27 +15,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 		{
 			Code = (int) code;
 			Description = HttpWorkerRequest.GetStatusDescription(Code);
-			CodeColor = GetBackgroundColor(code);
-
-		}
-
-		private SolidColorBrush GetBackgroundColor(HttpStatusCode code)
-		{
-			var ok = new SolidColorBrush(Color.FromRgb(4, 150, 4));
-			var maybe = new SolidColorBrush(Color.FromRgb(245, 113, 25));
-			var nope = new SolidColorBrush(Color.FromRgb(235, 40, 34));
-
-			switch (code)
-			{
-				case HttpStatusCode.OK:
-					return ok;
-
-				case HttpStatusCode.NoContent:
-					return maybe;
-
-				default:
-					return nope;
-			}
+			CodeColor = code.ToBrush();
 		}
 	}
 }
