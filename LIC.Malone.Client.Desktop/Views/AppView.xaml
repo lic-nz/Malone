@@ -88,7 +88,9 @@
 			<Button Grid.Row="2" Grid.Column="1" x:Name="ManageTokens" Content="Manage Tokens" HorizontalAlignment="Left" VerticalAlignment="Top" Width="110" Margin="230,0,0,0" />
 
 			<Button Grid.Row="3" Grid.Column="1" x:Name="Send" Content="Send" HorizontalAlignment="Left" VerticalAlignment="Top" Width="70"/>
-			<TextBlock Grid.Row="3" Grid.Column="1" x:Name="ResponseStatusError" Text="ResponseStatusError"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="400" FontFamily="Calibri" FontSize="14" Height="26" Margin="150,0,0,0" />
+			<TextBlock Grid.Row="3" Grid.Column="1" x:Name="ResponseStatusError" Text="ResponseStatusError"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="125" FontFamily="Calibri" FontSize="14" Height="26" Margin="75,0,0,0" />
+			<TextBlock Grid.Row="3" Grid.Column="1" x:Name="ResponseHttpStatusCode" Text="ResponseHttpStatusCode"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="70" FontFamily="Calibri" FontSize="14" Height="26" Margin="205,0,0,0" />
+			<TextBlock Grid.Row="3" Grid.Column="1" x:Name="ResponseHttpStatusCodeDescription" Text="ResponseHttpStatusCodeDescription" HorizontalAlignment="Left" VerticalAlignment="Top" Width="215" FontFamily="Calibri" FontSize="14" Height="26" Margin="295,0,0,0" />
 
 			<Label Grid.Row="4" Grid.Column="0" VerticalAlignment="Top" Content="Response"/>
 			<syntaxControl:SyntaxHighlightBox Grid.Row="4" Grid.Column="1" Name="Response" Margin="0,0,15,15" IsReadOnly="True" />

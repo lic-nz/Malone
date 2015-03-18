@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Web;
+using System.Xml.Linq;
 using Caliburn.Micro;
 using DotNetOpenAuth.OAuth2;
 using LIC.Malone.Client.Desktop.Messages;
@@ -110,6 +113,28 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			{
 				_responseStatusError = value;
 				NotifyOfPropertyChange(() => ResponseStatusError);
+			}
+		}
+
+		private int _responseHttpStatusCode;
+		public int ResponseHttpStatusCode
+		{
+			get { return _responseHttpStatusCode; }
+			set
+			{
+				_responseHttpStatusCode = value;
+				NotifyOfPropertyChange(() => ResponseHttpStatusCode);
+			}
+		}
+
+		private string _responseHttpStatusCodeDescription;
+		public string ResponseHttpStatusCodeDescription
+		{
+			get { return _responseHttpStatusCodeDescription; }
+			set
+			{
+				_responseHttpStatusCodeDescription = value;
+				NotifyOfPropertyChange(() => ResponseHttpStatusCodeDescription);
 			}
 		}
 
@@ -327,6 +352,10 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 		public void Send()
 		{
+			Response = null;
+			ResponseHttpStatusCode = 0; // TODO: make nullable.
+			ResponseHttpStatusCodeDescription = null;
+
 			if (string.IsNullOrWhiteSpace(Url))
 				return;
 
@@ -345,7 +374,10 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			if (ResponseStatusError != null)
 				return;
 
-			Response = System.Xml.Linq.XDocument.Parse(response.Content).ToString(); //JsonConvert.SerializeObject(response, Formatting.Indented);
+			ResponseHttpStatusCode = (int)response.StatusCode;
+			ResponseHttpStatusCodeDescription = HttpWorkerRequest.GetStatusDescription(ResponseHttpStatusCode);
+
+			Response = XDocument.Parse(response.Content).ToString(); //JsonConvert.SerializeObject(response, Formatting.Indented);
 		}
 
 		private string GetResponseStatusError(ResponseStatus status)
