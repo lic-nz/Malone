@@ -95,7 +95,7 @@
 			<TextBlock Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Height="40" Style="{StaticResource H1}" VerticalAlignment="Bottom" HorizontalAlignment="Left" Text="Response"/>
 
 			<Label Grid.Row="5" Grid.Column="0" VerticalAlignment="Top" Content="HTTP Status"/>
-			<ContentControl Grid.Row="5" Grid.Column="1" x:Name="ResponseHttpStatus" />
+			<ContentControl Grid.Row="5" Grid.Column="1" x:Name="HttpStatusCode" />
 
 			<!--<ContentControl Grid.Row="5" Grid.Column="1" cal:View.Model="{Binding ResponseHttpStatusCode}" x:Name="RedddsponseHttpStatusCode">
 				<ContentControl.DataContext></ContentControl.DataContext>

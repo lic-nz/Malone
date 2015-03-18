@@ -105,14 +105,14 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			}
 		}
 
-		private HttpStatusViewModel _responseHttpStatus;
-		public HttpStatusViewModel ResponseHttpStatus
+		private HttpStatusCodeViewModel _httpStatusCode;
+		public HttpStatusCodeViewModel HttpStatusCode
 		{
-			get { return _responseHttpStatus; }
+			get { return _httpStatusCode; }
 			set
 			{
-				_responseHttpStatus = value;
-				NotifyOfPropertyChange(() => ResponseHttpStatus);
+				_httpStatusCode = value;
+				NotifyOfPropertyChange(() => HttpStatusCode);
 			}
 		}
 
@@ -297,8 +297,6 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 				Method.PUT
 			};
 
-			ResponseHttpStatus = new HttpStatusViewModel(HttpStatusCode.BadGateway);
-
 			History.Add(new Request("http://localhost:1444/services/onfarmautomation/v2/shed/1"));
 			History.Add(new Request("http://wah/api/clients/new", Method.PUT));
 			History.Add(new Request("http://zomg/gimme/api"));
@@ -366,6 +364,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 		public void Send()
 		{
 			Response = null;
+			HttpStatusCode = null; // TODO: make nullable.
 			ResponseHttpStatusCode = 0; // TODO: make nullable.
 			ResponseHttpStatusCodeDescription = null;
 
@@ -386,6 +385,8 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 			if (ResponseStatusError != null)
 				return;
+
+			HttpStatusCode = new HttpStatusCodeViewModel(response.StatusCode);
 
 			ResponseHttpStatusCode = (int)response.StatusCode;
 			ResponseHttpStatusCodeDescription = HttpWorkerRequest.GetStatusDescription(ResponseHttpStatusCode);

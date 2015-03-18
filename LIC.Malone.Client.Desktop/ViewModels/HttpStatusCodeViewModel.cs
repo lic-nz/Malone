@@ -4,13 +4,13 @@ using System.Windows.Media;
 
 namespace LIC.Malone.Client.Desktop.ViewModels
 {
-	public class HttpStatusViewModel
+	public class HttpStatusCodeViewModel
 	{
 		public int Code { get; private set; }
 		public string Description { get; private set; }
 		public Brush CodeColor { get; private set; }
 
-		public HttpStatusViewModel(HttpStatusCode code)
+		public HttpStatusCodeViewModel(HttpStatusCode code)
 		{
 			Code = (int) code;
 			Description = HttpWorkerRequest.GetStatusDescription(Code);
@@ -21,7 +21,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 		private SolidColorBrush GetBackgroundColor(HttpStatusCode code)
 		{
 			var ok = new SolidColorBrush(Color.FromRgb(4, 200, 4));
-			var maybe = new SolidColorBrush(Color.FromRgb(250, 240, 20));
+			var maybe = new SolidColorBrush(Color.FromRgb(250, 140, 50));
 			var nope = new SolidColorBrush(Color.FromRgb(235, 40, 34));
 
 			switch (code)
