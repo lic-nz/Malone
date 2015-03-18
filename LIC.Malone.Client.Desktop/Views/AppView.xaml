@@ -68,10 +68,7 @@
 			</Grid.RowDefinitions>
 
 			<Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Top" Content="Method"/>
-			<ComboBox Grid.Row="0" Grid.Column="1" x:Name="Method" SelectedValuePath="Content" HorizontalAlignment="Left" VerticalAlignment="Top" Width="63">
-				<ComboBoxItem IsSelected="True" Content="GET"/>
-				<ComboBoxItem Content="POST"/>
-			</ComboBox>
+			<ComboBox Grid.Row="0" Grid.Column="1" x:Name="Methods" HorizontalAlignment="Left" VerticalAlignment="Top" Width="63" />
 
 			<Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Top" Content="URL"/>
 			<TextBox Grid.Row="1" Grid.Column="1" x:Name="Url" metro:TextBoxHelper.Watermark="Enter URL or choose from history"

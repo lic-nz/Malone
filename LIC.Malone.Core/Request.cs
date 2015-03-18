@@ -6,10 +6,8 @@ namespace LIC.Malone.Core
 {
 	public class Request
 	{
-		private Color _getColor = new Color();
-
 		public string Url { get; set; }
-		public string Method { get; set; }
+		public Method Method { get; set; }
 		public string Token { get; set; }
 
 		public string BaseUrl
@@ -22,35 +20,13 @@ namespace LIC.Malone.Core
 			get { return GetResourcePath(); }
 		}
 
-		public Color MethodColor
-		{
-			get
-			{
-				return GetRestSharpMethod() == RestSharp.Method.GET
-					? new Color()
-					: new Color();
-			}
-		}
-
-		private Method GetRestSharpMethod()
-		{
-			switch (Method)
-			{
-				case "POST":
-					return RestSharp.Method.POST;
-				default:
-					return RestSharp.Method.GET;
-			}
-		}
-
 		public MaloneRestRequest ToMaloneRestRequest()
 		{
 			var url = GetUri();
 			var baseUrl = GetBaseUrl(url);
 			var resourcePath = GetResourcePath(url);
-			var method = GetRestSharpMethod();
 			
-			var request = new MaloneRestRequest(url, baseUrl, resourcePath, method);
+			var request = new MaloneRestRequest(url, baseUrl, resourcePath, Method);
 
 			request.AddHeader("Accept", "text/xml");
 			request.AddHeader("Accept-Encoding", "gzip,deflate");

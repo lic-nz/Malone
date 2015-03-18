@@ -10,6 +10,7 @@ using LIC.Malone.Core;
 using LIC.Malone.Core.Authentication;
 using LIC.Malone.Core.Authentication.OAuth;
 using Newtonsoft.Json;
+using RestSharp;
 using Path = System.IO.Path;
 
 namespace LIC.Malone.Client.Desktop.ViewModels
@@ -56,14 +57,25 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			}
 		}
 
-		private string _method;
-		public string Method
+		private IEnumerable<Method> _methods;
+		public IEnumerable<Method> Methods
 		{
-			get { return _method; }
+			get { return _methods; }
 			set
 			{
-				_method = value;
-				NotifyOfPropertyChange(() => Method);
+				_methods = value;
+				NotifyOfPropertyChange(() => Methods);
+			}
+		}
+
+		private Method _selectedMethod;
+		public Method SelectedMethod
+		{
+			get { return _selectedMethod; }
+			set
+			{
+				_selectedMethod = value;
+				NotifyOfPropertyChange(() => SelectedMethod);
 			}
 		}
 
@@ -225,10 +237,17 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 			LoadConfig(_bus);
 
-			History.Add(new Request { Method = "GET", Url = "http://localhost:1444/services/onfarmautomation/v2/shed/1" });
-			History.Add(new Request { Method = "POST", Url = "http://wah/api/clients/new" });
-			History.Add(new Request { Method = "GET", Url = "http://zomg/gimme/api" });
-			History.Add(new Request { Method = "GET", Url = "http://zomg/gimme/api/key/5bc5afe6-f873-40b3-b0b0-0d6585935067/some-really-long-url" });
+			Methods = new List<Method>
+			{
+				Method.GET,
+				Method.POST,
+				Method.PUT
+			};
+
+			History.Add(new Request { Method = Method.GET, Url = "http://localhost:1444/services/onfarmautomation/v2/shed/1" });
+			History.Add(new Request { Method = Method.PUT, Url = "http://wah/api/clients/new" });
+			History.Add(new Request { Method = Method.GET, Url = "http://zomg/gimme/api" });
+			History.Add(new Request { Method = Method.POST, Url = "http://zomg/gimme/api/key/5bc5afe6-f873-40b3-b0b0-0d6585935067/some-really-long-url" });
 		}
 
 		private void LoadConfig(EventAggregator bus)
@@ -297,7 +316,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			var request = new Request
 			{
 				Url = Url,
-				Method = Method,
+				Method = SelectedMethod,
 				Token = SelectedToken.AuthorizationState.AccessToken
 			};
 
@@ -311,9 +330,12 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 		public void HistoryClicked(object e)
 		{
+			if (SelectedHistory == null)
+				return;
+
 			// Rebind.
-			if (SelectedHistory != null)
-				Url = SelectedHistory.Url;
+			Url = SelectedHistory.Url;
+			SelectedMethod = SelectedHistory.Method;
 		}
 
 		// TODO: Move to own view model.
