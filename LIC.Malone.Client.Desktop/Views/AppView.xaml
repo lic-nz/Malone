@@ -9,10 +9,12 @@
 	xmlns:syntaxControl="clr-namespace:AurelienRibon.Ui.SyntaxHighlightBox;assembly=AurelienRibon.Ui.SyntaxHighlightBox"
 	mc:Ignorable="d"
 	Title="Malone"
+	Icon="Malone.ico"
+	ShowIconOnTitleBar="False"
 	GlowBrush="{DynamicResource AccentColorBrush}"
 	WindowStartupLocation="CenterScreen"
-	MinWidth="1000" MinHeight="800"
-	Width="1000" Height="800">
+	MinWidth="1000" MinHeight="730"
+	Width="1000" Height="730">
 
 	<Grid>
 		<Grid.ColumnDefinitions>
