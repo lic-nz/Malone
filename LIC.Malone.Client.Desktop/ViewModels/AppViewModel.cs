@@ -22,11 +22,11 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 	// TODO: Actually conduct the flyout.
 	public class AppViewModel : Conductor<object>, IHandle<ConfigurationLoaded>
 	{
-		private EventAggregator _bus;
-		private IAuthorizationState _authorizationState;
-		private DialogManager _dialogManager = new DialogManager();
+		private readonly EventAggregator _bus;
+		private readonly DialogManager _dialogManager = new DialogManager();
+		private readonly List<string> _allowedSchemes = new List<string> { Uri.UriSchemeHttp, Uri.UriSchemeHttps };
 
-		private static readonly List<string> AllowedSchemes = new List<string> { "http", "https" };
+		private IAuthorizationState _authorizationState;
 
 		#region Databound properties
 
@@ -64,7 +64,12 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			}
 		}
 
-		private IEnumerable<Method> _methods;
+		private IEnumerable<Method> _methods = new List<Method>
+		{
+			Method.GET,
+			Method.POST,
+			Method.PUT
+		};
 		public IEnumerable<Method> Methods
 		{
 			get { return _methods; }
@@ -157,7 +162,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			get
 			{
 				Uri url;
-				return Uri.TryCreate(Url, UriKind.Absolute, out url) && AllowedSchemes.Contains(url.Scheme);
+				return Uri.TryCreate(Url, UriKind.Absolute, out url) && _allowedSchemes.Contains(url.Scheme);
 			}
 		}
 
@@ -274,13 +279,6 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			_bus.Subscribe(this);
 
 			LoadConfig(_bus);
-
-			Methods = new List<Method>
-			{
-				Method.GET,
-				Method.POST,
-				Method.PUT
-			};
 
 			History.Add(new Request("http://localhost:1444/services/onfarmautomation/v2/shed/1"));
 			History.Add(new Request("http://wah/api/clients/new", Method.PUT));
