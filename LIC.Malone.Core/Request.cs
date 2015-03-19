@@ -1,14 +1,18 @@
 ﻿using System;
-using System.Windows.Media;
+using DotNetOpenAuth.OAuth2;
+using LIC.Malone.Core.Authentication.OAuth;
+using Newtonsoft.Json;
 using RestSharp;
 
 namespace LIC.Malone.Core
 {
 	public class Request
 	{
-		public string Url { get; private set; }
-		public Method Method { get; private set; }
-		public string Token { get; set; }
+		public Guid Guid { get; set; }
+		public string Url { get; set; }
+		public Method Method { get; set; }
+
+		public NamedAuthorizationState NamedAuthorizationState { get; set; }
 
 		public string BaseUrl
 		{
@@ -20,6 +24,11 @@ namespace LIC.Malone.Core
 			get { return GetResourcePath(); }
 		}
 
+		[JsonConstructor]
+		public Request()
+		{
+		}
+
 		public Request(string url) : this(url, Method.GET)
 		{
 			
@@ -27,6 +36,7 @@ namespace LIC.Malone.Core
 
 		public Request(string url, Method method)
 		{
+			Guid = Guid.NewGuid();
 			Url = url;
 			Method = method;
 		}
@@ -41,7 +51,9 @@ namespace LIC.Malone.Core
 
 			request.AddHeader("Accept", "text/xml");
 			request.AddHeader("Accept-Encoding", "gzip,deflate");
-			request.AddHeader("Authorization", string.Concat("Bearer ", Token));
+
+			if (NamedAuthorizationState != null)
+				request.AddHeader("Authorization", string.Concat("Bearer ", NamedAuthorizationState.AuthorizationState.AccessToken));
 
 			return request;
 		}

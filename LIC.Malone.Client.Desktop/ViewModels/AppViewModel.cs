@@ -13,6 +13,7 @@ using LIC.Malone.Client.Desktop.Messages;
 using LIC.Malone.Core;
 using LIC.Malone.Core.Authentication;
 using LIC.Malone.Core.Authentication.OAuth;
+using LIC.Malone.Core.Config.History;
 using Newtonsoft.Json;
 using RestSharp;
 using Path = System.IO.Path;
@@ -279,11 +280,6 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			_bus.Subscribe(this);
 
 			LoadConfig(_bus);
-
-			History.Add(new Request("http://localhost:1444/services/onfarmautomation/v2/shed/1"));
-			History.Add(new Request("http://wah/api/clients/new", Method.PUT));
-			History.Add(new Request("http://zomg/gimme/api"));
-			History.Add(new Request("http://zomg/gimme/api/key/5bc5afe6-f873-40b3-b0b0-0d6585935067/some-really-long-url", Method.POST));
 		}
 
 		private void LoadConfig(EventAggregator bus)
@@ -315,6 +311,14 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 			if (File.Exists(path))
 				userCredentials = JsonConvert.DeserializeObject<UserCredentials>(File.ReadAllText(path));
+
+			path = Path.Combine(configLocation, "history.json");
+
+			if (File.Exists(path))
+			{
+				var historyCollection = JsonConvert.DeserializeObject<HistoryCollection>(File.ReadAllText(path));
+				History.AddRange(historyCollection.Requests);
+			}
 
 			bus.PublishOnUIThread(new ConfigurationLoaded(applications, authenticationUrls, userCredentials));
 		}
@@ -357,7 +361,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			var request = new Request(Url, SelectedMethod);
 
 			if (SelectedToken != null)
-				request.Token = SelectedToken.AuthorizationState.AccessToken;
+				request.NamedAuthorizationState = SelectedToken;
 
 			AddToHistory(request);
 
