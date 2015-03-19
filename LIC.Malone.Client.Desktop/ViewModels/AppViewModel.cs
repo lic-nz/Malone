@@ -333,8 +333,15 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 				&& request.Method == latestRequest.Method;
 		}
 
-		private void AddToHistory(Request request)
+		private void AddToHistory(Request request, IRestResponse response)
 		{
+			request.Response = new Response
+			{
+				Guid = Guid.NewGuid(),
+				At = DateTimeOffset.Now,
+				HttpStatusCode = response.StatusCode
+			};
+
 			if (ShouldSkipHistory(request))
 				return;
 
@@ -361,8 +368,6 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			if (SelectedToken != null)
 				request.NamedAuthorizationState = SelectedToken;
 
-			AddToHistory(request);
-
 			var client = new ApiClient();
 			var response = client.Send(request);
 
@@ -377,6 +382,8 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			HttpStatusCode = new HttpStatusCodeViewModel(response.StatusCode);
 
 			ResponseContent = XDocument.Parse(response.Content).ToString(); //JsonConvert.SerializeObject(response, Formatting.Indented);
+			
+			AddToHistory(request, response);
 		}
 
 		private string GetResponseStatusError(ResponseStatus status)
