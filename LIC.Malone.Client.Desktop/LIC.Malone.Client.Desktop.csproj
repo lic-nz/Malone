@@ -96,6 +96,7 @@
     </Compile>
     <Compile Include="AppBootstrapper.cs" />
     <Compile Include="DialogManager.cs" />
+    <Compile Include="Extensions\HttpStatusCodeConverters.cs" />
     <Compile Include="ViewModels\HttpStatusCodeViewModel.cs" />
     <Page Include="Views\AppView.xaml">
       <SubType>Designer</SubType>

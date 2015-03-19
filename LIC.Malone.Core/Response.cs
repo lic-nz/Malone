@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 
 namespace LIC.Malone.Core
 {
@@ -6,6 +7,6 @@ namespace LIC.Malone.Core
 	{
 		public Guid Guid { get; set; }
 		public DateTimeOffset At { get; set; }
-		public int HttpStatusCode { get; set; }
+		public HttpStatusCode HttpStatusCode { get; set; }
 	}
 }

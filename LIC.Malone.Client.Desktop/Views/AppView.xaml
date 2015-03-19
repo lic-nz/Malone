@@ -7,6 +7,7 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:cal="http://www.caliburnproject.org"
 	xmlns:syntaxControl="clr-namespace:AurelienRibon.Ui.SyntaxHighlightBox;assembly=AurelienRibon.Ui.SyntaxHighlightBox"
+	xmlns:extensions="clr-namespace:LIC.Malone.Client.Desktop.Extensions"
 	mc:Ignorable="d"
 	Title="Malone"
 	TitleCaps="False"
@@ -34,6 +35,10 @@
 				<ListBox.ItemTemplate>
 					<DataTemplate>
 						<Grid Margin="5,5">
+							<Grid.Resources>
+								<extensions:HttpStatusCodeToBrushConverter x:Key="HttpStatusCodeToBrushConverter" />
+								<extensions:HttpStatusCodeToIntConverter x:Key="HttpStatusCodeToIntConverter" />
+							</Grid.Resources>
 							<Grid.ColumnDefinitions>
 								<ColumnDefinition Width="40" />
 								<ColumnDefinition Width="*" />
@@ -42,7 +47,10 @@
 								<RowDefinition />
 								<RowDefinition />
 							</Grid.RowDefinitions>
-							<TextBlock Grid.Column="0" Grid.RowSpan="2" Text="{Binding Method}" Style="{StaticResource History.Method}" />
+
+							<TextBlock Grid.Column="0" Grid.Row="0" Text="{Binding Method}" Style="{StaticResource History.BaseUrl}" />
+							<TextBlock Grid.Column="0" Grid.Row="1" Text="{Binding Response.HttpStatusCode, Converter={StaticResource HttpStatusCodeToIntConverter}}" Foreground="{Binding Response.HttpStatusCode, Converter={StaticResource HttpStatusCodeToBrushConverter}}" />
+							
 							<TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding BaseUrl}" Style="{StaticResource History.BaseUrl}" />
 							<TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding ResourcePath}" Style="{StaticResource History.ResourcePath}" />
 						</Grid>
