@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
+using System.Windows.Navigation;
 using System.Xml.Linq;
 using Caliburn.Micro;
 using DotNetOpenAuth.OAuth2;
@@ -22,8 +23,8 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 	public class AppViewModel : Conductor<object>, IHandle<ConfigurationLoaded>
 	{
 		private EventAggregator _bus;
-
 		private IAuthorizationState _authorizationState;
+		private DialogManager _dialogManager = new DialogManager();
 
 		#region Databound properties
 
@@ -127,14 +128,14 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			}
 		}
 
-		private string _content;
-		public string Content
+		private string _responseContent;
+		public string ResponseContent
 		{
-			get { return _content; }
+			get { return _responseContent; }
 			set
 			{
-				_content = value;
-				NotifyOfPropertyChange(() => Content);
+				_responseContent = value;
+				NotifyOfPropertyChange(() => ResponseContent);
 			}
 		}
 
@@ -314,11 +315,6 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			bus.PublishOnUIThread(new ConfigurationLoaded(applications, authenticationUrls, userCredentials));
 		}
 
-		public void ManageTokens()
-		{
-			ShowAddTokenFlyout = true;
-		}
-
 		private bool ShouldSkipHistory(Request request)
 		{
 			if (!_history.Any())
@@ -339,10 +335,15 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			History.Insert(0, request);
 		}
 
-		public void Send()
+		public void ManageTokens()
+		{
+			ShowAddTokenFlyout = true;
+		}
+
+		public async void Send()
 		{
 			// Reset.
-			Content = null;
+			ResponseContent = null;
 			ResponseStatusError = null;
 			HttpStatusCode = null;
 
@@ -362,11 +363,14 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			ResponseStatusError = GetResponseStatusError(response.ResponseStatus);
 
 			if (ResponseStatusError != null)
+			{
+				var result = await _dialogManager.Show("Oh dear", "I'll be honest with you: we've hit a snag. Not sure exactly what the problem is but I suggest you've got the URL wrong or forgotten to plug in your Internet. Double check those things and we'll have another go. BTW, the low level reponse was: " + ResponseStatusError);
 				return;
+			}
 
 			HttpStatusCode = new HttpStatusCodeViewModel(response.StatusCode);
 
-			Content = XDocument.Parse(response.Content).ToString(); //JsonConvert.SerializeObject(response, Formatting.Indented);
+			ResponseContent = XDocument.Parse(response.Content).ToString(); //JsonConvert.SerializeObject(response, Formatting.Indented);
 		}
 
 		private string GetResponseStatusError(ResponseStatus status)
@@ -421,7 +425,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 			if (result.HasError)
 			{
-				Content = result.Error;
+				ResponseContent = result.Error;
 				_authorizationState = null;
 				return;
 			}

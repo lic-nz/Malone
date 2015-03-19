@@ -98,7 +98,7 @@
 			<ContentControl Grid.Row="5" Grid.Column="1" x:Name="HttpStatusCode" />
 
 			<Label Grid.Row="6" Grid.Column="0" VerticalAlignment="Top" Content="Content"/>
-			<syntaxControl:SyntaxHighlightBox Grid.Row="6" Grid.Column="1" Name="Content" Margin="0,0,15,15" IsReadOnly="True" />
+			<syntaxControl:SyntaxHighlightBox Grid.Row="6" Grid.Column="1" Name="ResponseContent" Margin="0,0,15,15" IsReadOnly="True" />
 		</Grid>
 
 		<!--<Canvas Grid.Column="2">
