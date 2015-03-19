@@ -10,7 +10,6 @@ using LIC.Malone.Client.Desktop.Messages;
 using LIC.Malone.Core;
 using LIC.Malone.Core.Authentication;
 using LIC.Malone.Core.Authentication.OAuth;
-using LIC.Malone.Core.Config.History;
 using Newtonsoft.Json;
 using RestSharp;
 
@@ -22,6 +21,8 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 		private readonly EventAggregator _bus;
 		private readonly DialogManager _dialogManager = new DialogManager();
 		private readonly List<string> _allowedSchemes = new List<string> { Uri.UriSchemeHttp, Uri.UriSchemeHttps };
+
+		private string _historyJsonPath;
 
 		private IAuthorizationState _authorizationState;
 
@@ -310,12 +311,17 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			if (File.Exists(path))
 				userCredentials = JsonConvert.DeserializeObject<UserCredentials>(File.ReadAllText(path));
 
-			path = Path.Combine(configLocation, "history.json");
+			_historyJsonPath = Path.Combine(configLocation, "history.json");
 
-			if (File.Exists(path))
+			if (File.Exists(_historyJsonPath))
 			{
-				var historyCollection = JsonConvert.DeserializeObject<HistoryCollection>(File.ReadAllText(path));
-				History.AddRange(historyCollection.Requests);
+				var json = File.ReadAllText(_historyJsonPath);
+
+				if (json.Any())
+				{
+					var history = JsonConvert.DeserializeObject<List<Request>>(json);
+					History.AddRange(history);
+				}
 			}
 
 			bus.PublishOnUIThread(new ConfigurationLoaded(applications, authenticationUrls, userCredentials));
@@ -346,6 +352,9 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 				return;
 
 			History.Insert(0, request);
+
+			var json = JsonConvert.SerializeObject(History);
+			File.WriteAllText(_historyJsonPath, json);
 		}
 
 		public void ManageTokens()
