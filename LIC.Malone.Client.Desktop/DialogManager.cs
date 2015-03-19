@@ -14,12 +14,7 @@ namespace LIC.Malone.Client.Desktop
 
 		public async Task<MessageDialogResult> Show(string title, string message, MessageDialogStyle dialogStyle)
 		{
-			var settings = new MetroDialogSettings
-			{
-				//ColorScheme = MetroDialogColorScheme.Accented
-			};
-
-			return await Show(title, message, dialogStyle, settings);
+			return await Show(title, message, dialogStyle, new MetroDialogSettings());
 		}
 
 		public async Task<MessageDialogResult> Show(string title, string message, MessageDialogStyle dialogStyle, MetroDialogSettings settings)

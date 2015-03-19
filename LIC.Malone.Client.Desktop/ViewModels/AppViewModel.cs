@@ -364,7 +364,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 			if (ResponseStatusError != null)
 			{
-				var result = await _dialogManager.Show("Oh dear", "I'll be honest with you: we've hit a snag. Not sure exactly what the problem is but I suggest you've got the URL wrong or forgotten to plug in your Internet. Double check those things and we'll have another go. BTW, the low level reponse was: " + ResponseStatusError);
+				var result = await _dialogManager.Show("Oh dear", "I'll be honest with you: we've hit a snag. Not sure exactly what the problem is but I suggest you've got the URL wrong or forgotten to plug in your Internet. Double check those things and we'll have another go.\n\nBTW, the low level reponse was: " + ResponseStatusError);
 				return;
 			}
 
@@ -382,13 +382,13 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 				case ResponseStatus.Completed:
 					return null;
 				case ResponseStatus.Error:
-					return "Error";
+					return "Error. Network might be down, DNS failed, or sunspots messed up the signal.";
 				case ResponseStatus.TimedOut:
-					return "Timed out";
+					return "Timed out.";
 				case ResponseStatus.Aborted:
-					return "Aborted";
+					return "Aborted.";
 				default:
-					throw new ArgumentOutOfRangeException();
+					return "Well that's a new one: " + status + ". Might want to add it in.";
 			}
 		}
 
