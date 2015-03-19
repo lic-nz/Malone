@@ -7,7 +7,6 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:cal="http://www.caliburnproject.org"
 	xmlns:syntaxControl="clr-namespace:AurelienRibon.Ui.SyntaxHighlightBox;assembly=AurelienRibon.Ui.SyntaxHighlightBox"
-	xmlns:views="clr-namespace:LIC.Malone.Client.Desktop.Views"
 	mc:Ignorable="d"
 	Title="Malone"
 	TitleCaps="False"
@@ -18,14 +17,14 @@
 	MinWidth="1000" MinHeight="730"
 	Width="1000" Height="730">
 
-	<Grid>
+	<Grid Name="MainGrid">
 		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="1*" MinWidth="300" />
+			<ColumnDefinition Width="1*" MinWidth="200" />
 			<ColumnDefinition Width="2" />
-			<ColumnDefinition Width="5*" MinWidth="500" />
+			<ColumnDefinition Width="2*" MinWidth="500" />
 		</Grid.ColumnDefinitions>
 
-		<DockPanel Grid.Column="0" LastChildFill="True">
+		<DockPanel Name="HistoryDockPanel" Grid.Column="0" LastChildFill="True">
 
 			<TextBlock DockPanel.Dock="Top" Height="40" Style="{StaticResource H1}" HorizontalAlignment="Left" Text="History" Margin="8,0,0,0"/>
 
@@ -56,61 +55,73 @@
 
 		<GridSplitter Grid.Column="1" Width="2" HorizontalAlignment="Stretch" />
 
-		<TextBlock Grid.Column="2" Height="40" Style="{StaticResource H1}" VerticalAlignment="Top" HorizontalAlignment="Left" Text="Request" Margin="8,0,0,0"/>
+		<DockPanel Name="RequestResponseDockPanel" Grid.Column="2" LastChildFill="True" Margin="8 0 0 0">
 
-		<Grid Name="RequestGrid" Grid.Column="2" Margin="8,50,0,0">
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="100" />
-				<ColumnDefinition Width="*" />
-			</Grid.ColumnDefinitions>
-			<Grid.RowDefinitions>
-				<RowDefinition Height="40" />
-				<RowDefinition Height="40" />
-				<RowDefinition Height="40" />
-				<RowDefinition Height="40" />
-				<RowDefinition Height="40" />
-				<RowDefinition Height="40" />
-				<RowDefinition Height="*" />
-			</Grid.RowDefinitions>
+			<TextBlock DockPanel.Dock="Top" Height="40" Style="{StaticResource H1}" VerticalAlignment="Top" HorizontalAlignment="Left" Text="Request"/>
 
-			<Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Top" Content="Method"/>
-			<ComboBox Grid.Row="0" Grid.Column="1" x:Name="Methods" HorizontalAlignment="Left" VerticalAlignment="Top" Width="63" />
+			<Grid DockPanel.Dock="Top" Name="RequestGrid">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="100" />
+					<ColumnDefinition Width="*" />
+				</Grid.ColumnDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="40" />
+					<RowDefinition Height="40" />
+					<RowDefinition Height="40" />
+				</Grid.RowDefinitions>
 
-			<Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Top" Content="URL"/>
-			<TextBox Grid.Row="1" Grid.Column="1" x:Name="Url" metro:TextBoxHelper.Watermark="Enter URL or choose from history"
-				FontFamily="Calibri" FontSize="14" Height="26" VerticalAlignment="Top" Margin="0,0,15,0"/>
+				<Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Top" Content="URL"/>
+				<TextBox Grid.Row="0" Grid.Column="1" x:Name="Url" metro:TextBoxHelper.Watermark="Enter URL or choose from history"
+					FontFamily="Calibri" FontSize="14" Height="26" VerticalAlignment="Top" Margin="0 0 90 0"/>
 
-			<Label Grid.Row="2" Grid.Column="0" VerticalAlignment="Top" Content="Token"/>
-			<ComboBox Grid.Row="2" Grid.Column="1" x:Name="Tokens" HorizontalAlignment="Left" VerticalAlignment="Top" Width="200">
-				<ComboBox.ItemTemplate>
-					<DataTemplate>
-						<TextBlock Text="{Binding Name}" />
-					</DataTemplate>
-				</ComboBox.ItemTemplate>
-			</ComboBox>
-			<Button Grid.Row="2" Grid.Column="1" x:Name="ManageTokens" Content="Manage Tokens" HorizontalAlignment="Left" VerticalAlignment="Top" Width="110" Margin="230,0,0,0" />
+				<ComboBox Grid.Row="0" Grid.Column="1" x:Name="Methods" Margin="0 0 15 0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="65" />
 
-			<Button Grid.Row="3" Grid.Column="1" x:Name="Send" Content="Send" HorizontalAlignment="Left" VerticalAlignment="Top" Width="70"/>
+				<Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Top" Content="Token"/>
+				<ComboBox Grid.Row="1" Grid.Column="1" x:Name="Tokens" HorizontalAlignment="Left" VerticalAlignment="Top" Width="200">
+					<ComboBox.ItemTemplate>
+						<DataTemplate>
+							<TextBlock Text="{Binding Name}" />
+						</DataTemplate>
+					</ComboBox.ItemTemplate>
+				</ComboBox>
+				<Button Grid.Row="1" Grid.Column="1" x:Name="ManageTokens" Content="Manage Tokens" HorizontalAlignment="Left" VerticalAlignment="Top" Width="110" Margin="230,0,0,0" />
 
-			<TextBlock Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Height="40" Style="{StaticResource H1}" VerticalAlignment="Bottom" HorizontalAlignment="Left" Text="Response"/>
+				<Button Grid.Row="2" Grid.Column="1" x:Name="Send" Content="Send" HorizontalAlignment="Left" VerticalAlignment="Top" Width="70"/>
+			</Grid>
 
-			<Label Grid.Row="5" Grid.Column="0" VerticalAlignment="Top" Content="HTTP Status"/>
-			<ContentControl Grid.Row="5" Grid.Column="1" x:Name="HttpStatusCode" />
+			<TextBlock DockPanel.Dock="Top" Height="40" Style="{StaticResource H1}" VerticalAlignment="Bottom" HorizontalAlignment="Left" Text="Response"/>
 
-			<Label Grid.Row="6" Grid.Column="0" VerticalAlignment="Top" Content="Content"/>
-			<syntaxControl:SyntaxHighlightBox Grid.Row="6" Grid.Column="1" Name="ResponseContent" Margin="0,0,15,15" IsReadOnly="True" />
-		</Grid>
+			<Grid DockPanel.Dock="Top" Name="ResponseGrid">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="100" />
+					<ColumnDefinition Width="*" />
+				</Grid.ColumnDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="40" />
+					<RowDefinition Height="*" />
+				</Grid.RowDefinitions>
+
+				<Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Top" Content="HTTP Status"/>
+				<ContentControl Grid.Row="0" Grid.Column="1" x:Name="HttpStatusCode" HorizontalAlignment="Left" Width="400" />
+
+				<Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Top" Content="Content"/>
+				<syntaxControl:SyntaxHighlightBox Grid.Row="1" Grid.Column="1" Name="ResponseContent" Margin="0,0,15,15" IsReadOnly="False" />
+
+			</Grid>
+
+		</DockPanel>
 
 		<!--<Canvas Grid.Column="2">
 			<TextBox x:Name="Token" HorizontalAlignment="Left" Height="73" TextWrapping="Wrap" VerticalAlignment="Top" Width="473" Canvas.Left="493" Canvas.Top="127"/>
 		</Canvas>-->
 	</Grid>
 
-	<metro:MetroWindow.RightWindowCommands>
+	<!-- TODO: Have some settings. -->
+	<!--<metro:MetroWindow.RightWindowCommands>
 		<metro:WindowCommands>
-			<Button Content="Manage tokens" cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action ManageTokens()]" />
+			<Button Content="Settings" cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action ManageTokens()]" />
 		</metro:WindowCommands>
-	</metro:MetroWindow.RightWindowCommands>
+	</metro:MetroWindow.RightWindowCommands>-->
 
 	<!-- TODO: Figure out how to auto-bind inside the flyout. -->
 	<metro:MetroWindow.Flyouts>
