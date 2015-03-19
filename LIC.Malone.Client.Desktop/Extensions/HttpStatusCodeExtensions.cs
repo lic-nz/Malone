@@ -7,26 +7,22 @@ namespace LIC.Malone.Client.Desktop.Extensions
 	{
 		public static Brush ToBrush(this HttpStatusCode code)
 		{
-			var ok = new SolidColorBrush(Color.FromRgb(4, 150, 4));
-			var maybe = new SolidColorBrush(Color.FromRgb(245, 113, 25));
-			var nope = new SolidColorBrush(Color.FromRgb(235, 40, 34));
-
 			switch (code)
 			{
 				case HttpStatusCode.OK:
-					return ok;
+					return Colors.Ok;
 
 				case HttpStatusCode.Accepted:
-					return ok;
+					return Colors.Ok;
 
 				case HttpStatusCode.NoContent:
-					return maybe;
+					return Colors.Maybe;
 
 				case HttpStatusCode.Created:
-					return maybe;
+					return Colors.Maybe;
 
 				default:
-					return nope;
+					return Colors.Nope;
 			}
 		}
 	}

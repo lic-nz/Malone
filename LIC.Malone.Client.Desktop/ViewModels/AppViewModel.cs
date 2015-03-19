@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Web;
-using System.Windows.Navigation;
 using System.Xml.Linq;
 using Caliburn.Micro;
 using DotNetOpenAuth.OAuth2;
@@ -16,7 +13,6 @@ using LIC.Malone.Core.Authentication.OAuth;
 using LIC.Malone.Core.Config.History;
 using Newtonsoft.Json;
 using RestSharp;
-using Path = System.IO.Path;
 
 namespace LIC.Malone.Client.Desktop.ViewModels
 {
