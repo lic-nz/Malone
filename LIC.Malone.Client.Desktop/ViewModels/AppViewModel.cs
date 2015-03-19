@@ -276,6 +276,8 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			_bus.Subscribe(this);
 
 			LoadConfig(_bus);
+
+			ResponseContent = JsonConvert.SerializeObject(DateTimeOffset.Now) + "\n" + JsonConvert.SerializeObject(DateTime.Now);
 		}
 
 		private void LoadConfig(EventAggregator bus)

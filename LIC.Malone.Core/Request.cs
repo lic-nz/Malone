@@ -9,8 +9,10 @@ namespace LIC.Malone.Core
 	public class Request
 	{
 		public Guid Guid { get; set; }
+		public DateTimeOffset At { get; set; }
 		public string Url { get; set; }
 		public Method Method { get; set; }
+		public Response Response { get; set; }
 
 		public NamedAuthorizationState NamedAuthorizationState { get; set; }
 
