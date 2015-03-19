@@ -26,6 +26,8 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 		private IAuthorizationState _authorizationState;
 		private DialogManager _dialogManager = new DialogManager();
 
+		private static readonly List<string> AllowedSchemes = new List<string> { "http", "https" };
+
 		#region Databound properties
 
 		private IObservableCollection<Request> _history = new BindableCollection<Request>();
@@ -152,7 +154,11 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 		public bool CanSend
 		{
-			get { return !string.IsNullOrWhiteSpace(Url); }
+			get
+			{
+				Uri url;
+				return Uri.TryCreate(Url, UriKind.Absolute, out url) && AllowedSchemes.Contains(url.Scheme);
+			}
 		}
 
 		#endregion
