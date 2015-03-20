@@ -5,6 +5,8 @@ namespace LIC.Malone.Core
 {
 	public class MaloneRestRequest : RestRequest
 	{
+		public DateTimeOffset SentAt { get; set; }
+
 		public Uri AbsoluteUrl { get; private set; }
 		public string BaseUrl { get; private set; }
 		public string ResourcePath { get; private set; }

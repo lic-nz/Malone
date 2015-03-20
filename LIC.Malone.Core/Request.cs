@@ -16,6 +16,25 @@ namespace LIC.Malone.Core
 
 		public NamedAuthorizationState NamedAuthorizationState { get; set; }
 
+		// TODO: Don't pollute core with Caliburn shiz.
+		#region Caliburn workarounds
+
+		public string AtString
+		{
+			get { return At.ToLocalTime().ToString("D"); }
+		}
+
+		public string ResponseTime
+		{
+			get
+			{
+				var diff = Response.At - this.At;
+				return string.Concat((int) diff.TotalMilliseconds, "ms");
+			}
+		}
+
+		#endregion
+
 		public string BaseUrl
 		{
 			get { return GetBaseUrl(); }

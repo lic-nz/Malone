@@ -325,36 +325,6 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			bus.PublishOnUIThread(new ConfigurationLoaded(applications, authenticationUrls, userCredentials));
 		}
 
-		private bool ShouldSkipHistory(Request request)
-		{
-			if (!_history.Any())
-				return false;
-
-			var latestRequest = _history[0];
-
-			return
-				request.Url == latestRequest.Url
-				&& request.Method == latestRequest.Method;
-		}
-
-		private void AddToHistory(Request request, IRestResponse response)
-		{
-			request.Response = new Response
-			{
-				Guid = Guid.NewGuid(),
-				At = DateTimeOffset.Now,
-				HttpStatusCode = response.StatusCode
-			};
-
-			if (ShouldSkipHistory(request))
-				return;
-
-			History.Insert(0, request);
-
-			var json = JsonConvert.SerializeObject(History);
-			File.WriteAllText(_historyJsonPath, json);
-		}
-
 		public void ManageTokens()
 		{
 			ShowAddTokenFlyout = true;
@@ -376,13 +346,25 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 				request.NamedAuthorizationState = SelectedToken;
 
 			var client = new ApiClient();
-			var response = client.Send(request);
+			var result = client.Send(request);
+			var response = result.Response;
+
+			if (response == null)
+				return;
+
+			request.At = result.SentAt;
+			request.Response = new Response
+			{
+				Guid = Guid.NewGuid(),
+				At = result.ReceivedAt,
+				HttpStatusCode = response.StatusCode
+			};
 
 			ResponseStatusError = GetResponseStatusError(response.ResponseStatus);
 
 			if (ResponseStatusError != null)
 			{
-				var result = await _dialogManager.Show("Oh dear", "I'll be honest with you: we've hit a snag. Not sure exactly what the problem is but I suggest you've got the URL wrong or forgotten to plug in your Internet. Double check those things and we'll have another go.\n\nBTW, the low level reponse was: " + ResponseStatusError);
+				var dialogResult = await _dialogManager.Show("Oh dear", "I'll be honest with you: we've hit a snag. Not sure exactly what the problem is but I suggest you've got the URL wrong or forgotten to plug in your Internet. Double check those things and we'll have another go.\n\nBTW, the low level reponse was: " + ResponseStatusError);
 				return;
 			}
 
@@ -390,7 +372,30 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 			ResponseContent = XDocument.Parse(response.Content).ToString(); //JsonConvert.SerializeObject(response, Formatting.Indented);
 			
-			AddToHistory(request, response);
+			AddToHistory(request);
+		}
+
+		private bool ShouldSkipHistory(Request request)
+		{
+			if (!_history.Any())
+				return false;
+
+			var latestRequest = _history[0];
+
+			return
+				request.Url == latestRequest.Url
+				&& request.Method == latestRequest.Method;
+		}
+
+		private void AddToHistory(Request request)
+		{
+			if (ShouldSkipHistory(request))
+				return;
+
+			History.Insert(0, request);
+
+			var json = JsonConvert.SerializeObject(History);
+			File.WriteAllText(_historyJsonPath, json);
 		}
 
 		private string GetResponseStatusError(ResponseStatus status)

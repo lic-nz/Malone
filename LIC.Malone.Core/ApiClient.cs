@@ -1,20 +1,27 @@
-﻿using RestSharp;
+﻿using System;
+using RestSharp;
 
 namespace LIC.Malone.Core
 {
 	public class ApiClient
 	{
-		public IRestResponse Send(Request request)
+		public SendResult Send(Request request)
 		{
 			return Send(request.ToMaloneRestRequest());
 		}
 
-		private IRestResponse Send(MaloneRestRequest request)
+		private SendResult Send(MaloneRestRequest request)
 		{
-			var client = new RestClient(request.BaseUrl);
-			var response = client.Execute(request);
+			var result = new SendResult();
 
-			return response;
+			var client = new RestClient(request.BaseUrl);
+
+			result.SentAt = DateTimeOffset.UtcNow;
+			var response = client.Execute(request);
+			result.ReceivedAt = DateTimeOffset.UtcNow;
+			result.Response = response;
+
+			return result;
 		}
 	}
 }
