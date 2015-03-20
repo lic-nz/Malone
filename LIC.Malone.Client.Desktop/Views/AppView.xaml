@@ -27,14 +27,14 @@
 
 		<DockPanel Name="HistoryDockPanel" Grid.Column="0" LastChildFill="True">
 
-			<TextBlock DockPanel.Dock="Top" Height="40" Style="{StaticResource H1}" HorizontalAlignment="Left" Text="History" Margin="8,0,0,0"/>
+			<Label DockPanel.Dock="Top" Height="40" Style="{StaticResource H1}" HorizontalAlignment="Left" Content="History" Margin="4 0 0 0" />
 
 			<ListBox x:Name="History" HorizontalAlignment="Stretch" SelectionMode="Single"
 				cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action HistoryClicked($executionContext)]">
 
 				<ListBox.ItemTemplate>
 					<DataTemplate>
-						<Grid Margin="5,5">
+						<Grid Margin="7,7">
 							<Grid.Resources>
 								<extensions:HttpStatusCodeToBrushConverter x:Key="HttpStatusCodeToBrushConverter" />
 								<extensions:HttpStatusCodeToIntConverter x:Key="HttpStatusCodeToIntConverter" />
@@ -65,7 +65,10 @@
 
 		<DockPanel Name="RequestResponseDockPanel" Grid.Column="2" LastChildFill="True" Margin="8 0 0 0">
 
-			<TextBlock DockPanel.Dock="Top" Height="40" Style="{StaticResource H1}" VerticalAlignment="Top" HorizontalAlignment="Left" Text="Request"/>
+			<DockPanel DockPanel.Dock="Top">
+				<Label DockPanel.Dock="Left" Style="{StaticResource H1}" Content="Request" Margin="-2 0 0 0"/>
+				<Label DockPanel.Dock="Right" Style="{StaticResource H1Info}" HorizontalAlignment="Right" Content="0001-01-01T00:00:00+00:00"/>
+			</DockPanel>
 
 			<Grid DockPanel.Dock="Top" Name="RequestGrid">
 				<Grid.ColumnDefinitions>
@@ -97,7 +100,11 @@
 				<Button Grid.Row="2" Grid.Column="1" x:Name="Send" Content="Send" HorizontalAlignment="Left" VerticalAlignment="Top" Width="70"/>
 			</Grid>
 
-			<TextBlock DockPanel.Dock="Top" Height="40" Style="{StaticResource H1}" VerticalAlignment="Bottom" HorizontalAlignment="Left" Text="Response"/>
+			<DockPanel DockPanel.Dock="Top">
+				<Label DockPanel.Dock="Left" Style="{StaticResource H1}" Content="Response" Margin="-2 0 0 0"/>
+				<Label DockPanel.Dock="Left" Style="{StaticResource H1Info}" Content="231ms"/>
+				<Label DockPanel.Dock="Right" Style="{StaticResource H1Info}" HorizontalAlignment="Right" Content="0001-01-01T00:00:00+00:00"/>
+			</DockPanel>
 
 			<Grid DockPanel.Dock="Top" Name="ResponseGrid">
 				<Grid.ColumnDefinitions>
