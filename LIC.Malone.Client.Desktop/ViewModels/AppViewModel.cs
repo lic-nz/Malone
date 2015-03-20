@@ -336,6 +336,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			ResponseContent = null;
 			ResponseStatusError = null;
 			HttpStatusCode = null;
+			SelectedHistory = null;
 
 			if (string.IsNullOrWhiteSpace(Url))
 				return;

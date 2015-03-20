@@ -21,7 +21,7 @@ namespace LIC.Malone.Core
 
 		public string AtString
 		{
-			get { return At.ToLocalTime().ToString("D"); }
+			get { return At.ToLocalTime().ToString("dddd dd MMMM yyyy hh:mm:ss.FFF"); }
 		}
 
 		public string ResponseTime
