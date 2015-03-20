@@ -415,6 +415,14 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			SelectedMethod = SelectedHistory.Method;
 		}
 
+		public void ClearHistory(object e)
+		{
+			History = new BindableCollection<Request>();
+
+			var json = JsonConvert.SerializeObject(History);
+			File.WriteAllText(_historyJsonPath, json);
+		}
+
 		// TODO: Move to own view model.
 		#region Add token flyout methods
 		public void Handle(ConfigurationLoaded message)

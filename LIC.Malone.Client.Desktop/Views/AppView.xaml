@@ -27,7 +27,11 @@
 
 		<DockPanel Name="HistoryDockPanel" Grid.Column="0" LastChildFill="True">
 
-			<Label DockPanel.Dock="Top" Height="40" Style="{StaticResource H1}" HorizontalAlignment="Left" Content="History" Margin="4 0 0 0" />
+			<DockPanel DockPanel.Dock="Top" Margin="4 0 0 0">
+				<Label DockPanel.Dock="Left" Style="{StaticResource H1}" Content="History"/>
+				<Button DockPanel.Dock="Right" Style="{StaticResource HyperlinkLikeButton}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0 0 10 6" Content="Clear history" 
+					cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action ClearHistory($executionContext)]"/>
+			</DockPanel>
 
 			<ListBox x:Name="History" HorizontalAlignment="Stretch" SelectionMode="Single"
 				cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action HistoryClicked($executionContext)]">
