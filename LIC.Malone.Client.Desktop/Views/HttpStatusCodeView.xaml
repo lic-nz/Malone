@@ -4,8 +4,8 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
 	mc:Ignorable="d" 
-	d:DesignHeight="40" d:DesignWidth="300">
-	<DockPanel>
+	d:DesignHeight="41" d:DesignWidth="300">
+	<DockPanel Height="41">
 		<Border BorderBrush="{Binding CodeColor}" BorderThickness="10 1 1 1" VerticalAlignment="Top" Margin="0 -1 5 0">
 			<Label Name="Code" Foreground="{Binding CodeColor}">Code</Label>
 		</Border>

@@ -376,27 +376,14 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			AddToHistory(request);
 		}
 
-		private bool ShouldSkipHistory(Request request)
-		{
-			if (!_history.Any())
-				return false;
-
-			var latestRequest = _history[0];
-
-			return
-				request.Url == latestRequest.Url
-				&& request.Method == latestRequest.Method;
-		}
-
 		private void AddToHistory(Request request)
 		{
-			if (ShouldSkipHistory(request))
-				return;
-
 			History.Insert(0, request);
 
 			var json = JsonConvert.SerializeObject(History);
 			File.WriteAllText(_historyJsonPath, json);
+
+			SelectedHistory = History.First();
 		}
 
 		private string GetResponseStatusError(ResponseStatus status)
