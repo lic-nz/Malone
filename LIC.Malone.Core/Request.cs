@@ -1,5 +1,4 @@
 ﻿using System;
-using DotNetOpenAuth.OAuth2;
 using LIC.Malone.Core.Authentication.OAuth;
 using Newtonsoft.Json;
 using RestSharp;
@@ -8,6 +7,8 @@ namespace LIC.Malone.Core
 {
 	public class Request
 	{
+		public const string DateFormatString = "dddd dd MMMM yyyy HH:mm:ss.FFF";
+
 		public Guid Guid { get; set; }
 		public DateTimeOffset At { get; set; }
 		public string Url { get; set; }
@@ -19,9 +20,14 @@ namespace LIC.Malone.Core
 		// TODO: Don't pollute core with Caliburn shiz.
 		#region Caliburn workarounds
 
-		public string AtString
+		public string AtLocalString
 		{
-			get { return At.ToLocalTime().ToString("dddd dd MMMM yyyy hh:mm:ss.FFF"); }
+			get { return At.ToLocalTime().ToString(DateFormatString); }
+		}
+
+		public string AtUtcString
+		{
+			get { return string.Concat("UTC: ", At.ToString(DateFormatString)); }
 		}
 
 		public string ResponseTime

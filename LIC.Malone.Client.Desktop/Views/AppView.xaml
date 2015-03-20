@@ -50,7 +50,7 @@
 
 							<TextBlock Grid.Column="0" Grid.Row="0" Text="{Binding Method}" Style="{StaticResource History.BaseUrl}" />
 							<TextBlock Grid.Column="0" Grid.Row="1" Text="{Binding Response.HttpStatusCode, Converter={StaticResource HttpStatusCodeToIntConverter}}" Foreground="{Binding Response.HttpStatusCode, Converter={StaticResource HttpStatusCodeToBrushConverter}}" />
-							
+
 							<TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding BaseUrl}" Style="{StaticResource History.BaseUrl}" />
 							<TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding ResourcePath}" Style="{StaticResource History.ResourcePath}" />
 						</Grid>
@@ -67,7 +67,11 @@
 
 			<DockPanel DockPanel.Dock="Top">
 				<Label DockPanel.Dock="Left" Style="{StaticResource H1}" Content="Request" Margin="-2 0 0 0"/>
-				<!--<Label DockPanel.Dock="Right" Style="{StaticResource H1Info}" HorizontalAlignment="Right" x:Name="SelectedHistory_AtString" Content="Request Date" />-->
+				<Label DockPanel.Dock="Right" Style="{StaticResource H1Info}" HorizontalAlignment="Right" x:Name="SelectedHistory_AtLocalString" Content="Request Date">
+					<Label.ToolTip>
+						<Label Content="{Binding Path=.SelectedHistory.AtUtcString}"/>
+					</Label.ToolTip>
+				</Label>
 			</DockPanel>
 
 			<Grid DockPanel.Dock="Top" Name="RequestGrid">
@@ -103,7 +107,11 @@
 			<DockPanel DockPanel.Dock="Top">
 				<Label DockPanel.Dock="Left" Style="{StaticResource H1}" Content="Response" Margin="-2 0 0 0"/>
 				<Label DockPanel.Dock="Left" Style="{StaticResource H1Info}" x:Name="SelectedHistory_ResponseTime" Content="Time"/>
-				<!--<Label DockPanel.Dock="Right" Style="{StaticResource H1Info}" x:Name="SelectedHistory_Response_AtString" HorizontalAlignment="Right" Content="Response Date"/>-->
+				<Label DockPanel.Dock="Right" Style="{StaticResource H1Info}" x:Name="SelectedHistory_Response_AtLocalString" HorizontalAlignment="Right" Content="Response Date">
+					<Label.ToolTip>
+						<Label Content="{Binding Path=.SelectedHistory.Response.AtUtcString}"/>
+					</Label.ToolTip>
+				</Label>
 			</DockPanel>
 
 			<Grid DockPanel.Dock="Top" Name="ResponseGrid">
