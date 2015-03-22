@@ -8,6 +8,8 @@
 	xmlns:cal="http://www.caliburnproject.org"
 	xmlns:syntaxControl="clr-namespace:AurelienRibon.Ui.SyntaxHighlightBox;assembly=AurelienRibon.Ui.SyntaxHighlightBox"
 	xmlns:extensions="clr-namespace:LIC.Malone.Client.Desktop.Extensions"
+	xmlns:local="clr-namespace:LIC.Malone.Client.Desktop"
+	xmlns:system="clr-namespace:System;assembly=mscorlib"
 	mc:Ignorable="d"
 	Title="Malone"
 	TitleCaps="False"
@@ -17,6 +19,71 @@
 	WindowStartupLocation="CenterScreen"
 	MinWidth="1000" MinHeight="730"
 	Width="1000" Height="730">
+
+	<Window.Resources>
+		<SolidColorBrush x:Key="Green_Brush" Color="Green" />
+		<SolidColorBrush x:Key="Black_Brush" Color="Black" />
+
+		<Style x:Key="Button_Style" TargetType="{x:Type Button}">
+			<Setter Property="Foreground" Value="{StaticResource Green_Brush}" />
+			<Setter Property="HorizontalAlignment" Value="Center" />
+			<Setter Property="VerticalAlignment" Value="Center" />
+
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="{x:Type Button}">
+						<Grid x:Name="grid">
+
+							<Rectangle
+								x:Name="Icon"
+								HorizontalAlignment="Left"
+								VerticalAlignment="Top"
+								Height="20"
+								Width="20"
+								Fill="{Binding Path=Foreground, RelativeSource={RelativeSource AncestorType={x:Type Button}}}" >
+								<Rectangle.OpacityMask>
+									<VisualBrush Visual="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(local:MyDependencyClass.DataForPath)}" Stretch="Fill" />
+								</Rectangle.OpacityMask>
+							</Rectangle>
+
+							<ContentPresenter x:Name="MyContent" 
+								Margin="40 0 0 0"
+                                              Content="{TemplateBinding Content}"
+                                              HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+                                              VerticalAlignment="{TemplateBinding VerticalAlignment}" />
+
+
+
+							<!--<Path x:Name="MyPath" 
+                                  SnapsToDevicePixels="True" 
+                                  Width="20" 
+                                  Height="18" 
+                                  Stretch="Fill" 
+                                  Fill="{Binding Path=Foreground, RelativeSource={RelativeSource AncestorType={x:Type Button}}}" 
+                                  Data="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(local:MyDependencyClass.DataForPath)}" />-->
+						</Grid>
+
+						<ControlTemplate.Triggers>
+							<Trigger Property="IsMouseOver" Value="True">
+								<Setter Property="Foreground" Value="{StaticResource Black_Brush}"/>
+							</Trigger>
+
+							<!--<Trigger Property="Tag" Value="OnlyText">
+								<Setter TargetName="MyPath" Property="Visibility" Value="Collapsed" />
+								<Setter TargetName="MyContent" Property="Visibility" Value="Visible" />
+							</Trigger>
+
+							<Trigger Property="Tag" Value="OnlyPath">
+								<Setter TargetName="MyPath" Property="Visibility" Value="Visible" />
+								<Setter TargetName="MyContent" Property="Visibility" Value="Collapsed" />
+							</Trigger>-->
+						</ControlTemplate.Triggers>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+	</Window.Resources>
+
 
 	<Grid Name="MainGrid">
 		<Grid.ColumnDefinitions>
@@ -29,8 +96,47 @@
 
 			<DockPanel DockPanel.Dock="Top" Margin="4 0 0 0">
 				<Label DockPanel.Dock="Left" Style="{StaticResource H1}" Content="History"/>
-				<Button DockPanel.Dock="Right" Style="{StaticResource HyperlinkLikeButton}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0 0 10 6" Content="Clear history" 
-					cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action ClearHistory($executionContext)]"/>
+
+				<WrapPanel>
+
+					<Button Name="SaveButton"
+                Style="{StaticResource Button_Style}" 
+                local:MyDependencyClass.DataForPath="{StaticResource appbar_adobe_acrobat}"
+                Content="Both"
+                Margin="10" />
+
+					<Button Name="JustText"
+                Style="{StaticResource Button_Style}" 
+                Content="Just Text"
+                Margin="10" />
+				</WrapPanel>
+
+
+				<!--<Button DockPanel.Dock="Right" Style="{StaticResource HyperlinkLikeButton}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0 0 10 6" 
+					cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action ClearHistory($executionContext)]">
+					
+					<StackPanel Orientation="Horizontal">
+
+						<Rectangle Height="10" Width="10" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Button}}}">
+							<Rectangle.OpacityMask>
+								<VisualBrush Visual="{StaticResource appbar_add}" Stretch="Fill" />
+							</Rectangle.OpacityMask>
+						</Rectangle>
+
+						<TextBlock Foreground="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">GitHub   Revert   Expand all Waaah</TextBlock>
+					
+
+					</StackPanel>
+				</Button>-->
+				
+				
+				<!--<TextBlock><Hyperlink>GitHub   Revert   Expand all
+	<Rectangle Height="10" Width="10" Style="{StaticResource Hyperlink}">
+        <Rectangle.OpacityMask>
+            <VisualBrush Visual="{StaticResource appbar_add}" Stretch="Fill" />
+        </Rectangle.OpacityMask>
+    </Rectangle></Hyperlink>
+				</TextBlock>-->
 			</DockPanel>
 
 			<ListBox x:Name="History" HorizontalAlignment="Stretch" SelectionMode="Single"
