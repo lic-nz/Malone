@@ -48,13 +48,11 @@
 									<ColumnDefinition />
 								</Grid.ColumnDefinitions>
 
-								<!--<Viewbox Grid.Column="0" Height="16" Width="16" SnapsToDevicePixels="True">-->
 								<Path Grid.Column="0"
 									SnapsToDevicePixels="True"
 									VerticalAlignment="Center"
 									Fill="{Binding Path=Foreground, RelativeSource={RelativeSource AncestorType={x:Type Button}}}" 
 									Data="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(local:HyperlinkButton.Icon)}" />
-								<!--</Viewbox>-->
 
 								<TextBlock Grid.Column="1"
 									Padding="6 0 0 0"
