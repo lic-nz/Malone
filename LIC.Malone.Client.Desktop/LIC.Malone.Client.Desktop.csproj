@@ -87,6 +87,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Extensions\HistoryWidthConverter.cs" />
     <Compile Include="HyperlinkButton.cs" />
     <Compile Include="Colors.cs" />
     <Compile Include="Extensions\HttpStatusCodeExtensions.cs" />

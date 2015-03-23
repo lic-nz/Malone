@@ -22,7 +22,7 @@
 
 	<Grid Name="MainGrid">
 		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="1*" MinWidth="200" />
+			<ColumnDefinition Width="1*" MinWidth="250" />
 			<ColumnDefinition Width="2" />
 			<ColumnDefinition Width="2*" MinWidth="500" />
 		</Grid.ColumnDefinitions>
@@ -32,20 +32,21 @@
 			<DockPanel DockPanel.Dock="Top" Margin="4 0 0 0" LastChildFill="True">
 				<Label DockPanel.Dock="Left" Style="{StaticResource H1}" Content="History"/>
 
-				<Button DockPanel.Dock="Right" Style="{StaticResource Hyperlink}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0 0 10 10" 
+				<Button x:Name="ClearHistoryButton" DockPanel.Dock="Right" Style="{StaticResource Hyperlink}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0 0 10 10" 
 					cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action ClearHistory($executionContext)]"
 					local:HyperlinkButton.Icon="{StaticResource squared_cross}" Content="Clear history" />
 			</DockPanel>
 
-			<ListBox x:Name="History" HorizontalAlignment="Stretch" SelectionMode="Single"
+			<ListBox x:Name="History" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" SelectionMode="Single"
 				cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action HistoryClicked($executionContext)]">
 
-				<ListBox.ItemTemplate>
+				<ListBox.ItemTemplate >
 					<DataTemplate>
-						<Grid Margin="7,7">
+						<Grid Margin="7,7" Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBox}}, Path=Width}">
 							<Grid.Resources>
 								<extensions:HttpStatusCodeToBrushConverter x:Key="HttpStatusCodeToBrushConverter" />
 								<extensions:HttpStatusCodeToIntConverter x:Key="HttpStatusCodeToIntConverter" />
+								<extensions:HistoryWidthConverter x:Key="HistoryWidthConverter" />
 							</Grid.Resources>
 							<Grid.ColumnDefinitions>
 								<ColumnDefinition Width="40" />
@@ -61,6 +62,24 @@
 
 							<TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding BaseUrl}" Style="{StaticResource History.BaseUrl}" />
 							<TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding ResourcePath}" Style="{StaticResource History.ResourcePath}" />
+
+							<Canvas ZIndex="30" Grid.Column="1" Grid.Row="0" Grid.RowSpan="2"
+									  HorizontalAlignment="Right"
+									  VerticalAlignment="Center"
+									  Top="0"
+									  Left="0"
+									  Right="0"
+									  Bottom="0"
+									  Height="40"
+									  Width="40">
+
+								<Rectangle Canvas.Right="0" Canvas.Top="0" Width="34" Height="40" Fill="#CFECF8" Visibility="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}},Path=IsMouseOver}" />
+
+								<Button Canvas.Right="0" Canvas.Top="10" x:Name="sideButton" HorizontalAlignment="Right" Margin="0"
+									Style="{StaticResource History.Hyperlink}" local:HyperlinkButton.Icon="{StaticResource squared_cross}">
+								</Button>
+							</Canvas>
+							
 						</Grid>
 					</DataTemplate>
 				</ListBox.ItemTemplate>
@@ -69,7 +88,7 @@
 
 		</DockPanel>
 
-		<GridSplitter Grid.Column="1" Width="2" HorizontalAlignment="Stretch" />
+		<GridSplitter Name="HistorySplitter" Grid.Column="1" Width="2" HorizontalAlignment="Stretch" />
 
 		<DockPanel Name="RequestResponseDockPanel" Grid.Column="2" LastChildFill="True" Margin="8 0 0 0">
 

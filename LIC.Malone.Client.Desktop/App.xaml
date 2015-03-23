@@ -47,12 +47,14 @@
 									<ColumnDefinition />
 									<ColumnDefinition />
 								</Grid.ColumnDefinitions>
-
-								<Path Grid.Column="0"
-									SnapsToDevicePixels="True"
-									VerticalAlignment="Center"
-									Fill="{Binding Path=Foreground, RelativeSource={RelativeSource AncestorType={x:Type Button}}}" 
-									Data="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(local:HyperlinkButton.Icon)}" />
+								
+								<Border Grid.Column="0" Background="Transparent">
+									<Path
+										SnapsToDevicePixels="True"
+										VerticalAlignment="Center"
+										Fill="{Binding Path=Foreground, RelativeSource={RelativeSource AncestorType={x:Type Button}}}" 
+										Data="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(local:HyperlinkButton.Icon)}" />
+								</Border>
 
 								<TextBlock Grid.Column="1"
 									Padding="6 0 0 0"
@@ -65,6 +67,7 @@
 							<ControlTemplate.Triggers>
 								<Trigger Property="IsMouseOver" Value="True">
 									<Setter Property="Foreground" Value="#2061A1"/>
+									<Setter Property="Cursor" Value="Hand"/>
 								</Trigger>
 							</ControlTemplate.Triggers>
 						</ControlTemplate>
@@ -73,10 +76,19 @@
 				</Setter>
 			</Style>
 
+			<Style x:Key="History.Hyperlink" TargetType="{x:Type Button}" BasedOn="{StaticResource Hyperlink}">
+				<Setter Property="Visibility" Value="Hidden" />
+				<Style.Triggers>
+					<DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}},Path=IsMouseOver}" Value="True">
+						<Setter Property="Visibility" Value="Visible" />
+					</DataTrigger>
+				</Style.Triggers>
+			</Style>
+
 			<Style TargetType="ListBoxItem">
 				<Style.Triggers>
 					<Trigger Property="IsMouseOver" Value="True">
-						<Setter Property="Background" Value="{DynamicResource AccentColorBrush4}" />
+						<Setter Property="Background" Value="#CFECF8" />
 					</Trigger>
 					<Trigger Property="IsSelected" Value="True">
 						<Setter Property="Foreground" Value="Black" />
