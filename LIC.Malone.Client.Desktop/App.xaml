@@ -36,46 +36,44 @@
 				<Setter Property="FontSize" Value="14" />
 			</Style>
 
-			<ControlTemplate x:Key="HyperlinkLikeButtonTemplate" TargetType="{x:Type Button}">
-				<!--<TextBlock x:Name="innerText" Foreground="{DynamicResource {x:Static SystemColors.HotTrackBrushKey}}" Cursor="Hand">-->
-				<TextBlock x:Name="innerText" Foreground="Violet" Cursor="Hand">
-					<ContentPresenter />
-				</TextBlock>
-				<ControlTemplate.Triggers>
-					<Trigger Property="Button.IsMouseOver" Value="true">
-						<!--<Setter TargetName="innerText" Property="Foreground" Value="#4d89c1" />-->
-						<Setter TargetName="innerText" Property="Foreground" Value="Green" />
-						<!--<Setter TargetName="innerText" Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />-->
-						<!--<Setter TargetName="innerText" Property="TextDecorations" Value="Underline" />-->
-					</Trigger>
-				</ControlTemplate.Triggers>
-			</ControlTemplate>
+			<Style x:Key="Hyperlink" TargetType="{x:Type Button}">
+				<Setter Property="Foreground" Value="#4D89C1" />
 
-			<Style x:Key="HyperlinkLikeButton" TargetType="{x:Type Button}">
-				<Setter Property="Template" Value="{StaticResource HyperlinkLikeButtonTemplate}" />
-				<!--<Setter Property="FontFamily" Value="Calibri" />-->
-				<!--<Setter Property="FontSize" Value="14" />-->
+				<Setter Property="Template">
+					<Setter.Value>
+						<ControlTemplate TargetType="{x:Type Button}">
+							<Grid>
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition />
+									<ColumnDefinition />
+								</Grid.ColumnDefinitions>
+
+								<!--<Viewbox Grid.Column="0" Height="16" Width="16" SnapsToDevicePixels="True">-->
+								<Path Grid.Column="0"
+									SnapsToDevicePixels="True"
+									VerticalAlignment="Center"
+									Fill="{Binding Path=Foreground, RelativeSource={RelativeSource AncestorType={x:Type Button}}}" 
+									Data="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(local:HyperlinkButton.Icon)}" />
+								<!--</Viewbox>-->
+
+								<TextBlock Grid.Column="1"
+									Padding="6 0 0 0"
+									Text="{TemplateBinding Content}"
+									HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+									VerticalAlignment="{TemplateBinding VerticalAlignment}" />
+
+							</Grid>
+
+							<ControlTemplate.Triggers>
+								<Trigger Property="IsMouseOver" Value="True">
+									<Setter Property="Foreground" Value="#2061A1"/>
+								</Trigger>
+							</ControlTemplate.Triggers>
+						</ControlTemplate>
+						
+					</Setter.Value>
+				</Setter>
 			</Style>
-
-			<!--<Style TargetType="{x:Type Hyperlink}">
-				<Style.Triggers>
-					<Trigger Property="IsMouseOver" Value="True">
-						<Setter Property="Foreground" Value="Green" />
-					</Trigger>
-				</Style.Triggers>
-				<Setter Property="Foreground" Value="Violet" />
-				<Setter Property="TextBlock.TextDecorations" Value="{x:Null}" />
-			</Style>
-
-			<Style x:Key="Hyperlink" TargetType="{x:Type Rectangle}">
-				<Style.Triggers>
-					<Trigger Property="IsMouseOver" Value="True">
-						<Setter Property="Fill" Value="DarkSlateBlue" />
-					</Trigger>
-				</Style.Triggers>
-				<Setter Property="Fill" Value="GreenYellow" />
-				<Setter Property="TextBlock.TextDecorations" Value="{x:Null}" />
-			</Style>-->
 
 			<Style TargetType="ListBoxItem">
 				<Style.Triggers>

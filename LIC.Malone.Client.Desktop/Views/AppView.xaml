@@ -20,61 +20,6 @@
 	MinWidth="1000" MinHeight="730"
 	Width="1000" Height="730">
 
-	<Window.Resources>
-		<SolidColorBrush x:Key="Green_Brush" Color="Green" />
-		<SolidColorBrush x:Key="Black_Brush" Color="Black" />
-
-		<Style x:Key="Button_Style" TargetType="{x:Type Button}">
-			<Setter Property="Foreground" Value="{StaticResource Green_Brush}" />
-			<Setter Property="HorizontalAlignment" Value="Center" />
-			<Setter Property="VerticalAlignment" Value="Center" />
-
-			<Setter Property="Template">
-				<Setter.Value>
-					<ControlTemplate TargetType="{x:Type Button}">
-						<Grid x:Name="grid">
-							
-							<Grid.ColumnDefinitions>
-								<ColumnDefinition />
-								<ColumnDefinition />
-							</Grid.ColumnDefinitions>
-
-							<Path Grid.Column="0" x:Name="MyPath" 
-									SnapsToDevicePixels="True"
-									Fill="{Binding Path=Foreground, RelativeSource={RelativeSource AncestorType={x:Type Button}}}" 
-									Data="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(local:HyperlinkButton.Icon)}" />
-							
-							<TextBlock Grid.Column="1" x:Name="MyContent" 
-								Padding="10 0 0 0"
-															 Text="{TemplateBinding Content}"
-															 HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
-															 VerticalAlignment="{TemplateBinding VerticalAlignment}" />
-
-
-						</Grid>
-
-						<ControlTemplate.Triggers>
-							<Trigger Property="IsMouseOver" Value="True">
-								<Setter Property="Foreground" Value="DeepPink"/>
-							</Trigger>
-
-							<!--<Trigger Property="Tag" Value="OnlyText">
-								<Setter TargetName="MyPath" Property="Visibility" Value="Collapsed" />
-								<Setter TargetName="MyContent" Property="Visibility" Value="Visible" />
-							</Trigger>
-
-							<Trigger Property="Tag" Value="OnlyPath">
-								<Setter TargetName="MyPath" Property="Visibility" Value="Visible" />
-								<Setter TargetName="MyContent" Property="Visibility" Value="Collapsed" />
-							</Trigger>-->
-						</ControlTemplate.Triggers>
-					</ControlTemplate>
-				</Setter.Value>
-			</Setter>
-		</Style>
-	</Window.Resources>
-
-
 	<Grid Name="MainGrid">
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="1*" MinWidth="200" />
@@ -84,50 +29,12 @@
 
 		<DockPanel Name="HistoryDockPanel" Grid.Column="0" LastChildFill="True">
 
-			<DockPanel DockPanel.Dock="Top" Margin="4 0 0 0">
+			<DockPanel DockPanel.Dock="Top" Margin="4 0 0 0" LastChildFill="True">
 				<Label DockPanel.Dock="Left" Style="{StaticResource H1}" Content="History"/>
 
-				<WrapPanel>
-
-					<Button Name="SaveButton"
-					 Style="{StaticResource Button_Style}" 
-					 local:HyperlinkButton.Icon="{StaticResource squared_cross}"
-					 Content="Both"
-					 Margin="10" />
-
-					<Button Name="JustText"
-					 Style="{StaticResource Button_Style}" 
-					 Content="Just Text"
-					 Margin="10" />
-					
-				</WrapPanel>
-
-
-				<!--<Button DockPanel.Dock="Right" Style="{StaticResource HyperlinkLikeButton}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0 0 10 6" 
-					cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action ClearHistory($executionContext)]">
-					
-					<StackPanel Orientation="Horizontal">
-
-						<Rectangle Height="10" Width="10" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Button}}}">
-							<Rectangle.OpacityMask>
-								<VisualBrush Visual="{StaticResource appbar_add}" Stretch="Fill" />
-							</Rectangle.OpacityMask>
-						</Rectangle>
-
-						<TextBlock Foreground="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">GitHub   Revert   Expand all Waaah</TextBlock>
-					
-
-					</StackPanel>
-				</Button>-->
-				
-				
-				<!--<TextBlock><Hyperlink>GitHub   Revert   Expand all
-	<Rectangle Height="10" Width="10" Style="{StaticResource Hyperlink}">
-		  <Rectangle.OpacityMask>
-				<VisualBrush Visual="{StaticResource appbar_add}" Stretch="Fill" />
-		  </Rectangle.OpacityMask>
-	 </Rectangle></Hyperlink>
-				</TextBlock>-->
+				<Button DockPanel.Dock="Right" Style="{StaticResource Hyperlink}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0 0 10 10" 
+					cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action ClearHistory($executionContext)]"
+					local:HyperlinkButton.Icon="{StaticResource squared_cross}" Content="Clear history" />
 			</DockPanel>
 
 			<ListBox x:Name="History" HorizontalAlignment="Stretch" SelectionMode="Single"
