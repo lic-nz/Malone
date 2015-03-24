@@ -10,6 +10,7 @@
 	xmlns:extensions="clr-namespace:LIC.Malone.Client.Desktop.Extensions"
 	xmlns:local="clr-namespace:LIC.Malone.Client.Desktop"
 	xmlns:system="clr-namespace:System;assembly=mscorlib"
+	xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
 	mc:Ignorable="d"
 	Title="Malone"
 	TitleCaps="False"
@@ -60,8 +61,8 @@
 							</Grid.RowDefinitions>
 
 							<Canvas Name="HistoryButtonCanvas" ZIndex="300" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Grid.RowSpan="2">
-
-								<Button Name="HistoryRemoveButton" Canvas.Top="-8" Style="{StaticResource ListBoxItemDelete}">
+								<Button Name="HistoryRemoveButton" Canvas.Top="-8" Style="{StaticResource ListBoxItemDelete}"
+									cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action RemoveHistory($this)]">
 									<Canvas.Left>
 										<MultiBinding Converter="{StaticResource HistoryWidthConverter}">
 											<Binding ElementName="History" Path="ActualWidth" />
@@ -69,40 +70,6 @@
 										</MultiBinding>
 									</Canvas.Left>
 								</Button>
-								
-								<!--<Rectangle Name="HistoryRemoveButtonBackground" Opacity=".6"
-									Canvas.Top="-7"
-									Width="42" Height="48"
-									Fill="Red"
-									Visibility="{Binding ElementName=HistoryRemoveButton, Path=Visibility}">
-									<Canvas.Left>
-										<MultiBinding Converter="{StaticResource HistoryWidthConverter}">
-											<Binding ElementName="History" Path="ActualWidth" />
-											<Binding ElementName="HistoryHorizontalOffset" Path="Content" />
-										</MultiBinding>
-									</Canvas.Left>
-								</Rectangle>
-
-								<Button Name="HistoryRemoveButton"
-									Canvas.Top="0" Canvas.Left="{Binding ElementName=HistoryRemoveButtonBackground, Path=(Canvas.Left)}"
-									Margin="11 7"
-									Style="{StaticResource History.Hyperlink}"
-									local:HyperlinkButton.Icon="{StaticResource squared_cross}">
-								</Button>-->
-
-								<!--<StackPanel Orientation="Horizontal" Background="GreenYellow" Canvas.Left="140"> CFECF8
-									<TextBlock Text="{Binding ElementName=History, Path=ActualWidth, Converter={StaticResource HistoryWidthConverter}}" Margin="5"></TextBlock>
-									<TextBlock Text="{Binding ElementName=HistoryRemoveButtonBackground, Path=ActualWidth}" Margin="5"></TextBlock>
-									<TextBlock Margin="5" Background="BlueViolet">
-										<TextBlock.Text>
-											<MultiBinding Converter="{StaticResource HistoryWidthConverter2}">
-												<Binding ElementName="History" Path="ActualWidth" />
-												<Binding ElementName="ResponseContent" Path="Text" />
-											</MultiBinding>
-										</TextBlock.Text>
-									</TextBlock>
-								</StackPanel>-->
-
 							</Canvas>
 
 							<TextBlock Grid.Column="0" Grid.Row="0" Text="{Binding Method}" Style="{StaticResource History.BaseUrl}" />

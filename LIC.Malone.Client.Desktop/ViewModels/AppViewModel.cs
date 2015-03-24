@@ -435,6 +435,15 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			SelectedMethod = SelectedHistory.Method;
 		}
 
+		public void RemoveHistory(object e)
+		{
+			var request = (Request) e;
+			History.Remove(request);
+
+			var json = JsonConvert.SerializeObject(History);
+			File.WriteAllText(_historyJsonPath, json);
+		}
+
 		public void ClearHistory(object e)
 		{
 			History = new BindableCollection<Request>();
