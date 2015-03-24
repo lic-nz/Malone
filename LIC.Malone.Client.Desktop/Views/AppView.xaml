@@ -31,7 +31,6 @@
 
 			<DockPanel DockPanel.Dock="Top" Margin="4 0 0 0" LastChildFill="True">
 				<Label DockPanel.Dock="Left" Style="{StaticResource H1}" Content="History"/>
-
 				<Button x:Name="ClearHistoryButton" DockPanel.Dock="Right" Style="{StaticResource Hyperlink}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0 0 10 10" 
 					cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action ClearHistory($executionContext)]"
 					local:HyperlinkButton.Icon="{StaticResource squared_cross}" Content="Clear history" />
