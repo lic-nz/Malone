@@ -39,6 +39,17 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			}
 		}
 
+		private double _historyHorizontalOffset;
+		public double HistoryHorizontalOffset
+		{
+			get { return _historyHorizontalOffset; }
+			set
+			{
+				_historyHorizontalOffset = value;
+				NotifyOfPropertyChange(() => HistoryHorizontalOffset);
+			}
+		}
+
 		private Request _selectedHistory;
 		public Request SelectedHistory
 		{
@@ -403,6 +414,11 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 				default:
 					return "Well that's a new one: " + status + ". Might want to add it in.";
 			}
+		}
+
+		public void HistoryLayoutUpdated(object e)
+		{
+			HistoryHorizontalOffset = ((MaloneListBox)((ActionExecutionContext)e).Source).ScrollViewerHorizontalOffset;
 		}
 
 		public void HistoryClicked(object e)

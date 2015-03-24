@@ -91,6 +91,7 @@
     <Compile Include="HyperlinkButton.cs" />
     <Compile Include="Colors.cs" />
     <Compile Include="Extensions\HttpStatusCodeExtensions.cs" />
+    <Compile Include="MaloneListBox.cs" />
     <Compile Include="Messages\ConfigurationLoaded.cs" />
     <Compile Include="ViewModels\AppViewModel.cs" />
     <Compile Include="App.cs">

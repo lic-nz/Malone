@@ -5,14 +5,19 @@ using System.Windows.Data;
 
 namespace LIC.Malone.Client.Desktop.Extensions
 {
-	public class HistoryWidthConverter : IValueConverter
+	public class HistoryWidthConverter : IMultiValueConverter
 	{
-		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+		public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
 		{
-			return -((double) value / 2);
+			const double buttonWidth = 51;
+
+			var historyWidth = (double)values[0];
+			var horizontalOffset = (double)values[1];
+
+			return historyWidth + horizontalOffset - buttonWidth;
 		}
 
-		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+		public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
 		{
 			throw new NotSupportedException();
 		}
