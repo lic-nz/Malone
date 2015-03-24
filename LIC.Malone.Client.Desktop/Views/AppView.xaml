@@ -61,11 +61,20 @@
 							</Grid.RowDefinitions>
 
 							<Canvas Name="HistoryButtonCanvas" ZIndex="300" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Grid.RowSpan="2">
+
+								<Button Name="HistoryRemoveButton" Canvas.Top="-8" Style="{StaticResource ListBoxItemDelete}">
+									<Canvas.Left>
+										<MultiBinding Converter="{StaticResource HistoryWidthConverter}">
+											<Binding ElementName="History" Path="ActualWidth" />
+											<Binding ElementName="HistoryHorizontalOffset" Path="Content" />
+										</MultiBinding>
+									</Canvas.Left>
+								</Button>
 								
-								<Rectangle Name="HistoryRemoveButtonBackground" Opacity=".8"
+								<!--<Rectangle Name="HistoryRemoveButtonBackground" Opacity=".6"
 									Canvas.Top="-7"
 									Width="42" Height="48"
-									Fill="#CFECF8"
+									Fill="Red"
 									Visibility="{Binding ElementName=HistoryRemoveButton, Path=Visibility}">
 									<Canvas.Left>
 										<MultiBinding Converter="{StaticResource HistoryWidthConverter}">
@@ -80,7 +89,7 @@
 									Margin="11 7"
 									Style="{StaticResource History.Hyperlink}"
 									local:HyperlinkButton.Icon="{StaticResource squared_cross}">
-								</Button>
+								</Button>-->
 
 								<!--<StackPanel Orientation="Horizontal" Background="GreenYellow" Canvas.Left="140"> CFECF8
 									<TextBlock Text="{Binding ElementName=History, Path=ActualWidth, Converter={StaticResource HistoryWidthConverter}}" Margin="5"></TextBlock>
