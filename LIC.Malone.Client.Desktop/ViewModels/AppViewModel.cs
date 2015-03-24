@@ -289,7 +289,11 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 			var applications = new List<OAuthApplication>();
 			var authenticationUrls = new List<Uri>();
-			UserCredentials userCredentials = null;
+			var userCredentials = new UserCredentials
+			{
+				Username = "Username",
+				Password = "Password"
+			};
 
 			var path = Path.Combine(configLocation, "oauth-applications.json");
 
@@ -428,10 +432,10 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 		public void Handle(ConfigurationLoaded message)
 		{
 			AuthenticationUrls = new BindableCollection<Uri>(message.AuthenticationUrls);
-			SelectedAuthenticationUrl = AuthenticationUrls.First();
+			SelectedAuthenticationUrl = AuthenticationUrls.FirstOrDefault();
 
 			Applications = new BindableCollection<OAuthApplication>(message.Applications);
-			SelectedApplication = Applications.First();
+			SelectedApplication = Applications.FirstOrDefault();
 
 			Username = message.UserCredentials.Username;
 			Password = message.UserCredentials.Password;
