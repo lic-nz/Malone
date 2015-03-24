@@ -11,14 +11,28 @@ namespace LIC.Malone.Client.Desktop
 	[Localizability(LocalizationCategory.ListBox)]
 	public class MaloneListBox : ListBox
 	{
+		public Visibility VerticalScrollBarVisibility
+		{
+			get
+			{
+				var scrollViewer = GetScrollViewer();
+				return scrollViewer.ComputedVerticalScrollBarVisibility;
+			}
+		}
+
 		public double ScrollViewerHorizontalOffset
 		{
 			get
 			{
-				var scrollViewer = GetDescendantByType(this, typeof(ScrollViewer)) as ScrollViewer;
+				var scrollViewer = GetScrollViewer();
 				var offset = scrollViewer.ContentHorizontalOffset;
 				return offset;
 			}
+		}
+
+		private ScrollViewer GetScrollViewer()
+		{
+			return GetDescendantByType(this, typeof (ScrollViewer)) as ScrollViewer;
 		}
 
 		public static Visual GetDescendantByType(Visual element, Type type)

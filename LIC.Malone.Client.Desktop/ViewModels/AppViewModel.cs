@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Windows;
+using System.Windows.Controls;
 using System.Xml.Linq;
 using Caliburn.Micro;
 using DotNetOpenAuth.OAuth2;
@@ -47,6 +49,17 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			{
 				_historyHorizontalOffset = value;
 				NotifyOfPropertyChange(() => HistoryHorizontalOffset);
+			}
+		}
+
+		private double _historyVerticalScrollBarOffset;
+		public double HistoryVerticalScrollBarOffset
+		{
+			get { return _historyVerticalScrollBarOffset; }
+			set
+			{
+				_historyVerticalScrollBarOffset = value;
+				NotifyOfPropertyChange(() => HistoryVerticalScrollBarOffset);
 			}
 		}
 
@@ -422,7 +435,12 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 		public void HistoryLayoutUpdated(object e)
 		{
-			HistoryHorizontalOffset = ((MaloneListBox)((ActionExecutionContext)e).Source).ScrollViewerHorizontalOffset;
+			var listBox = (MaloneListBox) ((ActionExecutionContext) e).Source;
+
+			HistoryHorizontalOffset = listBox.ScrollViewerHorizontalOffset;
+			HistoryVerticalScrollBarOffset = listBox.VerticalScrollBarVisibility == Visibility.Visible
+				? -14
+				: 0;
 		}
 
 		public void HistoryClicked(object e)

@@ -13,8 +13,9 @@ namespace LIC.Malone.Client.Desktop.Extensions
 
 			var historyWidth = (double)values[0];
 			var horizontalOffset = (double)values[1];
+			var historyVerticalScrollBarOffset = (double)values[2];
 
-			return historyWidth + horizontalOffset - buttonWidth;
+			return historyWidth + horizontalOffset + historyVerticalScrollBarOffset - buttonWidth;
 		}
 
 		public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)

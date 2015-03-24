@@ -38,6 +38,7 @@
 			</DockPanel>
 
 			<Label Name="HistoryHorizontalOffset" Visibility="Collapsed" />
+			<Label Name="HistoryVerticalScrollBarOffset" Visibility="Collapsed" />
 			
 			<local:MaloneListBox x:Name="History" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" SelectionMode="Single"
 				BorderThickness="0" Padding="0" Margin="-1"
@@ -67,6 +68,7 @@
 										<MultiBinding Converter="{StaticResource HistoryWidthConverter}">
 											<Binding ElementName="History" Path="ActualWidth" />
 											<Binding ElementName="HistoryHorizontalOffset" Path="Content" />
+											<Binding ElementName="HistoryVerticalScrollBarOffset" Path="Content" />
 										</MultiBinding>
 									</Canvas.Left>
 								</Button>
