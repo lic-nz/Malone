@@ -30,6 +30,47 @@
 
 		<DockPanel Name="HistoryDockPanel" Grid.Column="0" LastChildFill="True">
 
+			<TabControl DockPanel.Dock="Top" >
+				<TabItem>
+					<TabItem.HeaderTemplate>
+						<DataTemplate>
+							<Border>
+								<Label Name="Label" Style="{StaticResource H1}">History</Label>
+							</Border>
+							<DataTemplate.Triggers>
+								<DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=TabItem}, Path=IsSelected}" Value="True">
+									<Setter TargetName="Label" Property="Foreground" Value="#444444" />
+								</DataTrigger>
+								<DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=TabItem}, Path=IsSelected}" Value="False">
+									<Setter TargetName="Label" Property="Foreground" Value="LightSteelBlue" />
+								</DataTrigger>
+								<DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=TabItem}, Path=IsMouseOver}" Value="True">
+									<Setter TargetName="Label" Property="Foreground" Value="CornflowerBlue" />
+									<Setter TargetName="Label" Property="Cursor" Value="Hand" />
+								</DataTrigger>
+							</DataTemplate.Triggers>
+						</DataTemplate>
+					</TabItem.HeaderTemplate>
+					<TabItem.Content>
+						<TextBlock>hisdfsd</TextBlock>
+					</TabItem.Content>
+				</TabItem>
+				<TabItem>
+					<TabItem.HeaderTemplate>
+						<DataTemplate>
+							<Border>
+								<Label Style="{StaticResource H1}">Collections</Label>
+							</Border>
+						</DataTemplate>
+					</TabItem.HeaderTemplate>
+					<TabItem.Content>
+						<TextBlock>hi</TextBlock>
+					</TabItem.Content>
+				</TabItem>
+			</TabControl>
+			
+
+
 			<DockPanel DockPanel.Dock="Top" Margin="4 0 0 0" LastChildFill="True">
 				<Label DockPanel.Dock="Left" Style="{StaticResource H1}" Content="History"/>
 				<Button x:Name="ClearHistoryButton" DockPanel.Dock="Right" Style="{StaticResource Hyperlink}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0 0 10 10" 
