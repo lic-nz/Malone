@@ -9,7 +9,10 @@
 			<Color x:Key="H1Color">#60B2E0</Color>
 			<SolidColorBrush x:Key="H1Brush" Color="{StaticResource H1Color}"></SolidColorBrush>
 
-			<Color x:Key="HyperlinkHoverColor">#2061A1</Color>
+			<Color x:Key="HyperlinkColor">#337ab7</Color>
+			<SolidColorBrush x:Key="HyperlinkColorBrush" Color="{StaticResource HyperlinkColor}"></SolidColorBrush>
+
+			<Color x:Key="HyperlinkHoverColor">#286090</Color>
 			<SolidColorBrush x:Key="HyperlinkHoverColorBrush" Color="{StaticResource HyperlinkHoverColor}"></SolidColorBrush>
 
 			<Style TargetType="Label">
