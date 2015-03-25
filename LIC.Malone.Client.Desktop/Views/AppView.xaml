@@ -60,7 +60,6 @@
 
 					<Grid>
 
-
 						<StackPanel Orientation="Vertical" Visibility="{Binding History, Converter={StaticResource HideOnHistoryConverter}}" HorizontalAlignment="Center" VerticalAlignment="Center">
 							<ContentControl Content="{StaticResource appbar_smiley_frown}" />
 							<TextBlock Style="{StaticResource EmptyListMessage}">Nothing to see here. Try sending a request!</TextBlock>
@@ -77,28 +76,14 @@
 											</Border>
 											<ControlTemplate.Triggers>
 												<Trigger Property="IsMouseOver" Value="True">
-													<Setter TargetName="Border" Property="Background" Value="#449d44"></Setter>
+													<Setter TargetName="Border" Property="Background" Value="#c9302c"></Setter>
 												</Trigger>
 											</ControlTemplate.Triggers>
 										</ControlTemplate>
 									</Button.Template>
-									<Path HorizontalAlignment="Center" VerticalAlignment="Center" Margin="-2 -2 0 0" Fill="White" Data="M10,1.6c-4.639,0-8.4,3.761-8.4,8.4s3.761,8.4,8.4,8.4s8.4-3.761,8.4-8.4S14.639,1.6,10,1.6z M15,11h-4v4H9 v-4H5V9h4V5h2v4h4V11z"/>
+									<Path HorizontalAlignment="Center" VerticalAlignment="Center" Margin="-2 -2 0 0" Fill="White" Data="M10,1.6c-4.639,0-8.4,3.761-8.4,8.4s3.761,8.4,8.4,8.4s8.4-3.761,8.4-8.4S14.639,1.6,10,1.6z M14.789,13.061 L13.06,14.79L10,11.729l-3.061,3.06L5.21,13.06L8.272,10L5.211,6.939L6.94,5.211L10,8.271l3.061-3.061l1.729,1.729L11.728,10 L14.789,13.061z"/>
 								</Button>
 							</Canvas>
-
-							<!--<StackPanel DockPanel.Dock="Top" Background="Gold" Orientation="Horizontal" Margin="2 2 0 0">
-
-								<Button x:Name="ClearHistorgyButton" DockPanel.Dock="Right" Style="{StaticResource Hyperlink}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0 0 10 10" 
-									cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action ClearHistory($executionContext)]"
-									local:HyperlinkButton.Icon="{StaticResource squared_cross}" Content="Add collection" />
-
-
-								<Path Fill="Green" Data="M19.4,9H16V5.6C16,5,15.6,5,15,5s-1,0-1,0.6V9h-3.4C10,9,10,9.4,10,10s0,1,0.6,1H14v3.4c0,0.6,0.4,0.6,1,0.6
-	s1,0,1-0.6V11h3.4c0.6,0,0.6-0.4,0.6-1S20,9,19.4,9z M7.4,9H0.6C0,9,0,9.4,0,10s0,1,0.6,1h6.8C8,11,8,10.6,8,10S8,9,7.4,9z M7.4,14
-	H0.6C0,14,0,14.4,0,15s0,1,0.6,1h6.8C8,16,8,15.6,8,15S8,14,7.4,14z M7.4,4H0.6C0,4,0,4.4,0,5s0,1,0.6,1h6.8C8,6,8,5.6,8,5
-	S8,4,7.4,4z"/>
-
-							</StackPanel>-->
 
 							<DockPanel DockPanel.Dock="Top" Margin="4 0 0 0" LastChildFill="True">
 								<Button x:Name="ClearHistoryButton" DockPanel.Dock="Right" Style="{StaticResource Hyperlink}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0 0 10 10" 
@@ -166,11 +151,32 @@
 
 					<Grid>
 
-						<!--Visibility="{Binding History, Converter={StaticResource HideOnHistoryConverter}}"-->
 						<StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
 							<ContentControl Content="{StaticResource appbar_smiley_frown}" />
-							<TextBlock Style="{StaticResource EmptyListMessage}">Collections are super-nifty. Care to create one?</TextBlock>
+							<TextBlock Style="{StaticResource EmptyListMessage}">Collections are super-nifty. Why not create one?</TextBlock>
 						</StackPanel>
+
+						<DockPanel Name="CollectionsDockPanel" LastChildFill="True" Visibility="{Binding History, Converter={StaticResource ShowOnHistoryConverter}}">
+
+							<Canvas DockPanel.Dock="Top">
+								<Button Canvas.Top="-45" Canvas.Right="-1" BorderThickness="0" Background="#efefef">
+									<Button.Template>
+										<ControlTemplate TargetType="{x:Type Button}">
+											<Border Name="Border" Background="{TemplateBinding Background}" Height="40" Width="40">
+												<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+											</Border>
+											<ControlTemplate.Triggers>
+												<Trigger Property="IsMouseOver" Value="True">
+													<Setter TargetName="Border" Property="Background" Value="#449d44"></Setter>
+												</Trigger>
+											</ControlTemplate.Triggers>
+										</ControlTemplate>
+									</Button.Template>
+									<Path HorizontalAlignment="Center" VerticalAlignment="Center" Margin="-2 -2 0 0" Fill="White" Data="M10,1.6c-4.639,0-8.4,3.761-8.4,8.4s3.761,8.4,8.4,8.4s8.4-3.761,8.4-8.4S14.639,1.6,10,1.6z M15,11h-4v4H9 v-4H5V9h4V5h2v4h4V11z"/>
+								</Button>
+							</Canvas>
+							
+						</DockPanel>
 
 					</Grid>
 
