@@ -14,6 +14,9 @@
 
 			<Color x:Key="HyperlinkHoverColor">#286090</Color>
 			<SolidColorBrush x:Key="HyperlinkHoverColorBrush" Color="{StaticResource HyperlinkHoverColor}"></SolidColorBrush>
+			
+			<Color x:Key="RecededColor">#999999</Color>
+			<SolidColorBrush x:Key="RecededColorBrush" Color="{StaticResource RecededColor}"></SolidColorBrush>
 
 			<Style TargetType="Label">
 				<Setter Property="FontFamily" Value="Calibri" />

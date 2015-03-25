@@ -146,17 +146,6 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			}
 		}
 
-		private string _responseStatusError;
-		public string ResponseStatusError
-		{
-			get { return _responseStatusError; }
-			set
-			{
-				_responseStatusError = value;
-				NotifyOfPropertyChange(() => ResponseStatusError);
-			}
-		}
-
 		private string _responseContent;
 		public string ResponseContent
 		{
@@ -362,7 +351,6 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 		{
 			// Reset.
 			ResponseContent = null;
-			ResponseStatusError = null;
 			HttpStatusCode = null;
 			SelectedHistory = null;
 
@@ -378,28 +366,26 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			var result = client.Send(request);
 			var response = result.Response;
 
-			if (response == null)
+			var responseError = GetResponseError(response);
+
+			if (responseError != null)
+			{
+				var dialogResult = await _dialogManager.Show("Oh dear", "I'll be honest with you: we've hit a snag. Not sure exactly what the problem is but I suggest you've got the URL wrong or forgotten to plug in your Internet. Double check those things and we'll have another go.\n\nBTW, the low level reponse was: " + responseError);
 				return;
+			}
 
 			request.At = result.SentAt;
 			request.Response = new Response
 			{
 				Guid = Guid.NewGuid(),
 				At = result.ReceivedAt,
-				HttpStatusCode = response.StatusCode
+				HttpStatusCode = response.StatusCode,
+				Content = response.Content
 			};
 
-			ResponseStatusError = GetResponseStatusError(response.ResponseStatus);
-
-			if (ResponseStatusError != null)
-			{
-				var dialogResult = await _dialogManager.Show("Oh dear", "I'll be honest with you: we've hit a snag. Not sure exactly what the problem is but I suggest you've got the URL wrong or forgotten to plug in your Internet. Double check those things and we'll have another go.\n\nBTW, the low level reponse was: " + ResponseStatusError);
-				return;
-			}
-
 			HttpStatusCode = new HttpStatusCodeViewModel(response.StatusCode);
-
-			ResponseContent = XDocument.Parse(response.Content).ToString(); //JsonConvert.SerializeObject(response, Formatting.Indented);
+			ResponseContent = response.Content;
+			//ResponseContent = XDocument.Parse(response.Content).ToString(); //JsonConvert.SerializeObject(response, Formatting.Indented);
 			
 			AddToHistory(request);
 		}
@@ -408,16 +394,16 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 		{
 			History.Insert(0, request);
 			NotifyOfPropertyChange(() => History);
-
-			var json = JsonConvert.SerializeObject(History);
-			File.WriteAllText(_historyJsonPath, json);
-
 			SelectedHistory = History.First();
+			SaveHistory();
 		}
 
-		private string GetResponseStatusError(ResponseStatus status)
+		private string GetResponseError(IRestResponse response)
 		{
-			switch (status)
+			if (response == null)
+				return "Uhm, response was null?";
+			
+			switch (response.ResponseStatus)
 			{
 				case ResponseStatus.None:
 					return "Uh, not sure what happened. Didn't get a response?";
@@ -430,7 +416,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 				case ResponseStatus.Aborted:
 					return "Aborted.";
 				default:
-					return "Well that's a new one: " + status + ". Might want to add it in.";
+					return null;
 			}
 		}
 
@@ -452,6 +438,8 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			// Rebind.
 			Url = SelectedHistory.Url;
 			SelectedMethod = SelectedHistory.Method;
+			HttpStatusCode = new HttpStatusCodeViewModel(SelectedHistory.Response.HttpStatusCode);
+			ResponseContent = SelectedHistory.Response.Content;
 		}
 
 		public void RemoveFromHistory(object e)
@@ -469,7 +457,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 		private void SaveHistory()
 		{
-			var json = JsonConvert.SerializeObject(History);
+			var json = JsonConvert.SerializeObject(History, Formatting.Indented);
 			File.WriteAllText(_historyJsonPath, json);
 		}
 
