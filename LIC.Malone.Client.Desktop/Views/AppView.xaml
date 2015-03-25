@@ -36,12 +36,12 @@
 							<ControlTemplate TargetType="{x:Type TabItem}">
 								<ContentPresenter Name="HeaderContentPresenter">
 									<ContentPresenter.Content>
-										<Label Name="Header" Style="{StaticResource H1}" Content="{TemplateBinding Header}"></Label>
+										<Label Name="Header" Style="{StaticResource H1}" Content="{TemplateBinding Header}" Padding="13 7 7 7" />
 									</ContentPresenter.Content>
 								</ContentPresenter>
 								<ControlTemplate.Triggers>
 									<Trigger Property="IsSelected" Value="False">
-										<Setter TargetName="Header" Property="Foreground" Value="LightSlateGray"></Setter>
+										<Setter TargetName="Header" Property="Foreground" Value="LightGray"></Setter>
 									</Trigger>
 									<Trigger SourceName="HeaderContentPresenter" Property="IsMouseOver" Value="True">
 										<Setter TargetName="Header" Property="Foreground" Value="{StaticResource HyperlinkHoverColorBrush}"></Setter>
