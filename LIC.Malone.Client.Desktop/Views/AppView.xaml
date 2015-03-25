@@ -64,12 +64,9 @@
 					<Grid>
 
 						<StackPanel Orientation="Vertical" Visibility="{Binding History, Converter={StaticResource HideOnHistoryConverter}}" HorizontalAlignment="Center" VerticalAlignment="Center">
-
 							<ContentControl Content="{StaticResource appbar_smiley_frown}" />
 							<Label Foreground="#aaaaaa">Nothing to see here. Try sending a request!</Label>
-							
 						</StackPanel>
-						
 
 						<DockPanel Name="HistoryDockPanel" Grid.Column="0" LastChildFill="True" Visibility="{Binding History, Converter={StaticResource ShowOnHistoryConverter}}">
 
@@ -136,7 +133,17 @@
 			</TabItem>
 			<TabItem Header="Collections">
 				<TabItem.Content>
-					<TextBlock>hi</TextBlock>
+
+					<Grid>
+
+						<!--Visibility="{Binding History, Converter={StaticResource HideOnHistoryConverter}}"-->
+						<StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+							<ContentControl Content="{StaticResource appbar_smiley_frown}" />
+							<Label Foreground="#aaaaaa">Collections are pretty nifty. Care to create one?</Label>
+						</StackPanel>
+
+					</Grid>
+					
 				</TabItem.Content>
 			</TabItem>
 		</TabControl>
