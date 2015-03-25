@@ -29,32 +29,38 @@
 		</Grid.ColumnDefinitions>
 
 		<TabControl Grid.Column="0" Margin="-2 -2 0 0" Padding="0">
-			<TabItem>
-				<TabItem.HeaderTemplate>
-					<DataTemplate>
-						<Border>
-							<Label Name="Label" Style="{StaticResource H1}">History</Label>
-						</Border>
-						<DataTemplate.Triggers>
-							<DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=TabItem}, Path=IsSelected}" Value="True">
-								<Setter TargetName="Label" Property="Foreground" Value="#444444" />
-							</DataTrigger>
-							<DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=TabItem}, Path=IsSelected}" Value="False">
-								<Setter TargetName="Label" Property="Foreground" Value="LightSteelBlue" />
-							</DataTrigger>
-							<DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=TabItem}, Path=IsMouseOver}" Value="True">
-								<Setter TargetName="Label" Property="Foreground" Value="CornflowerBlue" />
-								<Setter TargetName="Label" Property="Cursor" Value="Hand" />
-							</DataTrigger>
-						</DataTemplate.Triggers>
-					</DataTemplate>
-				</TabItem.HeaderTemplate>
+			<TabControl.Resources>
+				<Style TargetType="{x:Type TabItem}">
+					<Setter Property="Template">
+						<Setter.Value>
+							<ControlTemplate TargetType="{x:Type TabItem}">
+								<ContentPresenter Name="HeaderContentPresenter">
+									<ContentPresenter.Content>
+										<Label Name="Header" Style="{StaticResource H1}" Content="{TemplateBinding Header}"></Label>
+									</ContentPresenter.Content>
+								</ContentPresenter>
+								<ControlTemplate.Triggers>
+									<Trigger Property="IsSelected" Value="False">
+										<Setter TargetName="Header" Property="Foreground" Value="LightSlateGray"></Setter>
+									</Trigger>
+									<Trigger SourceName="HeaderContentPresenter" Property="IsMouseOver" Value="True">
+										<Setter TargetName="Header" Property="Foreground" Value="{StaticResource HyperlinkHoverColorBrush}"></Setter>
+									</Trigger>
+								</ControlTemplate.Triggers>
+							</ControlTemplate>
+						</Setter.Value>
+					</Setter>
+				</Style>
+			</TabControl.Resources>
+
+
+			<TabItem Header="History">
+
 				<TabItem.Content>
 
 					<DockPanel Name="HistoryDockPanel" Grid.Column="0" LastChildFill="True">
 
 						<DockPanel DockPanel.Dock="Top" Margin="4 0 0 0" LastChildFill="True">
-							<!--<Label DockPanel.Dock="Left" Style="{StaticResource H1}" Content="History"/>-->
 							<Button x:Name="ClearHistoryButton" DockPanel.Dock="Right" Style="{StaticResource Hyperlink}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0 0 10 10" 
 								cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action ClearHistory($executionContext)]"
 								local:HyperlinkButton.Icon="{StaticResource squared_cross}" Content="Clear history" />
@@ -114,82 +120,12 @@
 
 				</TabItem.Content>
 			</TabItem>
-			<TabItem>
-				<TabItem.HeaderTemplate>
-					<DataTemplate>
-						<Border>
-							<Label Style="{StaticResource H1}">Collections</Label>
-						</Border>
-					</DataTemplate>
-				</TabItem.HeaderTemplate>
+			<TabItem Header="Collections">
 				<TabItem.Content>
 					<TextBlock>hi</TextBlock>
 				</TabItem.Content>
 			</TabItem>
 		</TabControl>
-
-		<!--<DockPanel Name="HistoryDockPanel" Grid.Column="0" LastChildFill="True">
-			
-
-
-			<DockPanel DockPanel.Dock="Top" Margin="4 0 0 0" LastChildFill="True">
-				<Label DockPanel.Dock="Left" Style="{StaticResource H1}" Content="History"/>
-				<Button x:Name="ClearHistoryButton" DockPanel.Dock="Right" Style="{StaticResource Hyperlink}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0 0 10 10" 
-					cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action ClearHistory($executionContext)]"
-					local:HyperlinkButton.Icon="{StaticResource squared_cross}" Content="Clear history" />
-			</DockPanel>
-
-			<Label Name="HistoryHorizontalOffset" Visibility="Collapsed" />
-			<Label Name="HistoryVerticalScrollBarOffset" Visibility="Collapsed" />
-			
-			<local:MaloneListBox x:Name="History" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" SelectionMode="Single"
-				BorderThickness="0" Padding="0" Margin="-1"
-				cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action HistoryClicked($executionContext)]; [Event LayoutUpdated] = [Action HistoryLayoutUpdated($executionContext)]">
-
-				<ListBox.ItemTemplate>
-					<DataTemplate>
-						<Grid Margin="7,7" Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBox}}, Path=Width}">
-							<Grid.Resources>
-								<extensions:HttpStatusCodeToBrushConverter x:Key="HttpStatusCodeToBrushConverter" />
-								<extensions:HttpStatusCodeToIntConverter x:Key="HttpStatusCodeToIntConverter" />
-								<extensions:HistoryWidthConverter x:Key="HistoryWidthConverter" />
-							</Grid.Resources>
-							<Grid.ColumnDefinitions>
-								<ColumnDefinition Width="40" />
-								<ColumnDefinition Width="*" />
-							</Grid.ColumnDefinitions>
-							<Grid.RowDefinitions>
-								<RowDefinition />
-								<RowDefinition />
-							</Grid.RowDefinitions>
-
-							<Canvas Name="HistoryButtonCanvas" ZIndex="300" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Grid.RowSpan="2">
-								<Button Name="HistoryRemoveButton" Canvas.Top="-8" Style="{StaticResource ListBoxItemDelete}"
-									cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action RemoveHistory($this)]">
-									<Canvas.Left>
-										<MultiBinding Converter="{StaticResource HistoryWidthConverter}">
-											<Binding ElementName="History" Path="ActualWidth" />
-											<Binding ElementName="HistoryHorizontalOffset" Path="Content" />
-											<Binding ElementName="HistoryVerticalScrollBarOffset" Path="Content" />
-										</MultiBinding>
-									</Canvas.Left>
-								</Button>
-							</Canvas>
-
-							<TextBlock Grid.Column="0" Grid.Row="0" Text="{Binding Method}" Style="{StaticResource History.BaseUrl}" />
-							<TextBlock Grid.Column="0" Grid.Row="1" Text="{Binding Response.HttpStatusCode, Converter={StaticResource HttpStatusCodeToIntConverter}}" Foreground="{Binding Response.HttpStatusCode, Converter={StaticResource HttpStatusCodeToBrushConverter}}" />
-
-							<TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding BaseUrl}" Style="{StaticResource History.BaseUrl}" />
-							<TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding ResourcePath}" Style="{StaticResource History.ResourcePath}" />
-
-						</Grid>
-
-					</DataTemplate>
-				</ListBox.ItemTemplate>
-
-			</local:MaloneListBox>
-
-		</DockPanel>-->
 
 		<GridSplitter Name="HistorySplitter" Grid.Column="1" Width="2" HorizontalAlignment="Stretch" />
 
