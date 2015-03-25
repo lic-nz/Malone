@@ -93,7 +93,7 @@
 
 								<ListBox.ItemTemplate>
 									<DataTemplate>
-										<Grid Margin="7,2" Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBox}}, Path=Width}">
+										<Grid Margin="7,3" Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBox}}, Path=Width}">
 											<Grid.Resources>
 												<extensions:HttpStatusCodeToBrushConverter x:Key="HttpStatusCodeToBrushConverter" />
 												<extensions:HttpStatusCodeToIntConverter x:Key="HttpStatusCodeToIntConverter" />

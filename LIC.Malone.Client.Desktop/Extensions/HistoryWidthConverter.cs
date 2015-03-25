@@ -9,7 +9,7 @@ namespace LIC.Malone.Client.Desktop.Extensions
 	{
 		public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
 		{
-			const double buttonWidth = 53;
+			const double buttonWidth = 51;
 
 			var historyWidth = (double)values[0];
 			var horizontalOffset = (double)values[1];
