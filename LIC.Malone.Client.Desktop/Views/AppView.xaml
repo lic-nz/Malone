@@ -21,7 +21,7 @@
 
 	<Grid Name="MainGrid">
 		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="1*" MinWidth="250" />
+			<ColumnDefinition Width="1*" MinWidth="280" />
 			<ColumnDefinition Width="2" />
 			<ColumnDefinition Width="2*" MinWidth="500" />
 		</Grid.ColumnDefinitions>
@@ -65,7 +65,7 @@
 
 						<Canvas>
 							<Button Canvas.Top="-45" Canvas.Right="-1" BorderThickness="0" Background="#efefef" Visibility="{Binding History, Converter={StaticResource ShowOnHistoryConverter}}"
-									cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action ClearHistory($executionContext)]">
+									cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action ClearHistory($executionContext)]" ToolTip="Clear history">
 								<Button.Template>
 									<ControlTemplate TargetType="{x:Type Button}">
 										<Border Name="Border" Background="{TemplateBinding Background}" Height="40" Width="40">
@@ -73,7 +73,7 @@
 										</Border>
 										<ControlTemplate.Triggers>
 											<Trigger Property="IsMouseOver" Value="True">
-												<Setter TargetName="Border" Property="Background" Value="#c9302c"></Setter>
+												<Setter TargetName="Border" Property="Background" Value="Red"/>
 											</Trigger>
 										</ControlTemplate.Triggers>
 									</ControlTemplate>

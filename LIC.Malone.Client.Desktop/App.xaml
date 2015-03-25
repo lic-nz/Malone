@@ -50,17 +50,17 @@
 				<Setter Property="Template">
 					<Setter.Value>
 						<ControlTemplate TargetType="{x:Type Button}">
-							<Border Name="Border" Background="Red" Opacity=".5" Width="40" Height="50">
+							<Border Name="Border" Background="#efefef" Width="55" Height="50">
 								<Path
-									Margin="9 -5 0 0"
+									Margin="10 -5 0 0"
 									SnapsToDevicePixels="True"
 									VerticalAlignment="Center"
 									Fill="White" 
-									Data="{StaticResource cross}" />
+									Data="M10,1.6c-4.639,0-8.4,3.761-8.4,8.4s3.761,8.4,8.4,8.4s8.4-3.761,8.4-8.4S14.639,1.6,10,1.6z M15,11H5V9h10 V11z" />
 							</Border>
 							<ControlTemplate.Triggers>
 								<Trigger Property="IsMouseOver" Value="True">
-									<Setter TargetName="Border" Property="Opacity" Value="1" />
+									<Setter TargetName="Border" Property="Background" Value="Red"/>
 									<Setter Property="Cursor" Value="Hand"/>
 								</Trigger>
 							</ControlTemplate.Triggers>
