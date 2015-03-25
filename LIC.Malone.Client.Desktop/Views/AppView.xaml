@@ -58,7 +58,8 @@
 
 				<TabItem.Content>
 
-					<Grid>
+					<Grid>
+
 
 						<StackPanel Orientation="Vertical" Visibility="{Binding History, Converter={StaticResource HideOnHistoryConverter}}" HorizontalAlignment="Center" VerticalAlignment="Center">
 							<ContentControl Content="{StaticResource appbar_smiley_frown}" />
@@ -68,7 +69,11 @@
 						<DockPanel Name="HistoryDockPanel" Grid.Column="0" LastChildFill="True" Visibility="{Binding History, Converter={StaticResource ShowOnHistoryConverter}}">
 
 							<Canvas DockPanel.Dock="Top">
-								<Button Canvas.Top="-55" Canvas.Right="-10" Margin="10" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Background="Firebrick">									<Border Background="Green" Height="40" Width="40">										<Path HorizontalAlignment="Center" VerticalAlignment="Center"  Fill="Gold" Data="M10,1.6c-4.639,0-8.4,3.761-8.4,8.4s3.761,8.4,8.4,8.4s8.4-3.761,8.4-8.4S14.639,1.6,10,1.6z M15,11h-4v4H9 v-4H5V9h4V5h2v4h4V11z"/>									</Border>								</Button>
+								<Button Canvas.Top="-55" Canvas.Right="-10" Margin="10" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Background="Firebrick">
+									<Border Background="Green" Height="40" Width="40">
+										<Path HorizontalAlignment="Center" VerticalAlignment="Center"  Fill="Gold" Data="M10,1.6c-4.639,0-8.4,3.761-8.4,8.4s3.761,8.4,8.4,8.4s8.4-3.761,8.4-8.4S14.639,1.6,10,1.6z M15,11h-4v4H9 v-4H5V9h4V5h2v4h4V11z"/>
+									</Border>
+								</Button>
 							</Canvas>
 
 							<!--<StackPanel DockPanel.Dock="Top" Background="Gold" Orientation="Horizontal" Margin="2 2 0 0">
@@ -81,7 +86,8 @@
 								<Path Fill="Green" Data="M19.4,9H16V5.6C16,5,15.6,5,15,5s-1,0-1,0.6V9h-3.4C10,9,10,9.4,10,10s0,1,0.6,1H14v3.4c0,0.6,0.4,0.6,1,0.6
 	s1,0,1-0.6V11h3.4c0.6,0,0.6-0.4,0.6-1S20,9,19.4,9z M7.4,9H0.6C0,9,0,9.4,0,10s0,1,0.6,1h6.8C8,11,8,10.6,8,10S8,9,7.4,9z M7.4,14
 	H0.6C0,14,0,14.4,0,15s0,1,0.6,1h6.8C8,16,8,15.6,8,15S8,14,7.4,14z M7.4,4H0.6C0,4,0,4.4,0,5s0,1,0.6,1h6.8C8,6,8,5.6,8,5
-	S8,4,7.4,4z"/>
+	S8,4,7.4,4z"/>
+
 							</StackPanel>-->
 
 							<DockPanel DockPanel.Dock="Top" Margin="4 0 0 0" LastChildFill="True">
