@@ -87,6 +87,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Extensions\PathConverter.cs" />
     <Compile Include="Extensions\ShowOnHistoryConverter.cs" />
     <Compile Include="Extensions\HideOnHistoryConverter.cs" />
     <Compile Include="Extensions\HistoryWidthConverter.cs" />

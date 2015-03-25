@@ -32,6 +32,7 @@
 			<TabControl.Resources>
 				<extensions:HideOnHistoryConverter x:Key="HideOnHistoryConverter" />
 				<extensions:ShowOnHistoryConverter x:Key="ShowOnHistoryConverter" />
+				<extensions:PathConverter x:Key="PathConverter" />
 				<Style TargetType="{x:Type TabItem}">
 					<Setter Property="Template">
 						<Setter.Value>
@@ -62,7 +63,13 @@
 					
 					<Grid>
 
-						<TextBlock Text="Nothing to see here..." Visibility="{Binding History, Converter={StaticResource HideOnHistoryConverter}}" />
+						<StackPanel Orientation="Vertical" Visibility="{Binding History, Converter={StaticResource HideOnHistoryConverter}}" HorizontalAlignment="Center" VerticalAlignment="Center">
+
+							<ContentControl Content="{StaticResource appbar_smiley_frown}" />
+							<Label Foreground="#aaaaaa">Nothing to see here. Try sending a request!</Label>
+							
+						</StackPanel>
+						
 
 						<DockPanel Name="HistoryDockPanel" Grid.Column="0" LastChildFill="True" Visibility="{Binding History, Converter={StaticResource ShowOnHistoryConverter}}">
 
