@@ -17,6 +17,11 @@
 				<Setter Property="FontSize" Value="14" />
 			</Style>
 
+			<Style x:Key="DefaultTextBlock" TargetType="TextBlock">
+				<Setter Property="FontFamily" Value="Calibri" />
+				<Setter Property="FontSize" Value="14" />
+			</Style>
+
 			<Style x:Key="H1" TargetType="Label">
 				<Setter Property="FontFamily" Value="Segoe UI Light" />
 				<Setter Property="FontSize" Value="24" />
@@ -31,15 +36,11 @@
 				<Setter Property="Margin" Value="0 11 15 0" />
 			</Style>
 
-			<Style x:Key="History.BaseUrl" TargetType="TextBlock">
-				<Setter Property="FontFamily" Value="Calibri" />
-				<Setter Property="FontSize" Value="14" />
+			<Style x:Key="History.BaseUrl" TargetType="TextBlock" BasedOn="{StaticResource DefaultTextBlock}">
 				<Setter Property="Foreground" Value="#999999" />
 			</Style>
 
-			<Style x:Key="History.ResourcePath" TargetType="TextBlock">
-				<Setter Property="FontFamily" Value="Calibri" />
-				<Setter Property="FontSize" Value="14" />
+			<Style x:Key="History.ResourcePath" TargetType="TextBlock" BasedOn="{StaticResource DefaultTextBlock}">
 			</Style>
 
 			<Style x:Key="ListBoxItemDelete" TargetType="{x:Type Button}">
@@ -149,6 +150,13 @@
 						<Setter Property="Foreground" Value="OrangeRed"/>
 					</DataTrigger>
 				</Style.Triggers>
+			</Style>
+			
+			<Style x:Key="EmptyListMessage" TargetType="TextBlock" BasedOn="{StaticResource DefaultTextBlock}">
+				<Setter Property="TextWrapping" Value="Wrap"/>
+				<Setter Property="Foreground" Value="#aaaaaa"/>
+				<Setter Property="TextAlignment" Value="Center"/>
+				<Setter Property="Padding" Value="20"/>
 			</Style>
 
 			<ResourceDictionary.MergedDictionaries>

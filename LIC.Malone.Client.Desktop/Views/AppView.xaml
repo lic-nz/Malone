@@ -65,7 +65,7 @@
 
 						<StackPanel Orientation="Vertical" Visibility="{Binding History, Converter={StaticResource HideOnHistoryConverter}}" HorizontalAlignment="Center" VerticalAlignment="Center">
 							<ContentControl Content="{StaticResource appbar_smiley_frown}" />
-							<Label Foreground="#aaaaaa">Nothing to see here. Try sending a request!</Label>
+							<TextBlock Style="{StaticResource EmptyListMessage}">Nothing to see here. Try sending a request!</TextBlock>
 						</StackPanel>
 
 						<DockPanel Name="HistoryDockPanel" Grid.Column="0" LastChildFill="True" Visibility="{Binding History, Converter={StaticResource ShowOnHistoryConverter}}">
@@ -139,7 +139,7 @@
 						<!--Visibility="{Binding History, Converter={StaticResource HideOnHistoryConverter}}"-->
 						<StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
 							<ContentControl Content="{StaticResource appbar_smiley_frown}" />
-							<Label Foreground="#aaaaaa">Collections are pretty nifty. Care to create one?</Label>
+							<TextBlock Style="{StaticResource EmptyListMessage}">Awww, you don't have any collections! Care to create one?</TextBlock>
 						</StackPanel>
 
 					</Grid>
