@@ -407,6 +407,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 		private void AddToHistory(Request request)
 		{
 			History.Insert(0, request);
+			NotifyOfPropertyChange(() => History);
 
 			var json = JsonConvert.SerializeObject(History);
 			File.WriteAllText(_historyJsonPath, json);

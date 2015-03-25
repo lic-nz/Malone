@@ -30,6 +30,8 @@
 
 		<TabControl Grid.Column="0" Margin="-2 -2 0 0" Padding="0">
 			<TabControl.Resources>
+				<extensions:HideOnHistoryConverter x:Key="HideOnHistoryConverter" />
+				<extensions:ShowOnHistoryConverter x:Key="ShowOnHistoryConverter" />
 				<Style TargetType="{x:Type TabItem}">
 					<Setter Property="Template">
 						<Setter.Value>
@@ -57,66 +59,71 @@
 			<TabItem Header="History">
 
 				<TabItem.Content>
+					
+					<Grid>
 
-					<DockPanel Name="HistoryDockPanel" Grid.Column="0" LastChildFill="True">
+						<TextBlock Text="Nothing to see here..." Visibility="{Binding History, Converter={StaticResource HideOnHistoryConverter}}" />
 
-						<DockPanel DockPanel.Dock="Top" Margin="4 0 0 0" LastChildFill="True">
-							<Button x:Name="ClearHistoryButton" DockPanel.Dock="Right" Style="{StaticResource Hyperlink}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0 0 10 10" 
-								cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action ClearHistory($executionContext)]"
-								local:HyperlinkButton.Icon="{StaticResource squared_cross}" Content="Clear history" />
+						<DockPanel Name="HistoryDockPanel" Grid.Column="0" LastChildFill="True" Visibility="{Binding History, Converter={StaticResource ShowOnHistoryConverter}}">
+
+							<DockPanel DockPanel.Dock="Top" Margin="4 0 0 0" LastChildFill="True">
+								<Button x:Name="ClearHistoryButton" DockPanel.Dock="Right" Style="{StaticResource Hyperlink}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0 0 10 10" 
+									cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action ClearHistory($executionContext)]"
+									local:HyperlinkButton.Icon="{StaticResource squared_cross}" Content="Clear history" />
+							</DockPanel>
+
+							<Label Name="HistoryHorizontalOffset" Visibility="Collapsed" />
+							<Label Name="HistoryVerticalScrollBarOffset" Visibility="Collapsed" />
+
+							<local:MaloneListBox x:Name="History" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" SelectionMode="Single"
+								BorderThickness="0" Padding="0" Margin="-2"
+								cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action HistoryClicked($executionContext)]; [Event LayoutUpdated] = [Action HistoryLayoutUpdated($executionContext)]">
+
+								<ListBox.ItemTemplate>
+									<DataTemplate>
+										<Grid Margin="7,7" Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBox}}, Path=Width}">
+											<Grid.Resources>
+												<extensions:HttpStatusCodeToBrushConverter x:Key="HttpStatusCodeToBrushConverter" />
+												<extensions:HttpStatusCodeToIntConverter x:Key="HttpStatusCodeToIntConverter" />
+												<extensions:HistoryWidthConverter x:Key="HistoryWidthConverter" />
+											</Grid.Resources>
+											<Grid.ColumnDefinitions>
+												<ColumnDefinition Width="40" />
+												<ColumnDefinition Width="*" />
+											</Grid.ColumnDefinitions>
+											<Grid.RowDefinitions>
+												<RowDefinition />
+												<RowDefinition />
+											</Grid.RowDefinitions>
+
+											<Canvas Name="HistoryButtonCanvas" ZIndex="300" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Grid.RowSpan="2">
+												<Button Name="HistoryRemoveButton" Canvas.Top="-8" Style="{StaticResource ListBoxItemDelete}"
+													cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action RemoveHistory($this)]">
+													<Canvas.Left>
+														<MultiBinding Converter="{StaticResource HistoryWidthConverter}">
+															<Binding ElementName="History" Path="ActualWidth" />
+															<Binding ElementName="HistoryHorizontalOffset" Path="Content" />
+															<Binding ElementName="HistoryVerticalScrollBarOffset" Path="Content" />
+														</MultiBinding>
+													</Canvas.Left>
+												</Button>
+											</Canvas>
+
+											<TextBlock Grid.Column="0" Grid.Row="0" Text="{Binding Method}" Style="{StaticResource History.BaseUrl}" />
+											<TextBlock Grid.Column="0" Grid.Row="1" Text="{Binding Response.HttpStatusCode, Converter={StaticResource HttpStatusCodeToIntConverter}}" Foreground="{Binding Response.HttpStatusCode, Converter={StaticResource HttpStatusCodeToBrushConverter}}" />
+
+											<TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding BaseUrl}" Style="{StaticResource History.BaseUrl}" />
+											<TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding ResourcePath}" Style="{StaticResource History.ResourcePath}" />
+
+										</Grid>
+
+									</DataTemplate>
+								</ListBox.ItemTemplate>
+
+							</local:MaloneListBox>
+
 						</DockPanel>
-
-						<Label Name="HistoryHorizontalOffset" Visibility="Collapsed" />
-						<Label Name="HistoryVerticalScrollBarOffset" Visibility="Collapsed" />
-
-						<local:MaloneListBox x:Name="History" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" SelectionMode="Single"
-							BorderThickness="0" Padding="0" Margin="-2"
-							cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action HistoryClicked($executionContext)]; [Event LayoutUpdated] = [Action HistoryLayoutUpdated($executionContext)]">
-
-							<ListBox.ItemTemplate>
-								<DataTemplate>
-									<Grid Margin="7,7" Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBox}}, Path=Width}">
-										<Grid.Resources>
-											<extensions:HttpStatusCodeToBrushConverter x:Key="HttpStatusCodeToBrushConverter" />
-											<extensions:HttpStatusCodeToIntConverter x:Key="HttpStatusCodeToIntConverter" />
-											<extensions:HistoryWidthConverter x:Key="HistoryWidthConverter" />
-										</Grid.Resources>
-										<Grid.ColumnDefinitions>
-											<ColumnDefinition Width="40" />
-											<ColumnDefinition Width="*" />
-										</Grid.ColumnDefinitions>
-										<Grid.RowDefinitions>
-											<RowDefinition />
-											<RowDefinition />
-										</Grid.RowDefinitions>
-
-										<Canvas Name="HistoryButtonCanvas" ZIndex="300" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Grid.RowSpan="2">
-											<Button Name="HistoryRemoveButton" Canvas.Top="-8" Style="{StaticResource ListBoxItemDelete}"
-												cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action RemoveHistory($this)]">
-												<Canvas.Left>
-													<MultiBinding Converter="{StaticResource HistoryWidthConverter}">
-														<Binding ElementName="History" Path="ActualWidth" />
-														<Binding ElementName="HistoryHorizontalOffset" Path="Content" />
-														<Binding ElementName="HistoryVerticalScrollBarOffset" Path="Content" />
-													</MultiBinding>
-												</Canvas.Left>
-											</Button>
-										</Canvas>
-
-										<TextBlock Grid.Column="0" Grid.Row="0" Text="{Binding Method}" Style="{StaticResource History.BaseUrl}" />
-										<TextBlock Grid.Column="0" Grid.Row="1" Text="{Binding Response.HttpStatusCode, Converter={StaticResource HttpStatusCodeToIntConverter}}" Foreground="{Binding Response.HttpStatusCode, Converter={StaticResource HttpStatusCodeToBrushConverter}}" />
-
-										<TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding BaseUrl}" Style="{StaticResource History.BaseUrl}" />
-										<TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding ResourcePath}" Style="{StaticResource History.ResourcePath}" />
-
-									</Grid>
-
-								</DataTemplate>
-							</ListBox.ItemTemplate>
-
-						</local:MaloneListBox>
-
-					</DockPanel>
+					</Grid>
 
 				</TabItem.Content>
 			</TabItem>
