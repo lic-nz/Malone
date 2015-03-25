@@ -110,7 +110,7 @@
 
 											<Canvas Name="HistoryButtonCanvas" ZIndex="300" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Grid.RowSpan="2">
 												<Button Name="HistoryRemoveButton" Canvas.Top="-8" Style="{StaticResource ListBoxItemDelete}"
-													cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action RemoveHistory($this)]">
+													cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action RemoveFromHistory($this)]">
 													<Canvas.Left>
 														<MultiBinding Converter="{StaticResource HistoryWidthConverter}">
 															<Binding ElementName="History" Path="ActualWidth" />
