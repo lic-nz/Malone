@@ -50,9 +50,9 @@
 				<Setter Property="Template">
 					<Setter.Value>
 						<ControlTemplate TargetType="{x:Type Button}">
-							<Border Name="Border" Background="#efefef" Width="55" Height="50">
+							<Border Name="Border" Background="#efefef" Width="55" Height="40">
 								<Path
-									Margin="10 -5 0 0"
+									Margin="10 -2 0 0"
 									SnapsToDevicePixels="True"
 									VerticalAlignment="Center"
 									Fill="White" 
