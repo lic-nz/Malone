@@ -7,8 +7,8 @@ using System.Windows;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("LIC.Malone.Client.Desktop")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Malone")]
+[assembly: AssemblyDescription("Slamdunk API testing.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Livestock Improvement")]
 [assembly: AssemblyProduct("LIC.Malone.Client.Desktop")]
@@ -53,3 +53,4 @@ using System.Windows;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("0.0.1.0")]
 [assembly: AssemblyFileVersion("0.0.1.0")]
+[assembly: AssemblyInformationalVersion("0.0.1-alpha")]
