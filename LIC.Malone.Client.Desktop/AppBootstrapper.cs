@@ -19,6 +19,7 @@ namespace LIC.Malone.Client.Desktop
 			base.Configure();
 
 			_container.Singleton<IEventAggregator, EventAggregator>();
+			_container.Singleton<IWindowManager, WindowManager>();
 		}
 
 		protected override void OnStartup(object sender, StartupEventArgs e)

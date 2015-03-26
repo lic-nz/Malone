@@ -148,7 +148,8 @@
 						</StackPanel>
 
 						<Canvas DockPanel.Dock="Top">
-							<Button Canvas.Top="-45" Canvas.Right="-1" BorderThickness="0" Background="#efefef">
+							<Button Canvas.Top="-45" Canvas.Right="-1" BorderThickness="0" Background="#efefef"
+									cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action AddCollection()]" ToolTip="Add collection">
 								<Button.Template>
 									<ControlTemplate TargetType="{x:Type Button}">
 										<Border Name="Border" Background="{TemplateBinding Background}" Height="40" Width="40">

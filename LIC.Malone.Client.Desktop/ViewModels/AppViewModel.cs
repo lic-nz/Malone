@@ -20,9 +20,12 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 	// TODO: Actually conduct the flyout.
 	public class AppViewModel : Conductor<object>, IHandle<ConfigurationLoaded>
 	{
+		private readonly IWindowManager _windowManager;
 		private readonly EventAggregator _bus;
 		private readonly DialogManager _dialogManager = new DialogManager();
 		private readonly List<string> _allowedSchemes = new List<string> { Uri.UriSchemeHttp, Uri.UriSchemeHttps };
+
+		private AddCollectionViewModel _addCollectionViewModel = new AddCollectionViewModel();
 
 		private string _historyJsonPath;
 
@@ -286,6 +289,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 		public AppViewModel()
 		{
+			_windowManager = IoC.Get<WindowManager>();
 			_bus = IoC.Get<EventAggregator>();
 			_bus.Subscribe(this);
 
@@ -459,6 +463,18 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 		{
 			var json = JsonConvert.SerializeObject(History, Formatting.Indented);
 			File.WriteAllText(_historyJsonPath, json);
+		}
+
+		public void AddCollection()
+		{
+			var settings = new Dictionary<string, object>
+			{
+				{"Title", "Add collection"},
+				{"WindowStartupLocation", WindowStartupLocation.CenterOwner}
+			};
+
+			_windowManager.ShowDialog(_addCollectionViewModel, settings: settings);
+			ActivateItem(_addCollectionViewModel);
 		}
 
 		// TODO: Move to own view model.

@@ -1,0 +1,26 @@
+﻿<metro:MetroWindow
+	x:Class="LIC.Malone.Client.Desktop.Views.AddCollectionView"
+	xmlns:metro="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:cal="http://www.caliburnproject.org"
+	xmlns:syntaxControl="clr-namespace:AurelienRibon.Ui.SyntaxHighlightBox;assembly=AurelienRibon.Ui.SyntaxHighlightBox"
+	xmlns:extensions="clr-namespace:LIC.Malone.Client.Desktop.Extensions"
+	xmlns:local="clr-namespace:LIC.Malone.Client.Desktop"
+	mc:Ignorable="d"
+	TitleCaps="False"
+	ShowIconOnTitleBar="False"
+	GlowBrush="{DynamicResource AccentColorBrush}"
+	MinWidth="400" MinHeight="300"
+	Width="400" Height="300">
+
+	<Grid Name="MainGrid" Margin="15">
+		<StackPanel Orientation="Vertical">
+			<Label Style="{StaticResource H1}">Oh Em Gee</Label>
+			<Label>Sorry, but I haven't got around to building this yet.</Label>
+		</StackPanel>
+	</Grid>
+
+</metro:MetroWindow>
