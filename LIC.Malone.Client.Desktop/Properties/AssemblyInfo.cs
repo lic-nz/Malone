@@ -11,7 +11,7 @@ using System.Windows;
 [assembly: AssemblyDescription("Slamdunk API testing.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Livestock Improvement")]
-[assembly: AssemblyProduct("LIC.Malone.Client.Desktop")]
+[assembly: AssemblyProduct("Malone")]
 [assembly: AssemblyCopyright("Copyright © Livestock Improvement 2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
