@@ -101,7 +101,12 @@ namespace LIC.Malone.Core
 
 		private string GetBaseUrl(Uri url)
 		{
-			var baseUrl = new UriBuilder(url.Scheme, url.Host, url.Port).ToString();
+			var builder = new UriBuilder(url.Scheme, url.Host);
+
+			if (!url.IsDefaultPort)
+				builder.Port = url.Port;
+
+			var baseUrl = builder.ToString();
 
 			// Remove trailing slash to keep RestSharp happy.
 			return baseUrl.Substring(0, baseUrl.Length - 1);
