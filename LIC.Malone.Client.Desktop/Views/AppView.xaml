@@ -180,76 +180,127 @@
 
 		<DockPanel Name="RequestResponseDockPanel" Grid.Column="2" LastChildFill="True" Margin="8 0 0 0">
 
-			<DockPanel DockPanel.Dock="Top">
-				<Label DockPanel.Dock="Left" Style="{StaticResource H1}" Content="Request" Margin="-2 0 0 0"/>
-				<Label DockPanel.Dock="Right" Style="{StaticResource H1Info}" HorizontalAlignment="Right" x:Name="SelectedHistory_AtLocalString" Content="Request Date">
-					<Label.ToolTip>
-						<Label Content="{Binding Path=.SelectedHistory.AtUtcString}"/>
-					</Label.ToolTip>
-				</Label>
-			</DockPanel>
+			<TabControl DockPanel.Dock="Top">
 
-			<Grid DockPanel.Dock="Top" Name="RequestGrid">
-				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="100" />
-					<ColumnDefinition Width="*" />
-				</Grid.ColumnDefinitions>
-				<Grid.RowDefinitions>
-					<RowDefinition Height="60" />
-					<RowDefinition Height="40" />
-					<RowDefinition Height="80" />
-				</Grid.RowDefinitions>
+				<TabControl.Resources>
+					<extensions:HideOnHistoryConverter x:Key="HideOnHistoryConverter" />
+					<extensions:ShowOnHistoryConverter x:Key="ShowOnHistoryConverter" />
+					<Style TargetType="{x:Type TabItem}">
+						<Setter Property="Template">
+							<Setter.Value>
+								<ControlTemplate TargetType="{x:Type TabItem}">
+									<ContentPresenter Name="HeaderContentPresenter">
+										<ContentPresenter.Content>
+											<Label Name="Header" Style="{StaticResource H1}" Content="{TemplateBinding Header}" Padding="5 7 13 7" />
+										</ContentPresenter.Content>
+									</ContentPresenter>
+									<ControlTemplate.Triggers>
+										<Trigger Property="IsSelected" Value="False">
+											<Setter TargetName="Header" Property="Foreground" Value="LightGray"></Setter>
+										</Trigger>
+										<Trigger SourceName="HeaderContentPresenter" Property="IsMouseOver" Value="True">
+											<Setter TargetName="Header" Property="Foreground" Value="{StaticResource HyperlinkHoverColorBrush}"></Setter>
+										</Trigger>
+									</ControlTemplate.Triggers>
+								</ControlTemplate>
+							</Setter.Value>
+						</Setter>
+					</Style>
+				</TabControl.Resources>
 
-				<Label Grid.Row="0" Grid.Column="0" Content="Method" HorizontalAlignment="Left" FontFamily="Segoe UI" FontSize="14" Foreground="#FF9395A2"/>
-				<ComboBox Grid.Row="0" Grid.Column="0" x:Name="Methods" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="90" Padding="3" Height="30" />
+				<TabItem Header="Request">
+					<TabItem.Content>
 
-				<Label Grid.Row="0" Grid.Column="1" Content="URL" HorizontalAlignment="Left" FontFamily="Segoe UI" FontSize="14" Foreground="#FF9395A2" />
-				<TextBox Grid.Row="0" Grid.Column="1" x:Name="Url" metro:TextBoxHelper.Watermark="Enter URL or choose from history"
-					FontFamily="Calibri" FontSize="14" VerticalAlignment="Bottom" Padding="3" Margin="0,0,100,0"/>
+						<DockPanel LastChildFill="True">
 
-				<Button Grid.Row="0" Grid.Column="1" x:Name="Send" ToolTipService.ShowOnDisabled="True" HorizontalAlignment="Right" VerticalAlignment="Top" BorderThickness="1" Margin="0,29,10,0">
-					<Button.Template>
-						<ControlTemplate>
-							<Border Name="Border" BorderBrush="#2e6da4" BorderThickness="2" Background="#337ab7" Height="31" Padding="7" >
-								<StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-									<Path VerticalAlignment="Center" Margin="0 -4 0 0" Fill="White" Data="M18.64,2.634C18.296,2.755,1.319,8.738,0.984,8.856c-0.284,0.1-0.347,0.345-0.01,0.479 c0.401,0.161,3.796,1.521,3.796,1.521l0,0l2.25,0.901c0,0,10.838-7.958,10.984-8.066c0.148-0.108,0.318,0.095,0.211,0.211 c-0.107,0.117-7.871,8.513-7.871,8.513v0.002L9.892,12.92l0.599,0.322l0,0c0,0,4.65,2.504,4.982,2.682 c0.291,0.156,0.668,0.027,0.752-0.334c0.099-0.426,2.845-12.261,2.906-12.525C19.21,2.722,18.983,2.513,18.64,2.634z M7,17.162 c0,0.246,0.139,0.315,0.331,0.141c0.251-0.229,2.85-2.561,2.85-2.561L7,13.098V17.162z"/>
-									<TextBlock Padding="9 0 4 0" VerticalAlignment="Center" Foreground="White">Send</TextBlock>
-								</StackPanel>
-							</Border>
-							<ControlTemplate.Resources>
-								<Style TargetType="TextBlock">
-									<Setter Property="FontFamily" Value="Calibri" />
-									<Setter Property="FontSize" Value="14" />
-									<Setter Property="FontWeight" Value="Regular" />
-								</Style>
-							</ControlTemplate.Resources>
-							<ControlTemplate.Triggers>
-								<Trigger Property="IsEnabled" Value="True">
-									<Setter Property="ToolTip" Value="{x:Null}"/>
-								</Trigger>
-								<Trigger Property="IsEnabled" Value="False">
-									<Setter TargetName="Border" Property="Background" Value="{StaticResource RecededColorBrush}"/>
-									<Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource RecededColorBrush}"/>
-									<Setter Property="ToolTip" Value="Waiting on a valid URL"/>
-								</Trigger>
-								<Trigger Property="IsMouseOver" Value="True">
-									<Setter TargetName="Border" Property="Background" Value="#2e6da4"/>
-								</Trigger>
-							</ControlTemplate.Triggers>
-						</ControlTemplate>
-					</Button.Template>
-				</Button>
+							<!--<Label DockPanel.Dock="Top" Style="{StaticResource H1Info}" HorizontalAlignment="Right" x:Name="SelectedHistory_AtLocalString" Content="Request Date">
+									<Label.ToolTip>
+										<Label Content="{Binding Path=.SelectedHistory.AtUtcString}"/>
+									</Label.ToolTip>
+								</Label>-->
 
-				<Label Grid.Row="2" Grid.Column="0" VerticalAlignment="Top" Content="Token" Margin="0,9,0,0"/>
-				<ComboBox Grid.Row="2" Grid.Column="1" x:Name="Tokens" HorizontalAlignment="Left" VerticalAlignment="Top" Width="200" Margin="0,10,0,0">
-					<ComboBox.ItemTemplate>
-						<DataTemplate>
-							<TextBlock Text="{Binding Name}" />
-						</DataTemplate>
-					</ComboBox.ItemTemplate>
-				</ComboBox>
-				<Button Grid.Row="2" Grid.Column="1" x:Name="ManageTokens" Content="Manage Tokens" HorizontalAlignment="Left" VerticalAlignment="Top" Width="110" Margin="213,11,0,0" />
-			</Grid>
+							<Grid DockPanel.Dock="Top" Name="RequestGrid">
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="100" />
+									<ColumnDefinition Width="*" />
+								</Grid.ColumnDefinitions>
+								<Grid.RowDefinitions>
+									<RowDefinition Height="60" />
+									<RowDefinition Height="40" />
+								</Grid.RowDefinitions>
+
+								<Label Grid.Row="0" Grid.Column="0" Content="Method" HorizontalAlignment="Left" FontFamily="Segoe UI" FontSize="14" Foreground="#FF9395A2"/>
+								<ComboBox Grid.Row="0" Grid.Column="0" x:Name="Methods" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="90" Padding="3" Height="30" />
+
+								<Label Grid.Row="0" Grid.Column="1" Content="URL" HorizontalAlignment="Left" FontFamily="Segoe UI" FontSize="14" Foreground="#FF9395A2" />
+								<TextBox Grid.Row="0" Grid.Column="1" x:Name="Url" metro:TextBoxHelper.Watermark="Enter URL or choose from history"
+					FontFamily="Calibri" FontSize="14" VerticalAlignment="Bottom" Padding="3" Margin="0,0,10,0"/>
+
+								<Button Grid.Row="1" Grid.Column="1" x:Name="Send" ToolTipService.ShowOnDisabled="True" HorizontalAlignment="Left" VerticalAlignment="Top" BorderThickness="1" Margin="0,9,0,0">
+									<Button.Template>
+										<ControlTemplate>
+											<Border Name="Border" BorderBrush="#2e6da4" BorderThickness="2" Background="#337ab7" Height="31" Padding="7" >
+												<StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+													<Path VerticalAlignment="Center" Margin="0 -4 0 0" Fill="White" Data="M18.64,2.634C18.296,2.755,1.319,8.738,0.984,8.856c-0.284,0.1-0.347,0.345-0.01,0.479 c0.401,0.161,3.796,1.521,3.796,1.521l0,0l2.25,0.901c0,0,10.838-7.958,10.984-8.066c0.148-0.108,0.318,0.095,0.211,0.211 c-0.107,0.117-7.871,8.513-7.871,8.513v0.002L9.892,12.92l0.599,0.322l0,0c0,0,4.65,2.504,4.982,2.682 c0.291,0.156,0.668,0.027,0.752-0.334c0.099-0.426,2.845-12.261,2.906-12.525C19.21,2.722,18.983,2.513,18.64,2.634z M7,17.162 c0,0.246,0.139,0.315,0.331,0.141c0.251-0.229,2.85-2.561,2.85-2.561L7,13.098V17.162z"/>
+													<TextBlock Padding="9 0 4 0" VerticalAlignment="Center" Foreground="White">Send</TextBlock>
+												</StackPanel>
+											</Border>
+											<ControlTemplate.Resources>
+												<Style TargetType="TextBlock">
+													<Setter Property="FontFamily" Value="Calibri" />
+													<Setter Property="FontSize" Value="14" />
+													<Setter Property="FontWeight" Value="Regular" />
+												</Style>
+											</ControlTemplate.Resources>
+											<ControlTemplate.Triggers>
+												<Trigger Property="IsEnabled" Value="True">
+													<Setter Property="ToolTip" Value="{x:Null}"/>
+												</Trigger>
+												<Trigger Property="IsEnabled" Value="False">
+													<Setter TargetName="Border" Property="Background" Value="{StaticResource RecededColorBrush}"/>
+													<Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource RecededColorBrush}"/>
+													<Setter Property="ToolTip" Value="Waiting on a valid URL"/>
+												</Trigger>
+												<Trigger Property="IsMouseOver" Value="True">
+													<Setter TargetName="Border" Property="Background" Value="#2e6da4"/>
+												</Trigger>
+											</ControlTemplate.Triggers>
+										</ControlTemplate>
+									</Button.Template>
+								</Button>
+
+								<!--<Label Grid.Row="2" Grid.Column="0" VerticalAlignment="Top" Content="Token" Margin="0,9,0,0"/>
+								<ComboBox Grid.Row="2" Grid.Column="1" x:Name="Tokens" HorizontalAlignment="Left" VerticalAlignment="Top" Width="200" Margin="0,10,0,0">
+									<ComboBox.ItemTemplate>
+										<DataTemplate>
+											<TextBlock Text="{Binding Name}" />
+										</DataTemplate>
+									</ComboBox.ItemTemplate>
+								</ComboBox>
+								<Button Grid.Row="2" Grid.Column="1" x:Name="ManageTokens" Content="Manage Tokens" HorizontalAlignment="Left" VerticalAlignment="Top" Width="110" Margin="213,11,0,0" />-->
+							</Grid>
+						</DockPanel>
+
+					</TabItem.Content>
+				</TabItem>
+
+				<TabItem Header="Headers">
+					<TabItem.Content>
+						<TextBlock Style="{StaticResource EmptyListMessage}">Coming soon</TextBlock>
+					</TabItem.Content>
+				</TabItem>
+
+				<TabItem Header="Authentication">
+					<TabItem.Content>
+						<TextBlock Style="{StaticResource EmptyListMessage}">... to a theatre near you.</TextBlock>
+					</TabItem.Content>
+				</TabItem>
+
+			</TabControl>
+
+
+
+
 
 			<DockPanel DockPanel.Dock="Top">
 				<Label DockPanel.Dock="Left" Style="{StaticResource H1}" Content="Response" Margin="-2 0 0 0"/>
