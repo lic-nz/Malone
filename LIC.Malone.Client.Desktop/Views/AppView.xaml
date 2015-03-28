@@ -27,7 +27,7 @@
 		</Grid.ColumnDefinitions>
 
 		<TabControl Grid.Column="0" Margin="-2 -2 0 0" Padding="0">
-			
+
 			<TabControl.Resources>
 				<extensions:HideOnHistoryConverter x:Key="HideOnHistoryConverter" />
 				<extensions:ShowOnHistoryConverter x:Key="ShowOnHistoryConverter" />
@@ -53,11 +53,11 @@
 					</Setter>
 				</Style>
 			</TabControl.Resources>
-			
+
 			<TabItem Header="History">
 				<TabItem.Content>
 					<Grid>
-						
+
 						<StackPanel Orientation="Vertical" Visibility="{Binding History, Converter={StaticResource HideOnHistoryConverter}}" HorizontalAlignment="Center" VerticalAlignment="Center">
 							<ContentControl Content="{StaticResource appbar_smiley_frown}" />
 							<TextBlock Style="{StaticResource EmptyListMessage}">Nothing to see here. Try sending a request!</TextBlock>
@@ -138,7 +138,7 @@
 					</Grid>
 				</TabItem.Content>
 			</TabItem>
-			
+
 			<TabItem Header="Collections">
 				<TabItem.Content>
 					<Grid>
@@ -167,7 +167,7 @@
 						</Canvas>
 
 						<DockPanel Name="CollectionsDockPanel" LastChildFill="True" Visibility="{Binding History, Converter={StaticResource ShowOnHistoryConverter}}">
-							
+
 						</DockPanel>
 
 					</Grid>
@@ -214,13 +214,12 @@
 						</DataTemplate>
 					</ComboBox.ItemTemplate>
 				</ComboBox>
-				<Button Grid.Row="1" Grid.Column="1" x:Name="ManageTokens" Content
-						  ="Manage Tokens" HorizontalAlignment="Left" VerticalAlignment="Top" Width="110" Margin="230,0,0,0" />
+				<Button Grid.Row="1" Grid.Column="1" x:Name="ManageTokens" Content="Manage Tokens" HorizontalAlignment="Left" VerticalAlignment="Top" Width="110" Margin="230,0,0,0" />
 
-				<Button Grid.Row="2" Grid.Column="1" x:Name="Send" HorizontalAlignment="Left" VerticalAlignment="Top">
+				<Button Grid.Row="2" Grid.Column="1" x:Name="Send" HorizontalAlignment="Left" VerticalAlignment="Top" ToolTipService.ShowOnDisabled="True">
 					<Button.Template>
 						<ControlTemplate>
-							<Border Name="Border" BorderBrush="#2e6da4" BorderThickness="2" Background="#337ab7" Height="35" Padding="7">
+							<Border Name="Border" BorderBrush="#2e6da4" BorderThickness="2" Background="#337ab7" Height="35" Padding="7" >
 								<StackPanel Orientation="Horizontal" VerticalAlignment="Center">
 									<Path VerticalAlignment="Center" Margin="0 -2 0 0" Fill="White" Data="M18.64,2.634C18.296,2.755,1.319,8.738,0.984,8.856c-0.284,0.1-0.347,0.345-0.01,0.479 c0.401,0.161,3.796,1.521,3.796,1.521l0,0l2.25,0.901c0,0,10.838-7.958,10.984-8.066c0.148-0.108,0.318,0.095,0.211,0.211 c-0.107,0.117-7.871,8.513-7.871,8.513v0.002L9.892,12.92l0.599,0.322l0,0c0,0,4.65,2.504,4.982,2.682 c0.291,0.156,0.668,0.027,0.752-0.334c0.099-0.426,2.845-12.261,2.906-12.525C19.21,2.722,18.983,2.513,18.64,2.634z M7,17.162 c0,0.246,0.139,0.315,0.331,0.141c0.251-0.229,2.85-2.561,2.85-2.561L7,13.098V17.162z"/>
 									<TextBlock Padding="9 0 4 0" VerticalAlignment="Center" Foreground="White">Send</TextBlock>
@@ -231,13 +230,16 @@
 									<Setter Property="FontFamily" Value="Calibri" />
 									<Setter Property="FontSize" Value="14" />
 									<Setter Property="FontWeight" Value="Regular" />
-									<Setter Property="ToolTip" Value="Waiting on a valid URL"/>
 								</Style>
 							</ControlTemplate.Resources>
 							<ControlTemplate.Triggers>
+								<Trigger Property="IsEnabled" Value="True">
+									<Setter Property="ToolTip" Value="{x:Null}"/>
+								</Trigger>
 								<Trigger Property="IsEnabled" Value="False">
 									<Setter TargetName="Border" Property="Background" Value="{StaticResource RecededColorBrush}"/>
 									<Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource RecededColorBrush}"/>
+									<Setter Property="ToolTip" Value="Waiting on a valid URL"/>
 								</Trigger>
 								<Trigger Property="IsMouseOver" Value="True">
 									<Setter TargetName="Border" Property="Background" Value="#2e6da4"/>
@@ -246,7 +248,7 @@
 						</ControlTemplate>
 					</Button.Template>
 				</Button>
-			
+
 			</Grid>
 
 			<DockPanel DockPanel.Dock="Top">
