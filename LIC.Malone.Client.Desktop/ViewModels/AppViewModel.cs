@@ -6,6 +6,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Xml.Linq;
+using AurelienRibon.Ui.SyntaxHighlightBox;
 using Caliburn.Micro;
 using DotNetOpenAuth.OAuth2;
 using LIC.Malone.Client.Desktop.Messages;
@@ -171,6 +172,28 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			}
 		}
 
+		private string _requestBody;
+		public string RequestBody
+		{
+			get { return _requestBody; }
+			set
+			{
+				_requestBody = value;
+				NotifyOfPropertyChange(() => RequestBody);
+			}
+		}
+
+		private SyntaxHighlightBox _requestBodyControl;
+		public SyntaxHighlightBox RequestBodyControl
+		{
+			get { return _requestBodyControl; }
+			set
+			{
+				_requestBodyControl = value;
+				NotifyOfPropertyChange(() => RequestBodyControl);
+			}
+		}
+
 		public bool CanSend
 		{
 			get
@@ -292,6 +315,12 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			_windowManager = IoC.Get<WindowManager>();
 			_bus = IoC.Get<EventAggregator>();
 			_bus.Subscribe(this);
+
+			// Workaround to get SyntaxHighlightBox binding in TabControl.
+			RequestBodyControl = new SyntaxHighlightBox
+			{
+				Text = RequestBody
+			};
 
 			LoadConfig(_bus);
 		}
