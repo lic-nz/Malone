@@ -6,9 +6,9 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Xml.Linq;
-using AurelienRibon.Ui.SyntaxHighlightBox;
 using Caliburn.Micro;
 using DotNetOpenAuth.OAuth2;
+using ICSharpCode.AvalonEdit.Document;
 using LIC.Malone.Client.Desktop.Messages;
 using LIC.Malone.Core;
 using LIC.Malone.Core.Authentication;
@@ -150,14 +150,14 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			}
 		}
 
-		private string _responseContent;
-		public string ResponseContent
+		private TextDocument _responseBody;
+		public TextDocument ResponseBody
 		{
-			get { return _responseContent; }
+			get { return _responseBody; }
 			set
 			{
-				_responseContent = value;
-				NotifyOfPropertyChange(() => ResponseContent);
+				_responseBody = value;
+				NotifyOfPropertyChange(() => ResponseBody);
 			}
 		}
 
@@ -172,16 +172,16 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			}
 		}
 
-		private SyntaxHighlightBox _requestBodyControl;
-		public SyntaxHighlightBox RequestBodyControl
-		{
-			get { return _requestBodyControl; }
-			set
-			{
-				_requestBodyControl = value;
-				NotifyOfPropertyChange(() => RequestBodyControl);
-			}
-		}
+		//private SyntaxHighlightBox _requestBodyControl;
+		//public SyntaxHighlightBox RequestBodyControl
+		//{
+		//	get { return _requestBodyControl; }
+		//	set
+		//	{
+		//		_requestBodyControl = value;
+		//		NotifyOfPropertyChange(() => RequestBodyControl);
+		//	}
+		//}
 
 		public bool CanSend
 		{
@@ -306,7 +306,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			_bus.Subscribe(this);
 
 			// Workaround to get SyntaxHighlightBox binding in TabControl.
-			RequestBodyControl = new SyntaxHighlightBox();
+			//RequestBodyControl = new SyntaxHighlightBox();
 
 			LoadConfig(_bus);
 		}
@@ -369,7 +369,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 		public async void Send()
 		{
 			// Reset.
-			ResponseContent = null;
+			ResponseBody = null;
 			HttpStatusCode = null;
 			SelectedHistory = null;
 
@@ -378,7 +378,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 			var request = new Request(Url, SelectedMethod)
 			{
-				Body = RequestBodyControl.Text
+				//Body = RequestBodyControl.Text
 			};
 
 			if (SelectedToken != null)
@@ -406,7 +406,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			};
 
 			HttpStatusCode = new HttpStatusCodeViewModel(response.StatusCode);
-			ResponseContent = response.Content;
+			ResponseBody = new TextDocument(response.Content);
 			//ResponseContent = XDocument.Parse(response.Content).ToString(); //JsonConvert.SerializeObject(response, Formatting.Indented);
 			
 			AddToHistory(request);
@@ -461,8 +461,8 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			Url = SelectedHistory.Url;
 			SelectedMethod = SelectedHistory.Method;
 			HttpStatusCode = new HttpStatusCodeViewModel(SelectedHistory.Response.HttpStatusCode);
-			ResponseContent = SelectedHistory.Response.Content;
-			RequestBodyControl.Text = SelectedHistory.Body;
+			ResponseBody = new TextDocument(SelectedHistory.Response.Content);
+			//RequestBodyControl.Text = SelectedHistory.Body;
 		}
 
 		public void RemoveFromHistory(object e)
@@ -519,7 +519,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 			if (result.HasError)
 			{
-				ResponseContent = result.Error;
+				ResponseBody = new TextDocument(result.Error);
 				_authorizationState = null;
 				return;
 			}

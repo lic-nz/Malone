@@ -6,7 +6,6 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:cal="http://www.caliburnproject.org"
-	xmlns:syntaxControl="clr-namespace:AurelienRibon.Ui.SyntaxHighlightBox;assembly=AurelienRibon.Ui.SyntaxHighlightBox"
 	xmlns:extensions="clr-namespace:LIC.Malone.Client.Desktop.Extensions"
 	xmlns:local="clr-namespace:LIC.Malone.Client.Desktop"
 	mc:Ignorable="d"

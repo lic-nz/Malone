@@ -6,7 +6,7 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:cal="http://www.caliburnproject.org"
-	xmlns:syntaxControl="clr-namespace:AurelienRibon.Ui.SyntaxHighlightBox;assembly=AurelienRibon.Ui.SyntaxHighlightBox"
+	xmlns:ae="http://icsharpcode.net/sharpdevelop/avalonedit"
 	xmlns:extensions="clr-namespace:LIC.Malone.Client.Desktop.Extensions"
 	xmlns:local="clr-namespace:LIC.Malone.Client.Desktop"
 	mc:Ignorable="d"
@@ -284,8 +284,12 @@
 								</Label>
 							</DockPanel>
 
-							<syntaxControl:SyntaxHighlightBox DockPanel.Dock="Top" Name="ResponseContent" Margin="7,0,15,15" IsReadOnly="False" />
-
+							<ae:TextEditor
+								x:Name="ResponseContent" Document="{Binding ResponseBody}"
+								SyntaxHighlighting="XML"
+								FontFamily="Consolas"
+								FontSize="10pt" ShowLineNumbers="True" IsReadOnly="True"/>
+	
 						</DockPanel>
 
 					</TabItem.Content>
@@ -355,8 +359,16 @@
 						HorizontalAlignment="Left" Margin="140,170,0,0" VerticalAlignment="Top" Width="95" />
 
 					<Label Content="Response" HorizontalAlignment="Left" Margin="10,210,0,0" VerticalAlignment="Top"/>
-					<syntaxControl:SyntaxHighlightBox x:Name="AuthResponse" Text="{Binding AuthResponse}"
-						Margin="15,240,0,0" Height="300" VerticalAlignment="Top" HorizontalAlignment="Left" Width="570"/>
+					<!--Text="{Binding AuthResponse}"-->
+					<avalonEdit:TextEditor
+    xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
+    Name="TextEditor"
+    SyntaxHighlighting="C#"
+    FontFamily="Consolas"
+    FontSize="100pt"/>
+
+					<!--<ae:TextEditor x:Name="AuthResponse" ShowLineNumbers="True" LineNumbersForeground="Green"
+						Margin="15,240,0,0" Height="300" VerticalAlignment="Top" HorizontalAlignment="Left" Width="570"/>-->
 
 					<Label Content="Token name" HorizontalAlignment="Left" Margin="10,560,0,0" VerticalAlignment="Top"/>
 					<TextBox Name="TokenName" Text="{Binding TokenName}" HorizontalAlignment="Left" Height="23" Margin="145,560,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="252"/>

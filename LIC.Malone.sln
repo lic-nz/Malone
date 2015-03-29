@@ -16,12 +16,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{C56C15
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{C7F5B157-F670-43B0-9E68-8EE8FE0327FE}"
-	ProjectSection(SolutionItems) = preProject
-		lib\AurelienRibon.Ui.SyntaxHighlightBox.dll = lib\AurelienRibon.Ui.SyntaxHighlightBox.dll
-		lib\AurelienRibon.Ui.SyntaxHighlightBox.pdb = lib\AurelienRibon.Ui.SyntaxHighlightBox.pdb
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
