@@ -296,7 +296,12 @@
 				</TabItem>
 
 				<TabItem Header="Body">
-					<ContentPresenter Content="{Binding RequestBodyControl}" Margin="6 5 15 15"/>
+
+					<ae:TextEditor Document="{Binding RequestBody}"
+						SyntaxHighlighting="XML"
+						FontFamily="Consolas"
+						FontSize="10pt" ShowLineNumbers="True" IsReadOnly="False"/>
+					
 				</TabItem>
 
 				<TabItem Header="Headers">

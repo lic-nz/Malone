@@ -150,7 +150,18 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			}
 		}
 
-		private TextDocument _responseBody;
+		private TextDocument _requestBody = new TextDocument();
+		public TextDocument RequestBody
+		{
+			get { return _requestBody; }
+			set
+			{
+				_requestBody = value;
+				NotifyOfPropertyChange(() => RequestBody);
+			}
+		}
+
+		private TextDocument _responseBody = new TextDocument();
 		public TextDocument ResponseBody
 		{
 			get { return _responseBody; }
@@ -171,17 +182,6 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 				NotifyOfPropertyChange(() => ShowAddTokenFlyout);
 			}
 		}
-
-		//private SyntaxHighlightBox _requestBodyControl;
-		//public SyntaxHighlightBox RequestBodyControl
-		//{
-		//	get { return _requestBodyControl; }
-		//	set
-		//	{
-		//		_requestBodyControl = value;
-		//		NotifyOfPropertyChange(() => RequestBodyControl);
-		//	}
-		//}
 
 		public bool CanSend
 		{
@@ -305,9 +305,6 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			_bus = IoC.Get<EventAggregator>();
 			_bus.Subscribe(this);
 
-			// Workaround to get SyntaxHighlightBox binding in TabControl.
-			//RequestBodyControl = new SyntaxHighlightBox();
-
 			LoadConfig(_bus);
 		}
 
@@ -369,7 +366,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 		public async void Send()
 		{
 			// Reset.
-			ResponseBody = null;
+			ResponseBody = new TextDocument();
 			HttpStatusCode = null;
 			SelectedHistory = null;
 
@@ -378,7 +375,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 			var request = new Request(Url, SelectedMethod)
 			{
-				//Body = RequestBodyControl.Text
+				Body = RequestBody.Text
 			};
 
 			if (SelectedToken != null)
@@ -406,8 +403,11 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			};
 
 			HttpStatusCode = new HttpStatusCodeViewModel(response.StatusCode);
+
+			// Possibly detect response and format, e.g.:
+			// XDocument.Parse(response.Content).ToString();
+			// JsonConvert.SerializeObject(response, Formatting.Indented);
 			ResponseBody = new TextDocument(response.Content);
-			//ResponseContent = XDocument.Parse(response.Content).ToString(); //JsonConvert.SerializeObject(response, Formatting.Indented);
 			
 			AddToHistory(request);
 		}
@@ -462,7 +462,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			SelectedMethod = SelectedHistory.Method;
 			HttpStatusCode = new HttpStatusCodeViewModel(SelectedHistory.Response.HttpStatusCode);
 			ResponseBody = new TextDocument(SelectedHistory.Response.Content);
-			//RequestBodyControl.Text = SelectedHistory.Body;
+			RequestBody = new TextDocument(SelectedHistory.Body);
 		}
 
 		public void RemoveFromHistory(object e)
