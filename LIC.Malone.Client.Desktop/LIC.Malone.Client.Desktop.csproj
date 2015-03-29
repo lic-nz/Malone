@@ -132,6 +132,8 @@
     <Compile Include="Extensions\HttpStatusCodeExtensions.cs" />
     <Compile Include="MaloneListBox.cs" />
     <Compile Include="Messages\ConfigurationLoaded.cs" />
+    <Compile Include="Messages\TokenAdded.cs" />
+    <Compile Include="ViewModels\AddTokenViewModel.cs" />
     <Compile Include="ViewModels\AddCollectionViewModel.cs" />
     <Compile Include="ViewModels\AppViewModel.cs" />
     <Compile Include="App.cs">
@@ -143,6 +145,10 @@
     <Compile Include="Extensions\HttpStatusCodeConverters.cs" />
     <Compile Include="ViewModels\HttpStatusCodeViewModel.cs" />
     <Page Include="Resources\Icons.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\AddTokenView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

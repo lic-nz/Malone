@@ -19,14 +19,15 @@ using RestSharp;
 namespace LIC.Malone.Client.Desktop.ViewModels
 {
 	// TODO: Actually conduct the flyout.
-	public class AppViewModel : Conductor<object>, IHandle<ConfigurationLoaded>
+	public class AppViewModel : Conductor<object>, IHandle<ConfigurationLoaded>, IHandle<TokenAdded>
 	{
 		private readonly IWindowManager _windowManager;
-		private readonly EventAggregator _bus;
+		private readonly IEventAggregator _bus;
 		private readonly DialogManager _dialogManager = new DialogManager();
 		private readonly List<string> _allowedSchemes = new List<string> { Uri.UriSchemeHttp, Uri.UriSchemeHttps };
 
 		private AddCollectionViewModel _addCollectionViewModel = new AddCollectionViewModel();
+		private AddTokenViewModel _addTokenViewModel;
 
 		private string _historyJsonPath;
 
@@ -305,13 +306,15 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			_bus = IoC.Get<EventAggregator>();
 			_bus.Subscribe(this);
 
+			_addTokenViewModel = new AddTokenViewModel(_bus);
+
 			Tokens = new BindableCollection<NamedAuthorizationState>(new List<NamedAuthorizationState> { new NamedAuthorizationState("<Anonymous>", null)});
 			SelectedToken = Tokens.First();
 
-			LoadConfig(_bus);
+			LoadConfig();
 		}
 
-		private void LoadConfig(EventAggregator bus)
+		private void LoadConfig()
 		{
 			var configLocation = ConfigurationManager.AppSettings["ConfigLocation"];
 
@@ -358,7 +361,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 				}
 			}
 
-			bus.PublishOnUIThread(new ConfigurationLoaded(applications, authenticationUrls, userCredentials));
+			_bus.PublishOnUIThread(new ConfigurationLoaded(applications, authenticationUrls, userCredentials));
 		}
 
 		public void ManageTokens()
@@ -499,6 +502,18 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			ActivateItem(_addCollectionViewModel);
 		}
 
+		public void AddToken()
+		{
+			var settings = new Dictionary<string, object>
+			{
+				{"Title", "Add token"},
+				{"WindowStartupLocation", WindowStartupLocation.CenterOwner}
+			};
+
+			_windowManager.ShowDialog(_addTokenViewModel, settings: settings);
+			ActivateItem(_addTokenViewModel);
+		}
+
 		// TODO: Move to own view model.
 		#region Add token flyout methods
 		public void Handle(ConfigurationLoaded message)
@@ -549,5 +564,11 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			TokenName = null;
 		}
 		#endregion
+
+		public void Handle(TokenAdded message)
+		{
+			Tokens.Add(message.NamedAuthorizationState);
+			SelectedToken = Tokens.Last();
+		}
 	}
 }
