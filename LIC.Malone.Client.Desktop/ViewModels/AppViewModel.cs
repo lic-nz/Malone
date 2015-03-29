@@ -117,7 +117,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			}
 		}
 
-		private IObservableCollection<NamedAuthorizationState> _tokens = new BindableCollection<NamedAuthorizationState>();
+		private IObservableCollection<NamedAuthorizationState> _tokens;
 		public IObservableCollection<NamedAuthorizationState> Tokens
 		{
 			get { return _tokens; }
@@ -304,6 +304,9 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			_windowManager = IoC.Get<WindowManager>();
 			_bus = IoC.Get<EventAggregator>();
 			_bus.Subscribe(this);
+
+			Tokens = new BindableCollection<NamedAuthorizationState>(new List<NamedAuthorizationState> { new NamedAuthorizationState("<Anonymous>", null)});
+			SelectedToken = Tokens.First();
 
 			LoadConfig(_bus);
 		}
