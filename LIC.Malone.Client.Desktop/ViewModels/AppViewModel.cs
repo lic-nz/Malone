@@ -172,17 +172,6 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			}
 		}
 
-		private string _requestBody;
-		public string RequestBody
-		{
-			get { return _requestBody; }
-			set
-			{
-				_requestBody = value;
-				NotifyOfPropertyChange(() => RequestBody);
-			}
-		}
-
 		private SyntaxHighlightBox _requestBodyControl;
 		public SyntaxHighlightBox RequestBodyControl
 		{
@@ -317,10 +306,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			_bus.Subscribe(this);
 
 			// Workaround to get SyntaxHighlightBox binding in TabControl.
-			RequestBodyControl = new SyntaxHighlightBox
-			{
-				Text = RequestBody
-			};
+			RequestBodyControl = new SyntaxHighlightBox();
 
 			LoadConfig(_bus);
 		}
@@ -390,7 +376,10 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			if (string.IsNullOrWhiteSpace(Url))
 				return;
 
-			var request = new Request(Url, SelectedMethod);
+			var request = new Request(Url, SelectedMethod)
+			{
+				Body = RequestBodyControl.Text
+			};
 
 			if (SelectedToken != null)
 				request.NamedAuthorizationState = SelectedToken;
@@ -473,6 +462,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			SelectedMethod = SelectedHistory.Method;
 			HttpStatusCode = new HttpStatusCodeViewModel(SelectedHistory.Response.HttpStatusCode);
 			ResponseContent = SelectedHistory.Response.Content;
+			RequestBodyControl.Text = SelectedHistory.Body;
 		}
 
 		public void RemoveFromHistory(object e)

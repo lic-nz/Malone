@@ -13,6 +13,7 @@ namespace LIC.Malone.Core
 		public DateTimeOffset At { get; set; }
 		public string Url { get; set; }
 		public Method Method { get; set; }
+		public string Body { get; set; }
 		public Response Response { get; set; }
 
 		public NamedAuthorizationState NamedAuthorizationState { get; set; }
@@ -73,8 +74,10 @@ namespace LIC.Malone.Core
 			var url = GetUri();
 			var baseUrl = GetBaseUrl(url);
 			var resourcePath = GetResourcePath(url);
-			
+
 			var request = new MaloneRestRequest(url, baseUrl, resourcePath, Method);
+
+			request.AddBody(Body);
 
 			request.AddHeader("Accept", "text/xml");
 			request.AddHeader("Accept-Encoding", "gzip,deflate");
