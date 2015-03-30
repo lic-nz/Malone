@@ -188,7 +188,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			_bus = IoC.Get<EventAggregator>();
 			_bus.Subscribe(this);
 
-			_addTokenViewModel = new AddTokenViewModel(_bus);
+			_addTokenViewModel = new AddTokenViewModel(_bus, _windowManager);
 
 			Tokens = new BindableCollection<NamedAuthorizationState>(new List<NamedAuthorizationState> { new NamedAuthorizationState("<Anonymous>", null)});
 			SelectedToken = Tokens.First();

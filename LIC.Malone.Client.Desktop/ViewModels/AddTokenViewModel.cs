@@ -16,6 +16,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 		private IAuthorizationState _authorizationState;
 
 		private readonly IEventAggregator _bus;
+		private readonly IWindowManager _windowManager;
 
 		#region Databound properties
 
@@ -132,9 +133,10 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 		#endregion
 
-		public AddTokenViewModel(IEventAggregator bus)
+		public AddTokenViewModel(IEventAggregator bus, IWindowManager windowManager)
 		{
 			_bus = bus;
+			_windowManager = windowManager;
 			_bus.Subscribe(this);
 		}
 
@@ -152,8 +154,6 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 		public void Authenticate()
 		{
-			Reset();
-
 			var app = SelectedApplication;
 			var url = SelectedAuthenticationUrl;
 
@@ -171,9 +171,6 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 		public void SaveToken()
 		{
-			// TODO: verify if this is needed.
-			Reset();
-
 			var token = new NamedAuthorizationState(TokenName, _authorizationState);
 
 			var message = new TokenAdded
@@ -183,13 +180,11 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 			_bus.PublishOnUIThread(message);
 
-		}
-
-		private void Reset()
-		{
 			_authorizationState = null;
 			Response.Text = string.Empty;
 			TokenName = null;
+
+			TryClose();
 		}
 	}
 }
