@@ -19,7 +19,7 @@ using RestSharp;
 namespace LIC.Malone.Client.Desktop.ViewModels
 {
 	// TODO: Actually conduct the flyout.
-	public class AppViewModel : Conductor<object>, IHandle<ConfigurationLoaded>, IHandle<TokenAdded>
+	public class AppViewModel : Conductor<object>, IHandle<TokenAdded>
 	{
 		private readonly IWindowManager _windowManager;
 		private readonly IEventAggregator _bus;
@@ -30,8 +30,6 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 		private AddTokenViewModel _addTokenViewModel;
 
 		private string _historyJsonPath;
-
-		private IAuthorizationState _authorizationState;
 
 		#region Databound properties
 
@@ -173,17 +171,6 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			}
 		}
 
-		private bool _showAddTokenFlyout;
-		public bool ShowAddTokenFlyout
-		{
-			get { return _showAddTokenFlyout; }
-			set
-			{
-				_showAddTokenFlyout = value;
-				NotifyOfPropertyChange(() => ShowAddTokenFlyout);
-			}
-		}
-
 		public bool CanSend
 		{
 			get
@@ -195,111 +182,6 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 		#endregion
 		
-		// TODO: Move these to view model for flyout.
-		#region Databound properties for flyout
-
-		private IObservableCollection<Uri> _authenticationUrls = new BindableCollection<Uri>();
-		public IObservableCollection<Uri> AuthenticationUrls
-		{
-			get { return _authenticationUrls; }
-			set
-			{
-				_authenticationUrls = value;
-				NotifyOfPropertyChange(() => AuthenticationUrls);
-			}
-		}
-
-		private Uri _selectedAuthenticationUrl;
-		public Uri SelectedAuthenticationUrl
-		{
-			get { return _selectedAuthenticationUrl; }
-			set
-			{
-				_selectedAuthenticationUrl = value;
-				NotifyOfPropertyChange(() => SelectedAuthenticationUrl);
-			}
-
-		}
-
-		private IObservableCollection<OAuthApplication> _applications = new BindableCollection<OAuthApplication>();
-		public IObservableCollection<OAuthApplication> Applications
-		{
-			get { return _applications; }
-			set
-			{
-				_applications = value;
-				NotifyOfPropertyChange(() => Applications);
-			}
-		}
-
-		private OAuthApplication _selectedApplication;
-		public OAuthApplication SelectedApplication
-		{
-			get { return _selectedApplication; }
-			set
-			{
-				_selectedApplication = value;
-				NotifyOfPropertyChange(() => SelectedApplication);
-			}
-		}
-
-		private string _username;
-		public string Username
-		{
-			get { return _username; }
-			set
-			{
-				_username = value;
-				NotifyOfPropertyChange(() => Username);
-			}
-		}
-
-		private string _password;
-		public string Password
-		{
-			get { return _password; }
-			set
-			{
-				_password = value;
-				NotifyOfPropertyChange(() => Password);
-			}
-		}
-
-		private string _authResponse;
-		public string AuthResponse
-		{
-			get { return _authResponse; }
-			set
-			{
-				_authResponse = value;
-				NotifyOfPropertyChange(() => AuthResponse);
-			}
-		}
-
-		private string _tokenName;
-		public string TokenName
-		{
-			get { return _tokenName; }
-			set
-			{
-				_tokenName = value;
-				NotifyOfPropertyChange(() => TokenName);
-			}
-		}
-
-		//private IObservableCollection<NamedAuthorizationState> _tokens = new BindableCollection<NamedAuthorizationState>();
-		//public IObservableCollection<NamedAuthorizationState> Tokens
-		//{
-		//	get { return _tokens; }
-		//	set
-		//	{
-		//		_tokens = value;
-		//		NotifyOfPropertyChange(() => Tokens);
-		//	}
-		//}
-
-		#endregion
-
 		public AppViewModel()
 		{
 			_windowManager = IoC.Get<WindowManager>();
@@ -362,11 +244,6 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			}
 
 			_bus.PublishOnUIThread(new ConfigurationLoaded(applications, authenticationUrls, userCredentials));
-		}
-
-		public void ManageTokens()
-		{
-			ShowAddTokenFlyout = true;
 		}
 
 		public async void Send()
@@ -513,57 +390,6 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			_windowManager.ShowDialog(_addTokenViewModel, settings: settings);
 			ActivateItem(_addTokenViewModel);
 		}
-
-		// TODO: Move to own view model.
-		#region Add token flyout methods
-		public void Handle(ConfigurationLoaded message)
-		{
-			AuthenticationUrls = new BindableCollection<Uri>(message.AuthenticationUrls);
-			SelectedAuthenticationUrl = AuthenticationUrls.FirstOrDefault();
-
-			Applications = new BindableCollection<OAuthApplication>(message.Applications);
-			SelectedApplication = Applications.FirstOrDefault();
-
-			Username = message.UserCredentials.Username;
-			Password = message.UserCredentials.Password;
-		}
-
-		public void Authenticate()
-		{
-			var app = SelectedApplication;
-			var url = SelectedAuthenticationUrl;
-
-			var result = app.Authorize(url, Username, Password);
-
-			if (result.HasError)
-			{
-				ResponseBody = new TextDocument(result.Error);
-				_authorizationState = null;
-				return;
-			}
-
-			AuthResponse = JsonConvert.SerializeObject(result.AuthorizationState, Formatting.Indented);
-			_authorizationState = result.AuthorizationState;
-		}
-
-		public void SaveToken()
-		{
-			if (string.IsNullOrWhiteSpace(TokenName))
-				return;
-
-			var token = new NamedAuthorizationState(TokenName, _authorizationState);
-
-			Tokens.Add(token);
-			SelectedToken = SelectedToken ?? Tokens.First();
-
-			ShowAddTokenFlyout = false;
-
-			// Reset.
-			_authorizationState = null;
-			AuthResponse = null;
-			TokenName = null;
-		}
-		#endregion
 
 		public void Handle(TokenAdded message)
 		{

@@ -6,20 +6,59 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:cal="http://www.caliburnproject.org"
-	xmlns:extensions="clr-namespace:LIC.Malone.Client.Desktop.Extensions"
-	xmlns:local="clr-namespace:LIC.Malone.Client.Desktop"
+	xmlns:ae="http://icsharpcode.net/sharpdevelop/avalonedit"
 	mc:Ignorable="d"
 	TitleCaps="False"
 	ShowIconOnTitleBar="False"
-	GlowBrush="{DynamicResource AccentColorBrush}"
-	MinWidth="400" MinHeight="300"
-	Width="400" Height="300">
+	ResizeMode="NoResize"
+	Width="500"
+	GlowBrush="{DynamicResource AccentColorBrush}" d:DesignHeight="800">
 
-	<Grid Name="MainGrid" Margin="15">
-		<StackPanel Orientation="Vertical">
-			<Label Style="{StaticResource H1}">Add Token</Label>
-			<Button x:Name="AddToken">hai</Button>
-		</StackPanel>
-	</Grid>
+	<Window.Resources>
+		<Style x:Key="FormLabel" TargetType="Label">
+			<Setter Property="FontFamily" Value="Segoe UI" />
+			<Setter Property="FontSize" Value="14" />
+			<Setter Property="Foreground" Value="#FF9395A2" />
+			<Setter Property="Margin" Value="0 10 0 0" />
+		</Style>
+		<Style x:Key="FormComboBox" TargetType="ComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
+			<Setter Property="Margin" Value="5 0 0 0" />
+		</Style>
+		<Style x:Key="FormTextBox" TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+			<Setter Property="Margin" Value="5 0 0 0" />
+		</Style>
+	</Window.Resources>
+
+	<DockPanel Margin="5" LastChildFill="False">
+		<Label DockPanel.Dock="Top" Style="{StaticResource H1}">Add Token</Label>
+
+		<Label DockPanel.Dock="Top" Content="Authentication URL" Style="{StaticResource FormLabel}"/>
+		<ComboBox DockPanel.Dock="Top" Name="AuthenticationUrls" ItemsSource="{Binding AuthenticationUrls}" SelectedItem="{Binding SelectedAuthenticationUrl}"
+			DisplayMemberPath="AbsoluteUri" SelectedValuePath="Content" Style="{StaticResource FormComboBox}"/>
+
+		<Label DockPanel.Dock="Top" Content="Application" Style="{StaticResource FormLabel}"/>
+		<ComboBox DockPanel.Dock="Top" Name="Applications" ItemsSource="{Binding Applications}" SelectedItem="{Binding SelectedApplication}"
+			DisplayMemberPath="Name" SelectedValuePath="Content" Style="{StaticResource FormComboBox}"/>
+
+		<Label DockPanel.Dock="Top" Content="Username" Style="{StaticResource FormLabel}"/>
+		<TextBox DockPanel.Dock="Top" x:Name="Username" Text="{Binding Username}" Style="{StaticResource FormTextBox}" />
+
+		<Label DockPanel.Dock="Top" Content="Password" Style="{StaticResource FormLabel}"/>
+		<TextBox DockPanel.Dock="Top" x:Name="Password" Text="{Binding Password}" Style="{StaticResource FormTextBox}" />
+
+		<Button DockPanel.Dock="Top" x:Name="Authenticate" Content="Authenticate" cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action Authenticate()]"
+						HorizontalAlignment="Left" Width="95" />
+
+		<Label DockPanel.Dock="Top" Content="Response" HorizontalAlignment="Left" Style="{StaticResource FormLabel}"/>
+		<ae:TextEditor DockPanel.Dock="Top" Document="{Binding Response}" SyntaxHighlighting="JavaScript" FontFamily="Consolas" FontSize="10pt" Height="200" Margin="7 0 0 0" IsReadOnly="True"/>
+
+		<Label DockPanel.Dock="Top" Content="Token name" Style="{StaticResource FormLabel}"/>
+		<TextBox DockPanel.Dock="Top" x:Name="TokenName" Text="{Binding Password}" Style="{StaticResource FormTextBox}" />
+
+		<Button DockPanel.Dock="Top" Name="SaveToken" Content="Save Token" cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action SaveToken()]"
+						HorizontalAlignment="Left" Width="87"/>
+
+
+	</DockPanel>
 
 </metro:MetroWindow>
