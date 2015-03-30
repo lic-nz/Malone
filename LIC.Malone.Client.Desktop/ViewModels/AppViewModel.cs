@@ -358,13 +358,18 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 				return;
 
 			// Rebind.
+
 			Url = SelectedHistory.Url;
 			SelectedMethod = SelectedHistory.Method;
 			HttpStatusCode = new HttpStatusCodeViewModel(SelectedHistory.Response.HttpStatusCode);
 			ResponseBody = new TextDocument(SelectedHistory.Response.Content);
 			RequestBody = new TextDocument(SelectedHistory.Body);
+
+			SelectedToken = Tokens.First();
+			var historicalTokens = Tokens.Where(t => t.NamedAuthorizationStateOrigin == NamedAuthorizationStateOrigin.History).ToList();
+			Tokens.RemoveRange(historicalTokens);
 			Tokens.Add(SelectedHistory.NamedAuthorizationState);
-			SelectedToken = Tokens.Last();
+			SelectedToken = SelectedHistory.NamedAuthorizationState;
 		}
 
 		public void RemoveFromHistory(object e)
