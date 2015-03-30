@@ -130,6 +130,9 @@
     <Compile Include="HyperlinkButton.cs" />
     <Compile Include="Colors.cs" />
     <Compile Include="Extensions\HttpStatusCodeExtensions.cs" />
+    <Compile Include="Controls\MaloneButton.xaml.cs">
+      <DependentUpon>MaloneButton.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MaloneListBox.cs" />
     <Compile Include="Messages\ConfigurationLoaded.cs" />
     <Compile Include="Messages\TokenAdded.cs" />
@@ -144,6 +147,10 @@
     <Compile Include="DialogManager.cs" />
     <Compile Include="Extensions\HttpStatusCodeConverters.cs" />
     <Compile Include="ViewModels\HttpStatusCodeViewModel.cs" />
+    <Page Include="Controls\MaloneButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Resources\Icons.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

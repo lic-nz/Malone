@@ -7,6 +7,7 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:cal="http://www.caliburnproject.org"
 	xmlns:ae="http://icsharpcode.net/sharpdevelop/avalonedit"
+	xmlns:controls="clr-namespace:LIC.Malone.Client.Desktop.Controls"
 	mc:Ignorable="d"
 	TitleCaps="False"
 	ShowIconOnTitleBar="False"
@@ -66,12 +67,13 @@
 			<TextBox x:Name="Password" Style="{StaticResource FormTextBox}" />
 		</StackPanel>
 
-		<Button x:Name="Authenticate" Content="Authenticate" Style="{StaticResource FormButton}" />
+		<controls:MaloneButton x:Name="Authenticate" Style="{StaticResource FormButton}" Content="Authenticate" IconData="{StaticResource fingerprint}" />
 
 		<StackPanel Orientation="Horizontal">
 			<Label Content="Response" Style="{StaticResource FormLabel}"/>
 			<Border BorderThickness="1" BorderBrush="{StaticResource RecededColorBrush}" Margin="0 10 0 5">
-				<ae:TextEditor Document="{Binding Response}" SyntaxHighlighting="JavaScript" FontFamily="Consolas" FontSize="10pt" Height="400" Width="720" IsReadOnly="True" ShowLineNumbers="True"/>
+				<ae:TextEditor Document="{Binding Response}" SyntaxHighlighting="JavaScript" FontFamily="Consolas" FontSize="10pt" Height="400" Width="720" IsReadOnly="False" ShowLineNumbers="True"
+					cal:Message.Attach="[Event TextChanged] = [Action ResponseChanged($executionContext)]"/>
 			</Border>
 		</StackPanel>
 
@@ -80,7 +82,7 @@
 			<TextBox x:Name="TokenName" Style="{StaticResource FormTextBox}" />
 		</StackPanel>
 
-		<Button x:Name="SaveToken" Content="Save Token" Style="{StaticResource FormButton}" />
+		<controls:MaloneButton x:Name="SaveToken" Style="{StaticResource FormButton}" Content="Save token" IconData="{StaticResource save}" />
 
 	</StackPanel>
 

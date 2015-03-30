@@ -3,6 +3,7 @@ using System.Linq;
 using System.Windows;
 using Caliburn.Micro;
 using DotNetOpenAuth.OAuth2;
+using ICSharpCode.AvalonEdit;
 using ICSharpCode.AvalonEdit.Document;
 using LIC.Malone.Client.Desktop.Messages;
 using LIC.Malone.Core.Authentication.OAuth;
@@ -37,6 +38,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			{
 				_selectedAuthenticationUrl = value;
 				NotifyOfPropertyChange(() => SelectedAuthenticationUrl);
+				NotifyOfPropertyChange(() => CanAuthenticate);
 			}
 
 		}
@@ -60,6 +62,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			{
 				_selectedApplication = value;
 				NotifyOfPropertyChange(() => SelectedApplication);
+				NotifyOfPropertyChange(() => CanAuthenticate);
 			}
 		}
 
@@ -71,6 +74,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			{
 				_username = value;
 				NotifyOfPropertyChange(() => Username);
+				NotifyOfPropertyChange(() => CanAuthenticate);
 			}
 		}
 
@@ -82,6 +86,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			{
 				_password = value;
 				NotifyOfPropertyChange(() => Password);
+				NotifyOfPropertyChange(() => CanAuthenticate);
 			}
 		}
 
@@ -93,6 +98,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			{
 				_tokenName = value;
 				NotifyOfPropertyChange(() => TokenName);
+				NotifyOfPropertyChange(() => CanSaveToken);
 			}
 		}
 
@@ -115,7 +121,24 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			{
 				_response = value;
 				NotifyOfPropertyChange(() => Response);
+				NotifyOfPropertyChange(() => CanSaveToken);
 			}
+		}
+
+		public void ResponseChanged(ActionExecutionContext context)
+		{
+			var source = (TextEditor) context.Source;
+			Response = source.Document;
+		}
+
+		public bool CanSaveToken
+		{
+			get { return !string.IsNullOrWhiteSpace(Response.Text) && !string.IsNullOrWhiteSpace(TokenName); }
+		}
+
+		public bool CanAuthenticate
+		{
+			get { return SelectedApplication != null && SelectedAuthenticationUrl != null && !string.IsNullOrWhiteSpace(Username) && !string.IsNullOrWhiteSpace(Password); }
 		}
 
 		#endregion
@@ -138,14 +161,6 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			Password = message.UserCredentials.Password;
 		}
 
-		public bool CanAuthenticate()
-		{
-			return SelectedApplication != null
-				&& SelectedAuthenticationUrl != null
-				&& !string.IsNullOrWhiteSpace(Username)
-				&& !string.IsNullOrWhiteSpace(Password);
-		}
-
 		public void Authenticate()
 		{
 			var app = SelectedApplication;
@@ -162,11 +177,6 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 			Response.Text = JsonConvert.SerializeObject(result.AuthorizationState, Formatting.Indented);
 			_authorizationState = result.AuthorizationState;
-		}
-
-		public bool CanSaveToken()
-		{
-			return !string.IsNullOrWhiteSpace(Response.Text);
 		}
 
 		public void SaveToken()

@@ -194,6 +194,8 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			SelectedToken = Tokens.First();
 
 			LoadConfig();
+
+			AddToken();
 		}
 
 		private void LoadConfig()
@@ -208,8 +210,8 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			var authenticationUrls = new List<Uri>();
 			var userCredentials = new UserCredentials
 			{
-				Username = "Username",
-				Password = "Password"
+				Username = string.Empty,
+				Password = string.Empty
 			};
 
 			var path = Path.Combine(configLocation, "oauth-applications.json");
