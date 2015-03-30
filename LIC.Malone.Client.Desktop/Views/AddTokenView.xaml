@@ -11,7 +11,7 @@
 	TitleCaps="False"
 	ShowIconOnTitleBar="False"
 	ResizeMode="NoResize"
-	Width="500" Height="800"
+	Width="900" Height="870"
 	GlowBrush="{DynamicResource AccentColorBrush}">
 
 	<Window.Resources>
@@ -19,46 +19,69 @@
 			<Setter Property="FontFamily" Value="Segoe UI" />
 			<Setter Property="FontSize" Value="14" />
 			<Setter Property="Foreground" Value="#FF9395A2" />
-			<Setter Property="Margin" Value="0 10 0 0" />
+			<Setter Property="Width" Value="150" />
+			<Setter Property="Padding" Value="5 15" />
+			<Setter Property="VerticalAlignment" Value="Top" />
 		</Style>
 		<Style x:Key="FormComboBox" TargetType="ComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
-			<Setter Property="Margin" Value="5 0 0 0" />
+			<Setter Property="Height" Value="30" />
+			<Setter Property="Width" Value="500" />
 		</Style>
 		<Style x:Key="FormTextBox" TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
-			<Setter Property="Margin" Value="5 0 0 0" />
+			<Setter Property="FontFamily" Value="Segoe UI" />
+			<Setter Property="FontSize" Value="14" />
+			<Setter Property="Height" Value="30" />
+			<Setter Property="Width" Value="300" />
+		</Style>
+		<Style x:Key="FormButton" TargetType="Button">
+			<Setter Property="Margin" Value="150 10 0 30" />
+			<Setter Property="Padding" Value="10 5" />
+			<Setter Property="Height" Value="30" />
+			<Setter Property="HorizontalAlignment" Value="Left" />
 		</Style>
 	</Window.Resources>
 
-	<DockPanel Margin="5" LastChildFill="False">
-		<Label DockPanel.Dock="Top" Style="{StaticResource H1}">Add Token</Label>
+	<StackPanel Orientation="Vertical" Margin="5">
+		<Label Style="{StaticResource H1}">Add Token</Label>
 
-		<Label DockPanel.Dock="Top" Content="Authentication URL" Style="{StaticResource FormLabel}"/>
-		<ComboBox DockPanel.Dock="Top" Name="AuthenticationUrls" ItemsSource="{Binding AuthenticationUrls}" SelectedItem="{Binding SelectedAuthenticationUrl}"
-			DisplayMemberPath="AbsoluteUri" SelectedValuePath="Content" Style="{StaticResource FormComboBox}"/>
+		<StackPanel Orientation="Horizontal">
+			<Label Content="Authentication URL" Style="{StaticResource FormLabel}"/>
+			<ComboBox Name="AuthenticationUrls" ItemsSource="{Binding AuthenticationUrls}" SelectedItem="{Binding SelectedAuthenticationUrl}"
+				DisplayMemberPath="AbsoluteUri" SelectedValuePath="Content" Style="{StaticResource FormComboBox}"/>
+		</StackPanel>
 
-		<Label DockPanel.Dock="Top" Content="Application" Style="{StaticResource FormLabel}"/>
-		<ComboBox DockPanel.Dock="Top" Name="Applications" ItemsSource="{Binding Applications}" SelectedItem="{Binding SelectedApplication}"
+		<StackPanel Orientation="Horizontal">
+			<Label Content="Application" Style="{StaticResource FormLabel}"/>
+			<ComboBox Name="Applications" ItemsSource="{Binding Applications}" SelectedItem="{Binding SelectedApplication}"
 			DisplayMemberPath="Name" SelectedValuePath="Content" Style="{StaticResource FormComboBox}"/>
+		</StackPanel>
 
-		<Label DockPanel.Dock="Top" Content="Username" Style="{StaticResource FormLabel}"/>
-		<TextBox DockPanel.Dock="Top" x:Name="Username" Text="{Binding Username}" Style="{StaticResource FormTextBox}" />
+		<StackPanel Orientation="Horizontal">
+			<Label Content="Username" Style="{StaticResource FormLabel}"/>
+			<TextBox x:Name="Username" Style="{StaticResource FormTextBox}" />
+		</StackPanel>
 
-		<Label DockPanel.Dock="Top" Content="Password" Style="{StaticResource FormLabel}"/>
-		<TextBox DockPanel.Dock="Top" x:Name="Password" Text="{Binding Password}" Style="{StaticResource FormTextBox}" />
+		<StackPanel Orientation="Horizontal">
+			<Label Content="Password" Style="{StaticResource FormLabel}"/>
+			<TextBox x:Name="Password" Style="{StaticResource FormTextBox}" />
+		</StackPanel>
 
-		<Button DockPanel.Dock="Top" x:Name="Authenticate" Content="Authenticate" cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action Authenticate()]"
-						HorizontalAlignment="Left" Width="95" />
+		<Button x:Name="Authenticate" Content="Authenticate" Style="{StaticResource FormButton}" />
 
-		<Label DockPanel.Dock="Top" Content="Response" HorizontalAlignment="Left" Style="{StaticResource FormLabel}"/>
-		<ae:TextEditor DockPanel.Dock="Top" Document="{Binding Response}" SyntaxHighlighting="JavaScript" FontFamily="Consolas" FontSize="10pt" Height="300" Margin="7 0 0 0" IsReadOnly="True"/>
+		<StackPanel Orientation="Horizontal">
+			<Label Content="Response" Style="{StaticResource FormLabel}"/>
+			<Border BorderThickness="1" BorderBrush="{StaticResource RecededColorBrush}" Margin="0 10 0 5">
+				<ae:TextEditor Document="{Binding Response}" SyntaxHighlighting="JavaScript" FontFamily="Consolas" FontSize="10pt" Height="400" Width="720" IsReadOnly="True" ShowLineNumbers="True"/>
+			</Border>
+		</StackPanel>
 
-		<Label DockPanel.Dock="Top" Content="Token name" Style="{StaticResource FormLabel}"/>
-		<TextBox DockPanel.Dock="Top" x:Name="TokenName" Text="{Binding Password}" Style="{StaticResource FormTextBox}" />
+		<StackPanel Orientation="Horizontal">
+			<Label Content="Token name" Style="{StaticResource FormLabel}"/>
+			<TextBox x:Name="TokenName" Style="{StaticResource FormTextBox}" />
+		</StackPanel>
 
-		<Button DockPanel.Dock="Top" Name="SaveToken" Content="Save Token" cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action SaveToken()]"
-						HorizontalAlignment="Left" Width="87"/>
+		<Button x:Name="SaveToken" Content="Save Token" Style="{StaticResource FormButton}" />
 
-
-	</DockPanel>
+	</StackPanel>
 
 </metro:MetroWindow>

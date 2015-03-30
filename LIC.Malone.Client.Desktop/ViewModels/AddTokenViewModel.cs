@@ -12,12 +12,11 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 {
 	public class AddTokenViewModel : Screen, IHandle<ConfigurationLoaded>
 	{
-
-
 		private IAuthorizationState _authorizationState;
 
-		private readonly IEventAggregator _bus;// TODO: Move these to view model for flyout.
-		#region Databound properties for flyout
+		private readonly IEventAggregator _bus;
+
+		#region Databound properties
 
 		private IObservableCollection<Uri> _authenticationUrls = new BindableCollection<Uri>();
 		public IObservableCollection<Uri> AuthenticationUrls
@@ -139,6 +138,14 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			Password = message.UserCredentials.Password;
 		}
 
+		public bool CanAuthenticate()
+		{
+			return SelectedApplication != null
+				&& SelectedAuthenticationUrl != null
+				&& !string.IsNullOrWhiteSpace(Username)
+				&& !string.IsNullOrWhiteSpace(Password);
+		}
+
 		public void Authenticate()
 		{
 			var app = SelectedApplication;
@@ -155,6 +162,11 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 			Response.Text = JsonConvert.SerializeObject(result.AuthorizationState, Formatting.Indented);
 			_authorizationState = result.AuthorizationState;
+		}
+
+		public bool CanSaveToken()
+		{
+			return !string.IsNullOrWhiteSpace(Response.Text);
 		}
 
 		public void SaveToken()
