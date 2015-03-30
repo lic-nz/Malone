@@ -11,8 +11,8 @@
 	TitleCaps="False"
 	ShowIconOnTitleBar="False"
 	ResizeMode="NoResize"
-	Width="500"
-	GlowBrush="{DynamicResource AccentColorBrush}" d:DesignHeight="800">
+	Width="500" Height="800"
+	GlowBrush="{DynamicResource AccentColorBrush}">
 
 	<Window.Resources>
 		<Style x:Key="FormLabel" TargetType="Label">
@@ -50,7 +50,7 @@
 						HorizontalAlignment="Left" Width="95" />
 
 		<Label DockPanel.Dock="Top" Content="Response" HorizontalAlignment="Left" Style="{StaticResource FormLabel}"/>
-		<ae:TextEditor DockPanel.Dock="Top" Document="{Binding Response}" SyntaxHighlighting="JavaScript" FontFamily="Consolas" FontSize="10pt" Height="200" Margin="7 0 0 0" IsReadOnly="True"/>
+		<ae:TextEditor DockPanel.Dock="Top" Document="{Binding Response}" SyntaxHighlighting="JavaScript" FontFamily="Consolas" FontSize="10pt" Height="300" Margin="7 0 0 0" IsReadOnly="True"/>
 
 		<Label DockPanel.Dock="Top" Content="Token name" Style="{StaticResource FormLabel}"/>
 		<TextBox DockPanel.Dock="Top" x:Name="TokenName" Text="{Binding Password}" Style="{StaticResource FormTextBox}" />
