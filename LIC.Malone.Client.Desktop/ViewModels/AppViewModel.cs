@@ -135,6 +135,23 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			{
 				_selectedToken = value;
 				NotifyOfPropertyChange(() => SelectedToken);
+				NotifyOfPropertyChange(() => SelectedTokenJson);
+			}
+		}
+
+		private TextDocument _selectedTokenJson = new TextDocument();
+		public TextDocument SelectedTokenJson
+		{
+			get
+			{
+				if (SelectedToken == null)
+					_selectedTokenJson.Text = string.Empty;
+				else if (SelectedToken.AuthorizationState == null)
+					_selectedTokenJson.Text = string.Empty;
+				else
+					_selectedTokenJson.Text = JsonConvert.SerializeObject(SelectedToken.AuthorizationState, Formatting.Indented); ;
+
+				return _selectedTokenJson;
 			}
 		}
 
@@ -346,6 +363,8 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			HttpStatusCode = new HttpStatusCodeViewModel(SelectedHistory.Response.HttpStatusCode);
 			ResponseBody = new TextDocument(SelectedHistory.Response.Content);
 			RequestBody = new TextDocument(SelectedHistory.Body);
+			Tokens.Add(SelectedHistory.NamedAuthorizationState);
+			SelectedToken = Tokens.Last();
 		}
 
 		public void RemoveFromHistory(object e)

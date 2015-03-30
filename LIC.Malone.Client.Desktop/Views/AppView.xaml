@@ -284,11 +284,7 @@
 								</Label>
 							</DockPanel>
 
-							<ae:TextEditor DockPanel.Dock="Top"
-								x:Name="ResponseContent" Document="{Binding ResponseBody}"
-								SyntaxHighlighting="XML"
-								FontFamily="Consolas"
-								FontSize="10pt" ShowLineNumbers="True" IsReadOnly="True"/>
+							<ae:TextEditor DockPanel.Dock="Top" Document="{Binding ResponseBody}" SyntaxHighlighting="XML" FontFamily="Consolas" FontSize="10pt" ShowLineNumbers="True" IsReadOnly="True"/>
 
 						</DockPanel>
 
@@ -357,6 +353,8 @@
 							</Button>
 
 						</Grid>
+
+						<ae:TextEditor Document="{Binding SelectedTokenJson, Mode=OneWay}" SyntaxHighlighting="JavaScript" FontFamily="Consolas" FontSize="10pt" IsReadOnly="True" ShowLineNumbers="True" />
 
 					</DockPanel>
 				</TabItem>
