@@ -383,7 +383,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 		{
 			var settings = new Dictionary<string, object>
 			{
-				{"Title", "Add token"},
+				{"Title", string.Empty},
 				{"WindowStartupLocation", WindowStartupLocation.CenterOwner}
 			};
 

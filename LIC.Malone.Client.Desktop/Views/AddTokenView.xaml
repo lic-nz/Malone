@@ -9,10 +9,10 @@
 	xmlns:ae="http://icsharpcode.net/sharpdevelop/avalonedit"
 	xmlns:controls="clr-namespace:LIC.Malone.Client.Desktop.Controls"
 	mc:Ignorable="d"
-	TitleCaps="False"
-	ShowIconOnTitleBar="False"
+	ShowIconOnTitleBar="True"
+	ShowTitleBar="False"
 	ResizeMode="NoResize"
-	Width="900" Height="870"
+	Width="900" Height="850"
 	GlowBrush="{DynamicResource AccentColorBrush}">
 
 	<Window.Resources>
@@ -25,6 +25,8 @@
 			<Setter Property="VerticalAlignment" Value="Top" />
 		</Style>
 		<Style x:Key="FormComboBox" TargetType="ComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
+			<Setter Property="FontFamily" Value="Segoe UI" />
+			<Setter Property="FontSize" Value="14" />
 			<Setter Property="Height" Value="30" />
 			<Setter Property="Width" Value="500" />
 		</Style>
