@@ -102,17 +102,6 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			}
 		}
 
-		private IObservableCollection<NamedAuthorizationState> _tokens = new BindableCollection<NamedAuthorizationState>();
-		public IObservableCollection<NamedAuthorizationState> Tokens
-		{
-			get { return _tokens; }
-			set
-			{
-				_tokens = value;
-				NotifyOfPropertyChange(() => Tokens);
-			}
-		}
-
 		private TextDocument _response = new TextDocument();
 		public TextDocument Response
 		{
@@ -163,6 +152,8 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 		public void Authenticate()
 		{
+			Reset();
+
 			var app = SelectedApplication;
 			var url = SelectedAuthenticationUrl;
 
@@ -171,7 +162,6 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			if (result.HasError)
 			{
 				Response.Text = result.Error;
-				_authorizationState = null;
 				return;
 			}
 
@@ -181,29 +171,25 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 		public void SaveToken()
 		{
-			if (string.IsNullOrWhiteSpace(TokenName))
-				return;
+			// TODO: verify if this is needed.
+			Reset();
 
 			var token = new NamedAuthorizationState(TokenName, _authorizationState);
 
-			Tokens.Add(token);
-			//SelectedToken = SelectedToken ?? Tokens.First();
-
-			// Reset.
-			_authorizationState = null;
-			Response.Text = null;
-			TokenName = null;
-		}
-
-		public void AddToken()
-		{
-			var x = new NamedAuthorizationState("Hai!", null);
 			var message = new TokenAdded
 			{
-				NamedAuthorizationState = x
+				NamedAuthorizationState = token
 			};
 
 			_bus.PublishOnUIThread(message);
+
+		}
+
+		private void Reset()
+		{
+			_authorizationState = null;
+			Response.Text = string.Empty;
+			TokenName = null;
 		}
 	}
 }

@@ -72,7 +72,7 @@
 		<StackPanel Orientation="Horizontal">
 			<Label Content="Response" Style="{StaticResource FormLabel}"/>
 			<Border BorderThickness="1" BorderBrush="{StaticResource RecededColorBrush}" Margin="0 10 0 5">
-				<ae:TextEditor Document="{Binding Response}" SyntaxHighlighting="JavaScript" FontFamily="Consolas" FontSize="10pt" Height="400" Width="720" IsReadOnly="False" ShowLineNumbers="True"
+				<ae:TextEditor Document="{Binding Response}" SyntaxHighlighting="JavaScript" FontFamily="Consolas" FontSize="10pt" Height="400" Width="720" IsReadOnly="True" ShowLineNumbers="True"
 					cal:Message.Attach="[Event TextChanged] = [Action ResponseChanged($executionContext)]"/>
 			</Border>
 		</StackPanel>

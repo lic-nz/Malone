@@ -194,8 +194,6 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			SelectedToken = Tokens.First();
 
 			LoadConfig();
-
-			AddToken();
 		}
 
 		private void LoadConfig()
