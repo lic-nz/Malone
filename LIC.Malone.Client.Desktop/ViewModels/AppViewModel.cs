@@ -118,6 +118,17 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			}
 		}
 
+		private IObservableCollection<Header> _headers = new BindableCollection<Header>();
+		public IObservableCollection<Header> Headers
+		{
+			get { return _headers; }
+			set
+			{
+				_headers = value;
+				NotifyOfPropertyChange(() => Headers);
+			}
+		}
+
 		private IObservableCollection<NamedAuthorizationState> _tokens;
 		public IObservableCollection<NamedAuthorizationState> Tokens
 		{
@@ -242,6 +253,9 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			SelectedToken = Tokens.First();
 
 			LoadConfig();
+
+			Headers.Add(new Header("ho", "boy"));
+			Headers.Add(new Header("yeah", "nah"));
 		}
 
 		private void LoadConfig()
@@ -382,10 +396,10 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			switch (contentType)
 			{
 				case ContentType.Xml:
-					return manager.GetDefinition("XML"); 
+					return manager.GetDefinition("XML");
 
 				case ContentType.Json:
-					return manager.GetDefinition("JavaScript"); 
+					return manager.GetDefinition("JavaScript");
 
 				default:
 					return null; 

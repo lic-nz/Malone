@@ -46,6 +46,7 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -58,6 +59,7 @@
     <Compile Include="Authentication\OAuth\NamedAuthorizationState.cs" />
     <Compile Include="Authentication\OAuth\OAuthApplication.cs" />
     <Compile Include="Authentication\UserCredentials.cs" />
+    <Compile Include="Header.cs" />
     <Compile Include="MaloneRestRequest.cs" />
     <Compile Include="Request.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

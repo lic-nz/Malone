@@ -14,12 +14,20 @@
 
 			<Color x:Key="HyperlinkHoverColor">#286090</Color>
 			<SolidColorBrush x:Key="HyperlinkHoverColorBrush" Color="{StaticResource HyperlinkHoverColor}"></SolidColorBrush>
-			
-			<Color x:Key="RecededColor">#999999</Color>
+
+			<Color x:Key="RecededColor">#FF9395A2</Color>
 			<SolidColorBrush x:Key="RecededColorBrush" Color="{StaticResource RecededColor}"></SolidColorBrush>
+
+			<Color x:Key="SeparatorColor">#efefef</Color>
+			<SolidColorBrush x:Key="SeparatorColorBrush" Color="{StaticResource SeparatorColor}"></SolidColorBrush>
 
 			<Style TargetType="Label">
 				<Setter Property="FontFamily" Value="Calibri" />
+				<Setter Property="FontSize" Value="14" />
+			</Style>
+			
+			<Style x:Key="DefaultTextBox" TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+				<Setter Property="FontFamily" Value="Segoe UI" />
 				<Setter Property="FontSize" Value="14" />
 			</Style>
 
@@ -38,12 +46,12 @@
 				<Setter Property="FontFamily" Value="Calibri" />
 				<Setter Property="FontWeight" Value="Light" />
 				<Setter Property="FontSize" Value="16" />
-				<Setter Property="Foreground" Value="#999999" />
+				<Setter Property="Foreground" Value="{StaticResource RecededColorBrush}" />
 				<Setter Property="Margin" Value="0 11 15 0" />
 			</Style>
 
 			<Style x:Key="History.BaseUrl" TargetType="TextBlock" BasedOn="{StaticResource DefaultTextBlock}">
-				<Setter Property="Foreground" Value="#999999" />
+				<Setter Property="Foreground" Value="{StaticResource RecededColorBrush}" />
 			</Style>
 
 			<Style x:Key="History.ResourcePath" TargetType="TextBlock" BasedOn="{StaticResource DefaultTextBlock}">

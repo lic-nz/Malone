@@ -31,8 +31,6 @@
 			<Setter Property="Width" Value="500" />
 		</Style>
 		<Style x:Key="FormTextBox" TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
-			<Setter Property="FontFamily" Value="Segoe UI" />
-			<Setter Property="FontSize" Value="14" />
 			<Setter Property="Height" Value="30" />
 			<Setter Property="Width" Value="300" />
 		</Style>

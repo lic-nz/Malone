@@ -180,7 +180,7 @@
 
 		<DockPanel Name="RequestResponseDockPanel" Grid.Column="2" LastChildFill="True" Margin="8 0 0 0">
 
-			<TabControl DockPanel.Dock="Top" Padding="0">
+			<TabControl DockPanel.Dock="Top" Padding="0" SelectedIndex="2">
 
 				<TabControl.Resources>
 					<extensions:HideOnHistoryConverter x:Key="HideOnHistoryConverter" />
@@ -301,7 +301,29 @@
 				</TabItem>
 
 				<TabItem Header="Headers">
-					<TextBlock Style="{StaticResource EmptyListMessage}">Coming soon</TextBlock>
+					<DockPanel Margin="7 0 15 0">
+						<Border DockPanel.Dock="Top" Padding="5" BorderThickness="0 0 0 2" BorderBrush="{StaticResource SeparatorColorBrush}">
+							<StackPanel Orientation="Horizontal">
+								<Label Width="200">Name</Label>
+								<Label Width="300" Margin="15 0 0 0">Value</Label>
+							</StackPanel>
+						</Border>
+						<ItemsControl DockPanel.Dock="Top" x:Name="Headers">
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<Border Padding="0 10" BorderThickness="0 0 0 1" BorderBrush="{StaticResource SeparatorColorBrush}">
+										<StackPanel Orientation="Horizontal">
+											<TextBox Text="{Binding Name}" Width="200" Style="{StaticResource DefaultTextBox}" />
+											<TextBox Text="{Binding Value}" Width="300" Margin="15 0 0 0" Style="{StaticResource DefaultTextBox}" />
+											<Button>Delete</Button>
+										</StackPanel>
+									</Border>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
+						
+						<TextBlock DockPanel.Dock="Top">Add</TextBlock>
+					</DockPanel>
 				</TabItem>
 
 				<TabItem Header="Authentication">
