@@ -178,8 +178,10 @@
 		</TabControl>
 
 		<GridSplitter Grid.Column="1" Width="2" HorizontalAlignment="Stretch" />
+		
+		<ScrollViewer Grid.Column="2">
 
-		<DockPanel Grid.Column="2" LastChildFill="True" >
+		<DockPanel LastChildFill="True" >
 
 			<Label DockPanel.Dock="Top" Margin="4 0 0 0" Style="{StaticResource H1}" Content="Request" />
 
@@ -285,7 +287,8 @@
 
 				<TabItem Header="Body">
 
-					<ae:TextEditor Document="{Binding RequestBody}"
+					<!--TODO: Highlight based on accept header.-->
+					<ae:TextEditor Document="{Binding RequestBody}" VerticalScrollBarVisibility="Disabled"
 						SyntaxHighlighting="XML"
 						FontFamily="Consolas"
 						FontSize="10pt" ShowLineNumbers="True" IsReadOnly="False"/>
@@ -344,7 +347,7 @@
 
 						</Grid>
 
-						<ae:TextEditor Document="{Binding SelectedTokenJson, Mode=OneWay}" SyntaxHighlighting="JavaScript" FontFamily="Consolas" FontSize="10pt" IsReadOnly="True" ShowLineNumbers="True" />
+							<ae:TextEditor Document="{Binding SelectedTokenJson, Mode=OneWay}" SyntaxHighlighting="JavaScript" FontFamily="Consolas" FontSize="10pt" IsReadOnly="True" ShowLineNumbers="True"  VerticalScrollBarVisibility="Disabled" />
 
 					</DockPanel>
 				</TabItem>
@@ -373,11 +376,13 @@
 					</Label>
 				</DockPanel>
 
-				<ae:TextEditor DockPanel.Dock="Top" Document="{Binding ResponseBody}" SyntaxHighlighting="{Binding ResponseBodyHighlighting}" FontFamily="Consolas" FontSize="10pt" ShowLineNumbers="True" IsReadOnly="True"/>
+				<ae:TextEditor DockPanel.Dock="Top" VerticalScrollBarVisibility="Disabled" Document="{Binding ResponseBody}" SyntaxHighlighting="{Binding ResponseBodyHighlighting}" FontFamily="Consolas" FontSize="10pt" ShowLineNumbers="True" IsReadOnly="False"/>
 
 			</DockPanel>
 
 		</DockPanel>
+
+		</ScrollViewer>
 
 	</Grid>
 
