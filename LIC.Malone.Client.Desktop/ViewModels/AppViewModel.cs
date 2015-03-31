@@ -554,6 +554,19 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			ActivateItem(_addTokenViewModel);
 		}
 
+		public void Reset()
+		{
+			SelectedHistory = null;
+
+			// TODO: Bind all properties to a Request object.
+			SelectedMethod = Methods.First();
+			Url = null;
+			SelectedAccept = Accepts.First();
+			RequestBody.Text = string.Empty;
+			ResponseBody.Text = string.Empty;
+			ResponseContentType = null;
+		}
+
 		public void Handle(TokenAdded message)
 		{
 			Tokens.Add(message.NamedAuthorizationState);

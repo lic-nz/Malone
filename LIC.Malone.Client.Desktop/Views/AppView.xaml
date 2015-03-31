@@ -25,7 +25,7 @@
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="1*" MinWidth="280" />
 			<ColumnDefinition Width="Auto" />
-			<ColumnDefinition Width="2*" MinWidth="500" />
+			<ColumnDefinition Width="3*" MinWidth="500" />
 		</Grid.ColumnDefinitions>
 
 		<TabControl Grid.Column="0" Margin="-2 -2 0 0" Padding="0">
@@ -182,7 +182,7 @@
 
 		<ScrollViewer Grid.Column="2">
 
-			<DockPanel LastChildFill="True" >
+			<DockPanel LastChildFill="True">
 
 				<Label DockPanel.Dock="Top" Margin="4 0 0 0" Style="{StaticResource H1}" Content="Request" />
 
@@ -249,11 +249,9 @@
 					<TextBox  Grid.Row="1" Grid.Column="2" x:Name="Url" metro:TextBoxHelper.Watermark="Enter URL or choose from history" Style="{StaticResource DefaultTextBox}"/>
 					<ComboBox Grid.Row="1" Grid.Column="4" x:Name="Accepts" Width="130" Style="{StaticResource DefaultComboBox}" />
 
-					<controls:MaloneButton Grid.Row="3" Grid.Column="2" x:Name="Send" Content="Send" IconData="{StaticResource paper_plane}" IconTop="-2" HorizontalAlignment="Left" cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action AddHeader()]" />
-					<controls:MaloneButton Grid.Row="3" Grid.Column="2" HorizontalAlignment="Right"  Content="Reset" IconData="{StaticResource erase}" />
+					<controls:MaloneButton Grid.Row="3" Grid.Column="2" x:Name="Send" Content="Send" IconData="{StaticResource paper_plane}" IconTop="-2" HorizontalAlignment="Left" />
+					<controls:MaloneButton Grid.Row="3" Grid.Column="2" x:Name="Reset" HorizontalAlignment="Right" Content="Reset" IconData="{StaticResource erase}" />
 				</Grid>
-
-
 
 				<StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
 				</StackPanel>

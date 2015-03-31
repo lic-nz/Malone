@@ -22,7 +22,7 @@ namespace LIC.Malone.Core.Authentication.OAuth
 		{
 			Guid = guid;
 			NamedAuthorizationStateOrigin = NamedAuthorizationStateOrigin.History;
-			Name = name + " (from historical request)";
+			Name = name;
 			AuthorizationState = authorizationState;
 		}
 
