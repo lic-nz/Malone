@@ -461,8 +461,14 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			SelectedToken = Tokens.First();
 			var historicalTokens = Tokens.Where(t => t.NamedAuthorizationStateOrigin == NamedAuthorizationStateOrigin.History).ToList();
 			Tokens.RemoveRange(historicalTokens);
-			Tokens.Add(SelectedHistory.NamedAuthorizationState);
-			SelectedToken = SelectedHistory.NamedAuthorizationState;
+
+			var state = SelectedHistory.NamedAuthorizationState;
+
+			if (state != null)
+			{
+				Tokens.Add(SelectedHistory.NamedAuthorizationState);
+				SelectedToken = SelectedHistory.NamedAuthorizationState;
+			}
 		}
 
 		public void RemoveFromHistory(object e)
