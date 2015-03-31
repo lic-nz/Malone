@@ -303,6 +303,7 @@
 
 				<TabItem Header="Headers">
 					<DockPanel Margin="7 0 15 0" LastChildFill="False">
+						<TextBlock DockPanel.Dock="Top" FontSize="24" Padding="10" Foreground="OrangeRed">This isn't wired up yet.</TextBlock>
 						<Border DockPanel.Dock="Top" Padding="5" BorderThickness="0 0 0 2" BorderBrush="{StaticResource SeparatorColorBrush}">
 							<StackPanel Orientation="Horizontal">
 								<Label Width="200">Name</Label>
