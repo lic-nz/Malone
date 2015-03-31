@@ -177,70 +177,18 @@
 			</TabItem>
 		</TabControl>
 
-		<GridSplitter Name="HistorySplitter" Grid.Column="1" Width="2" HorizontalAlignment="Stretch" />
+		<GridSplitter Grid.Column="1" Width="2" HorizontalAlignment="Stretch" />
 
-		<DockPanel Name="RequestResponseDockPanel" Grid.Column="2" LastChildFill="True" Margin="8 0 0 0">
+		<DockPanel Grid.Column="2" LastChildFill="True" >
 
-			<TabControl DockPanel.Dock="Top" Padding="0">
+			<DockPanel DockPanel.Dock="Top" Margin="10 0">
+				<Label DockPanel.Dock="Left" Style="{StaticResource H1}" Content="Request" />
+				<!--<controls:MaloneButton DockPanel.Dock="Left" x:Name="Send" VerticalAlignment="Bottom" Margin="4 0 0 6"  Content="Send" IconData="{StaticResource paper_plane}" IconTop="-2" cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action AddHeader()]" />-->
+				<controls:MaloneButton DockPanel.Dock="Right" HorizontalAlignment="Right" Margin="0 0 0 6" VerticalAlignment="Bottom" Content="Reset" IconData="{StaticResource erase}" />
+			</DockPanel>
 
-				<TabControl.Resources>
-					<extensions:HideOnHistoryConverter x:Key="HideOnHistoryConverter" />
-					<extensions:ShowOnHistoryConverter x:Key="ShowOnHistoryConverter" />
-					<Style TargetType="{x:Type TabItem}">
-						<Setter Property="Template">
-							<Setter.Value>
-								<ControlTemplate TargetType="{x:Type TabItem}">
-									<ContentPresenter Name="HeaderContentPresenter">
-										<ContentPresenter.Content>
-											<Label Name="Header" Style="{StaticResource H1}" Content="{TemplateBinding Header}" Padding="5 7 13 7" />
-										</ContentPresenter.Content>
-									</ContentPresenter>
-									<ControlTemplate.Triggers>
-										<Trigger Property="IsSelected" Value="False">
-											<Setter TargetName="Header" Property="Foreground" Value="LightGray"></Setter>
-										</Trigger>
-										<Trigger SourceName="HeaderContentPresenter" Property="IsMouseOver" Value="True">
-											<Setter TargetName="Header" Property="Foreground" Value="{StaticResource HyperlinkHoverColorBrush}"></Setter>
-										</Trigger>
-									</ControlTemplate.Triggers>
-								</ControlTemplate>
-							</Setter.Value>
-						</Setter>
-					</Style>
-				</TabControl.Resources>
-
-				<TabItem Header="Request">
-					<TabItem.Content>
-
-						<DockPanel LastChildFill="True">
-
-							<!--<Label DockPanel.Dock="Top" Style="{StaticResource H1Info}" HorizontalAlignment="Right" x:Name="SelectedHistory_AtLocalString" Content="Request Date">
-									<Label.ToolTip>
-										<Label Content="{Binding Path=.SelectedHistory.AtUtcString}"/>
-									</Label.ToolTip>
-								</Label>-->
-
-							<Grid DockPanel.Dock="Top" Name="RequestGrid">
-								<Grid.ColumnDefinitions>
-									<ColumnDefinition Width="100" />
-									<ColumnDefinition Width="*" />
-								</Grid.ColumnDefinitions>
-								<Grid.RowDefinitions>
-									<RowDefinition Height="60" />
-									<RowDefinition Height="40" />
-								</Grid.RowDefinitions>
-
-								<Label Grid.Row="0" Grid.Column="0" Content="Method" HorizontalAlignment="Left" FontFamily="Segoe UI" FontSize="14" Foreground="#FF9395A2"/>
-								<ComboBox Grid.Row="0" Grid.Column="0" x:Name="Methods" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="80" Padding="3" Height="30" Margin="5,0,0,0" />
-
-								<Label Grid.Row="0" Grid.Column="1" Content="URL" HorizontalAlignment="Left" FontFamily="Segoe UI" FontSize="14" Foreground="#FF9395A2" />
-								<TextBox Grid.Row="0" Grid.Column="1" x:Name="Url" metro:TextBoxHelper.Watermark="Enter URL or choose from history"
-									FontFamily="Calibri" FontSize="14" VerticalAlignment="Bottom" Padding="3" Margin="0,0,15,0"/>
-
-								<controls:MaloneButton Grid.Row="1" Grid.Column="1" x:Name="Send" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0 9 0 0" Content="Send" IconData="{StaticResource paper_plane}" IconTop="-2" cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action AddHeader()]" />
-								
-								<!--TODO: Implement tooltips.-->
-								<!--<Button Grid.Row="1" Grid.Column="1" x:Name="Send2" ToolTipService.ShowOnDisabled="True" HorizontalAlignment="Left" VerticalAlignment="Top" BorderThickness="1" Margin="90,9,0,0">
+			<!--TODO: Implement tooltips.-->
+			<!--<Button Grid.Row="1" Grid.Column="1" x:Name="Send2" ToolTipService.ShowOnDisabled="True" HorizontalAlignment="Left" VerticalAlignment="Top" BorderThickness="1" Margin="90,9,0,0">
 									<Button.Template>
 										<ControlTemplate>
 											<Border Name="Border" BorderBrush="#2e6da4" BorderThickness="2" Background="#337ab7" Height="31" Padding="7" >
@@ -272,28 +220,69 @@
 										</ControlTemplate>
 									</Button.Template>
 								</Button>-->
-							</Grid>
 
-							<DockPanel DockPanel.Dock="Top" LastChildFill="True"  Margin="0,10,15,0">
-								<Label DockPanel.Dock="Left" Style="{StaticResource H1}" Content="Response" />
-								<Label DockPanel.Dock="Right" x:Name="SelectedHistory_ResponseTime" HorizontalAlignment="Right" VerticalAlignment="Bottom" Content="Time" Margin="0 0 0 2" FontFamily="Segoe UI" FontSize="14" Foreground="#FF9395A2"/>
-							</DockPanel>
+			<Grid DockPanel.Dock="Top" Margin="10 0">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="72"/>
+					<ColumnDefinition Width="10"/>
+					<ColumnDefinition Width="80"/>
+					<ColumnDefinition Width="10"/>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="10"/>
+					<ColumnDefinition Width="80"/>
+				</Grid.ColumnDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition />
+					<RowDefinition/>
+				</Grid.RowDefinitions>
+				
+				<Grid.Resources>
+					<Style x:Key="TopLabel" TargetType="Label" BasedOn="{StaticResource DefaultLabel}">
+						<Setter Property="Margin" Value="-5 0 0 0"/>
+					</Style>
+				</Grid.Resources>
 
-							<DockPanel Dock="Top" Height="40" Margin="7,0,15,0">
-								<ContentControl DockPanel.Dock="Left" x:Name="HttpStatusCode" VerticalAlignment="Bottom" HorizontalAlignment="Left" />
-								<Label DockPanel.Dock="Right" x:Name="SelectedHistory_Response_AtLocalString" Content="Response Date" HorizontalContentAlignment="Right" HorizontalAlignment="Right" FontFamily="Segoe UI" FontSize="14" Foreground="#FF9395A2">
-									<Label.ToolTip>
-										<Label Content="{Binding Path=.SelectedHistory.Response.AtUtcString}"/>
-									</Label.ToolTip>
-								</Label>
-							</DockPanel>
+				<Label Grid.Row="0" Grid.Column="2" Style="{StaticResource TopLabel}">Method</Label>
+				<Label Grid.Row="0" Grid.Column="4" Style="{StaticResource TopLabel}">URL</Label>
+				<Label Grid.Row="0" Grid.Column="6" Style="{StaticResource TopLabel}">Accept</Label>
 
-							<ae:TextEditor DockPanel.Dock="Top" Document="{Binding ResponseBody}" SyntaxHighlighting="{Binding ResponseBodyHighlighting}" FontFamily="Consolas" FontSize="10pt" ShowLineNumbers="True" IsReadOnly="True"/>
+				<controls:MaloneButton Grid.Row="1" Grid.Column="0" x:Name="Send" Content="Send" IconData="{StaticResource paper_plane}" IconTop="-2" HorizontalAlignment="Left" cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action AddHeader()]" />
+				<ComboBox Grid.Row="1" Grid.Column="2" x:Name="Methods" Width="80" Style="{StaticResource DefaultComboBox}" />
+				<TextBox  Grid.Row="1" Grid.Column="4" x:Name="Url" metro:TextBoxHelper.Watermark="Enter URL or choose from history" Style="{StaticResource DefaultTextBox}"/>
+				<ComboBox Grid.Row="1" Grid.Column="6" x:Name="Methods3" Width="80"  />
+			</Grid>
+			
+			
+			<StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+			</StackPanel>
 
-						</DockPanel>
+			<TabControl DockPanel.Dock="Top" Padding="0">
 
-					</TabItem.Content>
-				</TabItem>
+				<TabControl.Resources>
+					<extensions:HideOnHistoryConverter x:Key="HideOnHistoryConverter" />
+					<extensions:ShowOnHistoryConverter x:Key="ShowOnHistoryConverter" />
+					<Style TargetType="{x:Type TabItem}">
+						<Setter Property="Template">
+							<Setter.Value>
+								<ControlTemplate TargetType="{x:Type TabItem}">
+									<ContentPresenter Name="HeaderContentPresenter">
+										<ContentPresenter.Content>
+											<Label Name="Header" Style="{StaticResource H2}" Content="{TemplateBinding Header}" Padding="5 7 13 7" />
+										</ContentPresenter.Content>
+									</ContentPresenter>
+									<ControlTemplate.Triggers>
+										<Trigger Property="IsSelected" Value="False">
+											<Setter TargetName="Header" Property="Foreground" Value="LightGray"></Setter>
+										</Trigger>
+										<Trigger SourceName="HeaderContentPresenter" Property="IsMouseOver" Value="True">
+											<Setter TargetName="Header" Property="Foreground" Value="{StaticResource HyperlinkHoverColorBrush}"></Setter>
+										</Trigger>
+									</ControlTemplate.Triggers>
+								</ControlTemplate>
+							</Setter.Value>
+						</Setter>
+					</Style>
+				</TabControl.Resources>
 
 				<TabItem Header="Body">
 
@@ -362,6 +351,32 @@
 				</TabItem>
 
 			</TabControl>
+
+			<DockPanel LastChildFill="True">
+
+				<!--<Label DockPanel.Dock="Top" Style="{StaticResource H1Info}" HorizontalAlignment="Right" x:Name="SelectedHistory_AtLocalString" Content="Request Date">
+									<Label.ToolTip>
+										<Label Content="{Binding Path=.SelectedHistory.AtUtcString}"/>
+									</Label.ToolTip>
+								</Label>-->
+
+				<DockPanel DockPanel.Dock="Top" LastChildFill="True"  Margin="0,10,15,0">
+					<Label DockPanel.Dock="Left" Style="{StaticResource H1}" Content="Response" />
+					<Label DockPanel.Dock="Right" x:Name="SelectedHistory_ResponseTime" HorizontalAlignment="Right" VerticalAlignment="Bottom" Content="Time" Margin="0 0 0 2" FontFamily="Segoe UI" FontSize="14" Foreground="#FF9395A2"/>
+				</DockPanel>
+
+				<DockPanel Dock="Top" Height="40" Margin="7,0,15,0">
+					<ContentControl DockPanel.Dock="Left" x:Name="HttpStatusCode" VerticalAlignment="Bottom" HorizontalAlignment="Left" />
+					<Label DockPanel.Dock="Right" x:Name="SelectedHistory_Response_AtLocalString" Content="Response Date" HorizontalContentAlignment="Right" HorizontalAlignment="Right" FontFamily="Segoe UI" FontSize="14" Foreground="#FF9395A2">
+						<Label.ToolTip>
+							<Label Content="{Binding Path=.SelectedHistory.Response.AtUtcString}"/>
+						</Label.ToolTip>
+					</Label>
+				</DockPanel>
+
+				<ae:TextEditor DockPanel.Dock="Top" Document="{Binding ResponseBody}" SyntaxHighlighting="{Binding ResponseBodyHighlighting}" FontFamily="Consolas" FontSize="10pt" ShowLineNumbers="True" IsReadOnly="True"/>
+
+			</DockPanel>
 
 		</DockPanel>
 
