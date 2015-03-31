@@ -10,6 +10,7 @@
 	xmlns:extensions="clr-namespace:LIC.Malone.Client.Desktop.Extensions"
 	xmlns:local="clr-namespace:LIC.Malone.Client.Desktop"
 	xmlns:controls="clr-namespace:LIC.Malone.Client.Desktop.Controls"
+	xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
 	mc:Ignorable="d"
 	Title="Malone"
 	TitleCaps="False"
@@ -178,15 +179,15 @@
 		</TabControl>
 
 		<GridSplitter Grid.Column="1" Width="2" HorizontalAlignment="Stretch" />
-		
+
 		<ScrollViewer Grid.Column="2">
 
-		<DockPanel LastChildFill="True" >
+			<DockPanel LastChildFill="True" >
 
-			<Label DockPanel.Dock="Top" Margin="4 0 0 0" Style="{StaticResource H1}" Content="Request" />
+				<Label DockPanel.Dock="Top" Margin="4 0 0 0" Style="{StaticResource H1}" Content="Request" />
 
-			<!--TODO: Implement tooltips.-->
-			<!--<Button Grid.Row="1" Grid.Column="1" x:Name="Send2" ToolTipService.ShowOnDisabled="True" HorizontalAlignment="Left" VerticalAlignment="Top" BorderThickness="1" Margin="90,9,0,0">
+				<!--TODO: Implement tooltips.-->
+				<!--<Button Grid.Row="1" Grid.Column="1" x:Name="Send2" ToolTipService.ShowOnDisabled="True" HorizontalAlignment="Left" VerticalAlignment="Top" BorderThickness="1" Margin="90,9,0,0">
 									<Button.Template>
 										<ControlTemplate>
 											<Border Name="Border" BorderBrush="#2e6da4" BorderThickness="2" Background="#337ab7" Height="31" Padding="7" >
@@ -219,168 +220,173 @@
 									</Button.Template>
 								</Button>-->
 
-			<Grid DockPanel.Dock="Top" Margin="10 0">
-				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="70"/>
-					<ColumnDefinition Width="10"/>
-					<ColumnDefinition Width="*"/>
-					<ColumnDefinition Width="10"/>
-					<ColumnDefinition Width="130"/>
-				</Grid.ColumnDefinitions>
-				<Grid.RowDefinitions>
-					<RowDefinition />
-					<RowDefinition />
-					<RowDefinition Height="10"/>
-					<RowDefinition />
-				</Grid.RowDefinitions>
+				<Grid DockPanel.Dock="Top" Margin="10 0">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="70"/>
+						<ColumnDefinition Width="10"/>
+						<ColumnDefinition Width="*"/>
+						<ColumnDefinition Width="10"/>
+						<ColumnDefinition Width="130"/>
+					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition />
+						<RowDefinition />
+						<RowDefinition Height="10"/>
+						<RowDefinition />
+					</Grid.RowDefinitions>
 
-				<Grid.Resources>
-					<Style x:Key="TopLabel" TargetType="Label" BasedOn="{StaticResource DefaultLabel}">
-						<Setter Property="Margin" Value="-5 0 0 0"/>
-					</Style>
-				</Grid.Resources>
+					<Grid.Resources>
+						<Style x:Key="TopLabel" TargetType="Label" BasedOn="{StaticResource DefaultLabel}">
+							<Setter Property="Margin" Value="-5 0 0 0"/>
+						</Style>
+					</Grid.Resources>
 
-				<Label Grid.Row="0" Grid.Column="0" Style="{StaticResource TopLabel}">Method</Label>
-				<Label Grid.Row="0" Grid.Column="2" Style="{StaticResource TopLabel}">URL</Label>
-				<Label Grid.Row="0" Grid.Column="4" Style="{StaticResource TopLabel}">Accept</Label>
+					<Label Grid.Row="0" Grid.Column="0" Style="{StaticResource TopLabel}">Method</Label>
+					<Label Grid.Row="0" Grid.Column="2" Style="{StaticResource TopLabel}">URL</Label>
+					<Label Grid.Row="0" Grid.Column="4" Style="{StaticResource TopLabel}">Accept</Label>
 
-				<ComboBox Grid.Row="1" Grid.Column="0" x:Name="Methods" Width="70" Style="{StaticResource DefaultComboBox}" />
-				<TextBox  Grid.Row="1" Grid.Column="2" x:Name="Url" metro:TextBoxHelper.Watermark="Enter URL or choose from history" Style="{StaticResource DefaultTextBox}"/>
-				<ComboBox Grid.Row="1" Grid.Column="4" x:Name="Accepts" Width="130" Style="{StaticResource DefaultComboBox}" />
+					<ComboBox Grid.Row="1" Grid.Column="0" x:Name="Methods" Width="70" Style="{StaticResource DefaultComboBox}" />
+					<TextBox  Grid.Row="1" Grid.Column="2" x:Name="Url" metro:TextBoxHelper.Watermark="Enter URL or choose from history" Style="{StaticResource DefaultTextBox}"/>
+					<ComboBox Grid.Row="1" Grid.Column="4" x:Name="Accepts" Width="130" Style="{StaticResource DefaultComboBox}" />
 
-				<controls:MaloneButton Grid.Row="3" Grid.Column="2" x:Name="Send" Content="Send" IconData="{StaticResource paper_plane}" IconTop="-2" HorizontalAlignment="Left" cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action AddHeader()]" />
-				<controls:MaloneButton Grid.Row="3" Grid.Column="2" HorizontalAlignment="Right"  Content="Reset" IconData="{StaticResource erase}" />
-			</Grid>
-
-			
-
-			<StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
-			</StackPanel>
-
-			<TabControl DockPanel.Dock="Top" Padding="0">
-
-				<TabControl.Resources>
-					<extensions:HideOnHistoryConverter x:Key="HideOnHistoryConverter" />
-					<extensions:ShowOnHistoryConverter x:Key="ShowOnHistoryConverter" />
-					<Style TargetType="{x:Type TabItem}">
-						<Setter Property="Template">
-							<Setter.Value>
-								<ControlTemplate TargetType="{x:Type TabItem}">
-									<ContentPresenter Name="HeaderContentPresenter">
-										<ContentPresenter.Content>
-											<Label Name="Header" Style="{StaticResource H2}" Content="{TemplateBinding Header}" Padding="9 17 13 7" />
-										</ContentPresenter.Content>
-									</ContentPresenter>
-									<ControlTemplate.Triggers>
-										<Trigger Property="IsSelected" Value="False">
-											<Setter TargetName="Header" Property="Foreground" Value="LightGray"></Setter>
-										</Trigger>
-										<Trigger SourceName="HeaderContentPresenter" Property="IsMouseOver" Value="True">
-											<Setter TargetName="Header" Property="Foreground" Value="{StaticResource HyperlinkHoverColorBrush}"></Setter>
-										</Trigger>
-									</ControlTemplate.Triggers>
-								</ControlTemplate>
-							</Setter.Value>
-						</Setter>
-					</Style>
-				</TabControl.Resources>
-
-				<TabItem Header="Body">
-
-					<!--TODO: Highlight based on accept header.-->
-					<ae:TextEditor Document="{Binding RequestBody}" VerticalScrollBarVisibility="Disabled"
-						SyntaxHighlighting="XML"
-						FontFamily="Consolas"
-						FontSize="10pt" ShowLineNumbers="True" IsReadOnly="False"/>
-
-				</TabItem>
-
-				<TabItem Header="Headers">
-					<DockPanel Margin="7 0 15 0" LastChildFill="False">
-						<TextBlock DockPanel.Dock="Top" FontSize="24" Padding="10" Foreground="OrangeRed">This isn't wired up yet.</TextBlock>
-						<Border DockPanel.Dock="Top" Padding="5" BorderThickness="0 0 0 2" BorderBrush="{StaticResource SeparatorColorBrush}">
-							<StackPanel Orientation="Horizontal">
-								<Label Width="200">Name</Label>
-								<Label Width="300" Margin="15 0 0 0">Value</Label>
-							</StackPanel>
-						</Border>
-						<ItemsControl DockPanel.Dock="Top" x:Name="Headers">
-							<ItemsControl.ItemTemplate>
-								<DataTemplate>
-									<Border Padding="0 10" BorderThickness="0 0 0 1" BorderBrush="{StaticResource SeparatorColorBrush}">
-										<StackPanel Orientation="Horizontal">
-											<TextBox Text="{Binding Name}" Width="200" Style="{StaticResource DefaultTextBox}" />
-											<TextBox Text="{Binding Value}" Width="300" Margin="15 0 0 0" Style="{StaticResource DefaultTextBox}" />
-											<controls:MaloneButton Content="Remove" IconData="{StaticResource circle_with_minus}" Margin="15 0 0 0" 
-												cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action RemoveFromHeaders($this)]" />
-										</StackPanel>
-									</Border>
-								</DataTemplate>
-							</ItemsControl.ItemTemplate>
-						</ItemsControl>
-
-						<controls:MaloneButton DockPanel.Dock="Top" HorizontalAlignment="Left" Margin="0 20 0 0" Content="Add" IconData="{StaticResource plus}" IconTop="-2" cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action AddHeader()]" />
-					</DockPanel>
-				</TabItem>
-
-				<TabItem Header="Authentication">
-
-					<DockPanel>
-
-						<Grid DockPanel.Dock="Top">
-							<Grid.RowDefinitions>
-								<RowDefinition Height="60" />
-								<RowDefinition Height="40" />
-							</Grid.RowDefinitions>
+					<controls:MaloneButton Grid.Row="3" Grid.Column="2" x:Name="Send" Content="Send" IconData="{StaticResource paper_plane}" IconTop="-2" HorizontalAlignment="Left" cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action AddHeader()]" />
+					<controls:MaloneButton Grid.Row="3" Grid.Column="2" HorizontalAlignment="Right"  Content="Reset" IconData="{StaticResource erase}" />
+				</Grid>
 
 
-							<Label Grid.Row="0" Content="Send request as" HorizontalAlignment="Left" FontFamily="Segoe UI" FontSize="14" Foreground="#FF9395A2"/>
-							<ComboBox Grid.Row="0" x:Name="Tokens" VerticalAlignment="Bottom" Margin="5,0,96,0" Padding="3" Height="30" >
-								<ComboBox.ItemTemplate>
+
+				<StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+				</StackPanel>
+
+				<TabControl DockPanel.Dock="Top" Padding="0">
+
+					<TabControl.Resources>
+						<extensions:HideOnHistoryConverter x:Key="HideOnHistoryConverter" />
+						<extensions:ShowOnHistoryConverter x:Key="ShowOnHistoryConverter" />
+						<Style TargetType="{x:Type TabItem}">
+							<Setter Property="Template">
+								<Setter.Value>
+									<ControlTemplate TargetType="{x:Type TabItem}">
+										<ContentPresenter Name="HeaderContentPresenter">
+											<ContentPresenter.Content>
+												<Label Name="Header" Style="{StaticResource H2}" Content="{TemplateBinding Header}" Padding="9 17 13 7" />
+											</ContentPresenter.Content>
+										</ContentPresenter>
+										<ControlTemplate.Triggers>
+											<Trigger Property="IsSelected" Value="False">
+												<Setter TargetName="Header" Property="Foreground" Value="LightGray"></Setter>
+											</Trigger>
+											<Trigger SourceName="HeaderContentPresenter" Property="IsMouseOver" Value="True">
+												<Setter TargetName="Header" Property="Foreground" Value="{StaticResource HyperlinkHoverColorBrush}"></Setter>
+											</Trigger>
+										</ControlTemplate.Triggers>
+									</ControlTemplate>
+								</Setter.Value>
+							</Setter>
+						</Style>
+					</TabControl.Resources>
+
+					<TabItem Header="Body">
+
+						<!--TODO: Highlight based on accept header.-->
+						<ae:TextEditor Document="{Binding RequestBody}" VerticalScrollBarVisibility="Disabled" SyntaxHighlighting="XML" FontFamily="Consolas" FontSize="10pt" ShowLineNumbers="True" IsReadOnly="False">
+							<i:Interaction.Behaviors>
+								<local:BubbleScrollEvent/>
+							</i:Interaction.Behaviors>
+						</ae:TextEditor>
+
+					</TabItem>
+
+					<TabItem Header="Headers">
+						<DockPanel Margin="7 0 15 0" LastChildFill="False">
+							<TextBlock DockPanel.Dock="Top" FontSize="24" Padding="10" Foreground="OrangeRed">This isn't wired up yet.</TextBlock>
+							<Border DockPanel.Dock="Top" Padding="5" BorderThickness="0 0 0 2" BorderBrush="{StaticResource SeparatorColorBrush}">
+								<StackPanel Orientation="Horizontal">
+									<Label Width="200">Name</Label>
+									<Label Width="300" Margin="15 0 0 0">Value</Label>
+								</StackPanel>
+							</Border>
+							<ItemsControl DockPanel.Dock="Top" x:Name="Headers">
+								<ItemsControl.ItemTemplate>
 									<DataTemplate>
-										<TextBlock Text="{Binding Name}" />
+										<Border Padding="0 10" BorderThickness="0 0 0 1" BorderBrush="{StaticResource SeparatorColorBrush}">
+											<StackPanel Orientation="Horizontal">
+												<TextBox Text="{Binding Name}" Width="200" Style="{StaticResource DefaultTextBox}" />
+												<TextBox Text="{Binding Value}" Width="300" Margin="15 0 0 0" Style="{StaticResource DefaultTextBox}" />
+												<controls:MaloneButton Content="Remove" IconData="{StaticResource circle_with_minus}" Margin="15 0 0 0" 
+												cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action RemoveFromHeaders($this)]" />
+											</StackPanel>
+										</Border>
 									</DataTemplate>
-								</ComboBox.ItemTemplate>
-							</ComboBox>
+								</ItemsControl.ItemTemplate>
+							</ItemsControl>
 
-							<controls:MaloneButton Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,0" Content="Add" IconData="{StaticResource plus}" IconTop="-2" cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action AddToken()]" />
+							<controls:MaloneButton DockPanel.Dock="Top" HorizontalAlignment="Left" Margin="0 20 0 0" Content="Add" IconData="{StaticResource plus}" IconTop="-2" cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action AddHeader()]" />
+						</DockPanel>
+					</TabItem>
 
-						</Grid>
+					<TabItem Header="Authentication">
+
+						<DockPanel>
+
+							<Grid DockPanel.Dock="Top">
+								<Grid.RowDefinitions>
+									<RowDefinition Height="60" />
+									<RowDefinition Height="40" />
+								</Grid.RowDefinitions>
+
+
+								<Label Grid.Row="0" Content="Send request as" HorizontalAlignment="Left" FontFamily="Segoe UI" FontSize="14" Foreground="#FF9395A2"/>
+								<ComboBox Grid.Row="0" x:Name="Tokens" VerticalAlignment="Bottom" Margin="5,0,96,0" Padding="3" Height="30" >
+									<ComboBox.ItemTemplate>
+										<DataTemplate>
+											<TextBlock Text="{Binding Name}" />
+										</DataTemplate>
+									</ComboBox.ItemTemplate>
+								</ComboBox>
+
+								<controls:MaloneButton Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,0" Content="Add" IconData="{StaticResource plus}" IconTop="-2" cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action AddToken()]" />
+
+							</Grid>
 
 							<ae:TextEditor Document="{Binding SelectedTokenJson, Mode=OneWay}" SyntaxHighlighting="JavaScript" FontFamily="Consolas" FontSize="10pt" IsReadOnly="True" ShowLineNumbers="True"  VerticalScrollBarVisibility="Disabled" />
 
-					</DockPanel>
-				</TabItem>
+						</DockPanel>
+					</TabItem>
 
-			</TabControl>
+				</TabControl>
 
-			<DockPanel LastChildFill="True">
+				<DockPanel LastChildFill="True">
 
-				<!--<Label DockPanel.Dock="Top" Style="{StaticResource H1Info}" HorizontalAlignment="Right" x:Name="SelectedHistory_AtLocalString" Content="Request Date">
+					<!--<Label DockPanel.Dock="Top" Style="{StaticResource H1Info}" HorizontalAlignment="Right" x:Name="SelectedHistory_AtLocalString" Content="Request Date">
 									<Label.ToolTip>
 										<Label Content="{Binding Path=.SelectedHistory.AtUtcString}"/>
 									</Label.ToolTip>
 								</Label>-->
 
-				<DockPanel DockPanel.Dock="Top" LastChildFill="True"  Margin="0,10,15,0">
-					<Label DockPanel.Dock="Left" Style="{StaticResource H1}" Content="Response" />
-					<Label DockPanel.Dock="Right" x:Name="SelectedHistory_ResponseTime" HorizontalAlignment="Right" VerticalAlignment="Bottom" Content="Time" Margin="0 0 0 2" FontFamily="Segoe UI" FontSize="14" Foreground="#FF9395A2"/>
-				</DockPanel>
+					<DockPanel DockPanel.Dock="Top" LastChildFill="True"  Margin="0,10,15,0">
+						<Label DockPanel.Dock="Left" Style="{StaticResource H1}" Content="Response" />
+						<Label DockPanel.Dock="Right" x:Name="SelectedHistory_ResponseTime" HorizontalAlignment="Right" VerticalAlignment="Bottom" Content="Time" Margin="0 0 0 2" FontFamily="Segoe UI" FontSize="14" Foreground="#FF9395A2"/>
+					</DockPanel>
 
-				<DockPanel Dock="Top" Height="40" Margin="7,0,15,0">
-					<ContentControl DockPanel.Dock="Left" x:Name="HttpStatusCode" VerticalAlignment="Bottom" HorizontalAlignment="Left" />
-					<Label DockPanel.Dock="Right" x:Name="SelectedHistory_Response_AtLocalString" Content="Response Date" HorizontalContentAlignment="Right" HorizontalAlignment="Right" FontFamily="Segoe UI" FontSize="14" Foreground="#FF9395A2">
-						<Label.ToolTip>
-							<Label Content="{Binding Path=.SelectedHistory.Response.AtUtcString}"/>
-						</Label.ToolTip>
-					</Label>
-				</DockPanel>
+					<DockPanel Dock="Top" Height="40" Margin="7,0,15,0">
+						<ContentControl DockPanel.Dock="Left" x:Name="HttpStatusCode" VerticalAlignment="Bottom" HorizontalAlignment="Left" />
+						<Label DockPanel.Dock="Right" x:Name="SelectedHistory_Response_AtLocalString" Content="Response Date" HorizontalContentAlignment="Right" HorizontalAlignment="Right" FontFamily="Segoe UI" FontSize="14" Foreground="#FF9395A2">
+							<Label.ToolTip>
+								<Label Content="{Binding Path=.SelectedHistory.Response.AtUtcString}"/>
+							</Label.ToolTip>
+						</Label>
+					</DockPanel>
 
-				<ae:TextEditor DockPanel.Dock="Top" VerticalScrollBarVisibility="Disabled" Document="{Binding ResponseBody}" SyntaxHighlighting="{Binding ResponseBodyHighlighting}" FontFamily="Consolas" FontSize="10pt" ShowLineNumbers="True" IsReadOnly="False"/>
+					<ae:TextEditor DockPanel.Dock="Top" VerticalScrollBarVisibility="Disabled" Document="{Binding ResponseBody}" SyntaxHighlighting="{Binding ResponseBodyHighlighting}" FontFamily="Consolas" FontSize="10pt" ShowLineNumbers="True" IsReadOnly="False">
+						<i:Interaction.Behaviors>
+							<local:BubbleScrollEvent/>
+						</i:Interaction.Behaviors>
+					</ae:TextEditor>
+
+				</DockPanel>
 
 			</DockPanel>
-
-		</DockPanel>
 
 		</ScrollViewer>
 
