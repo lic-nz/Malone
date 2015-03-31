@@ -180,7 +180,7 @@
 
 		<DockPanel Name="RequestResponseDockPanel" Grid.Column="2" LastChildFill="True" Margin="8 0 0 0">
 
-			<TabControl DockPanel.Dock="Top" Padding="0" SelectedIndex="3">
+			<TabControl DockPanel.Dock="Top" Padding="0">
 
 				<TabControl.Resources>
 					<extensions:HideOnHistoryConverter x:Key="HideOnHistoryConverter" />
@@ -284,7 +284,7 @@
 								</Label>
 							</DockPanel>
 
-							<ae:TextEditor DockPanel.Dock="Top" Document="{Binding ResponseBody}" SyntaxHighlighting="XML" FontFamily="Consolas" FontSize="10pt" ShowLineNumbers="True" IsReadOnly="True"/>
+							<ae:TextEditor DockPanel.Dock="Top" Document="{Binding ResponseBody}" SyntaxHighlighting="{Binding ResponseBodyHighlighting}" FontFamily="Consolas" FontSize="10pt" ShowLineNumbers="True" IsReadOnly="True"/>
 
 						</DockPanel>
 

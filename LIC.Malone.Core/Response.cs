@@ -8,6 +8,7 @@ namespace LIC.Malone.Core
 		public Guid Guid { get; set; }
 		public DateTimeOffset At { get; set; }
 		public HttpStatusCode HttpStatusCode { get; set; }
+		public string ContentType { get; set; }
 
 		public string Content { get; set; }
 

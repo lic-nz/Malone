@@ -9,12 +9,14 @@ using System.Xml.Linq;
 using Caliburn.Micro;
 using DotNetOpenAuth.OAuth2;
 using ICSharpCode.AvalonEdit.Document;
+using ICSharpCode.AvalonEdit.Highlighting;
 using LIC.Malone.Client.Desktop.Messages;
 using LIC.Malone.Core;
 using LIC.Malone.Core.Authentication;
 using LIC.Malone.Core.Authentication.OAuth;
 using Newtonsoft.Json;
 using RestSharp;
+using RestSharp.Extensions;
 
 namespace LIC.Malone.Client.Desktop.ViewModels
 {
@@ -180,11 +182,40 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 		private TextDocument _responseBody = new TextDocument();
 		public TextDocument ResponseBody
 		{
-			get { return _responseBody; }
+			get
+			{
+				if (!string.IsNullOrWhiteSpace(_responseBody.Text))
+				{
+					if (GetContentType(ResponseContentType) == ContentType.Xml)
+						_responseBody.Text = XDocument.Parse(_responseBody.Text).ToString();
+				}
+
+				return _responseBody;
+			}
 			set
 			{
 				_responseBody = value;
 				NotifyOfPropertyChange(() => ResponseBody);
+			}
+		}
+
+		private string _responseContentType;
+		public string ResponseContentType
+		{
+			get { return _responseContentType; }
+			set
+			{
+				_responseContentType = value;
+				NotifyOfPropertyChange(() => ResponseContentType);
+				NotifyOfPropertyChange(() => ResponseBodyHighlighting);
+			}
+		}
+
+		public IHighlightingDefinition ResponseBodyHighlighting
+		{
+			get
+			{
+				return GetHighlightingForContentType(ResponseContentType);
 			}
 		}
 
@@ -299,7 +330,8 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 				Guid = Guid.NewGuid(),
 				At = result.ReceivedAt,
 				HttpStatusCode = response.StatusCode,
-				Content = response.Content
+				Content = response.Content,
+				ContentType = response.ContentType
 			};
 
 			HttpStatusCode = new HttpStatusCodeViewModel(response.StatusCode);
@@ -310,6 +342,54 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			ResponseBody = new TextDocument(response.Content);
 			
 			AddToHistory(request);
+		}
+
+		private enum ContentType
+		{
+			Unknown,
+			Xml,
+			Json
+		}
+
+		private ContentType GetContentType(string contentType)
+		{
+			if (contentType == null)
+				return ContentType.Unknown;
+
+			var parts = contentType
+				   .Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries)
+				   .Select(s => s.Trim())
+				   .ToList();
+
+			if (parts.Contains("application/xml") || parts.Contains("text/xml"))
+				return ContentType.Xml;
+
+			if (parts.Contains("text/json"))
+				return ContentType.Json;
+
+			return ContentType.Unknown;
+		}
+
+		private IHighlightingDefinition GetHighlightingForContentType(string contentType)
+		{
+			return GetHighlightingForContentType(GetContentType(contentType));
+		}
+
+		private IHighlightingDefinition GetHighlightingForContentType(ContentType contentType)
+		{
+			var manager = HighlightingManager.Instance;
+			
+			switch (contentType)
+			{
+				case ContentType.Xml:
+					return manager.GetDefinition("XML"); 
+
+				case ContentType.Json:
+					return manager.GetDefinition("JavaScript"); 
+
+				default:
+					return null; 
+			}
 		}
 
 		private void AddToHistory(Request request)
@@ -361,9 +441,11 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 			Url = SelectedHistory.Url;
 			SelectedMethod = SelectedHistory.Method;
-			HttpStatusCode = new HttpStatusCodeViewModel(SelectedHistory.Response.HttpStatusCode);
-			ResponseBody = new TextDocument(SelectedHistory.Response.Content);
 			RequestBody = new TextDocument(SelectedHistory.Body);
+
+			HttpStatusCode = new HttpStatusCodeViewModel(SelectedHistory.Response.HttpStatusCode);
+			ResponseContentType = SelectedHistory.Response.ContentType;
+			ResponseBody = new TextDocument(SelectedHistory.Response.Content);
 
 			SelectedToken = Tokens.First();
 			var historicalTokens = Tokens.Where(t => t.NamedAuthorizationStateOrigin == NamedAuthorizationStateOrigin.History).ToList();
@@ -407,7 +489,6 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 		{
 			var settings = new Dictionary<string, object>
 			{
-				{"Title", string.Empty},
 				{"WindowStartupLocation", WindowStartupLocation.CenterOwner}
 			};
 
