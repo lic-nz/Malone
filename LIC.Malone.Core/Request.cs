@@ -82,7 +82,7 @@ namespace LIC.Malone.Core
 			request.AddHeader("Accept", "text/xml");
 			request.AddHeader("Accept-Encoding", "gzip,deflate");
 
-			if (NamedAuthorizationState != null)
+			if (NamedAuthorizationState != null && NamedAuthorizationState.AuthorizationState != null && NamedAuthorizationState.AuthorizationState.AccessToken != null)
 				request.AddHeader("Authorization", string.Concat("Bearer ", NamedAuthorizationState.AuthorizationState.AccessToken));
 
 			return request;
