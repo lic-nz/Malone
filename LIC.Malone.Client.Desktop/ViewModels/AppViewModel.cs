@@ -253,9 +253,6 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			SelectedToken = Tokens.First();
 
 			LoadConfig();
-
-			Headers.Add(new Header("ho", "boy"));
-			Headers.Add(new Header("yeah", "nah"));
 		}
 
 		private void LoadConfig()
@@ -473,6 +470,17 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			var request = (Request) e;
 			History.Remove(request);
 			SaveHistory();
+		}
+
+		public void RemoveFromHeaders(object e)
+		{
+			var header = (Header) e;
+			Headers.Remove(header);
+		}
+
+		public void AddHeader()
+		{
+			Headers.Add(new Header());
 		}
 
 		public void ClearHistory(object e)
