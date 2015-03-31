@@ -97,6 +97,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			Method.POST,
 			Method.PUT
 		};
+
 		public IEnumerable<Method> Methods
 		{
 			get { return _methods; }
@@ -115,6 +116,34 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			{
 				_selectedMethod = value;
 				NotifyOfPropertyChange(() => SelectedMethod);
+			}
+		}
+
+		private IEnumerable<string> _accepts = new List<string>
+		{
+			"application/xml",
+			"text/json",
+			"This isn't wired up yet"
+		};
+		
+		public IEnumerable<string> Accepts
+		{
+			get { return _accepts; }
+			set
+			{
+				_accepts = value;
+				NotifyOfPropertyChange(() => Accepts);
+			}
+		}
+
+		private string _selectedAccept;
+		public string SelectedAccept
+		{
+			get { return _selectedAccept; }
+			set
+			{
+				_selectedAccept = value;
+				NotifyOfPropertyChange(() => SelectedAccept);
 			}
 		}
 
@@ -249,6 +278,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 			_addTokenViewModel = new AddTokenViewModel(_bus, _windowManager);
 
+			SelectedAccept = Accepts.First();
 			Tokens = new BindableCollection<NamedAuthorizationState>(new List<NamedAuthorizationState> { new NamedAuthorizationState("<Anonymous>", null)});
 			SelectedToken = Tokens.First();
 

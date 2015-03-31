@@ -181,11 +181,7 @@
 
 		<DockPanel Grid.Column="2" LastChildFill="True" >
 
-			<DockPanel DockPanel.Dock="Top" Margin="10 0">
-				<Label DockPanel.Dock="Left" Style="{StaticResource H1}" Content="Request" />
-				<!--<controls:MaloneButton DockPanel.Dock="Left" x:Name="Send" VerticalAlignment="Bottom" Margin="4 0 0 6"  Content="Send" IconData="{StaticResource paper_plane}" IconTop="-2" cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action AddHeader()]" />-->
-				<controls:MaloneButton DockPanel.Dock="Right" HorizontalAlignment="Right" Margin="0 0 0 6" VerticalAlignment="Bottom" Content="Reset" IconData="{StaticResource erase}" />
-			</DockPanel>
+			<Label DockPanel.Dock="Top" Margin="4 0 0 0" Style="{StaticResource H1}" Content="Request" />
 
 			<!--TODO: Implement tooltips.-->
 			<!--<Button Grid.Row="1" Grid.Column="1" x:Name="Send2" ToolTipService.ShowOnDisabled="True" HorizontalAlignment="Left" VerticalAlignment="Top" BorderThickness="1" Margin="90,9,0,0">
@@ -223,36 +219,39 @@
 
 			<Grid DockPanel.Dock="Top" Margin="10 0">
 				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="72"/>
-					<ColumnDefinition Width="10"/>
-					<ColumnDefinition Width="80"/>
+					<ColumnDefinition Width="70"/>
 					<ColumnDefinition Width="10"/>
 					<ColumnDefinition Width="*"/>
 					<ColumnDefinition Width="10"/>
-					<ColumnDefinition Width="80"/>
+					<ColumnDefinition Width="130"/>
 				</Grid.ColumnDefinitions>
 				<Grid.RowDefinitions>
 					<RowDefinition />
-					<RowDefinition/>
+					<RowDefinition />
+					<RowDefinition Height="10"/>
+					<RowDefinition />
 				</Grid.RowDefinitions>
-				
+
 				<Grid.Resources>
 					<Style x:Key="TopLabel" TargetType="Label" BasedOn="{StaticResource DefaultLabel}">
 						<Setter Property="Margin" Value="-5 0 0 0"/>
 					</Style>
 				</Grid.Resources>
 
-				<Label Grid.Row="0" Grid.Column="2" Style="{StaticResource TopLabel}">Method</Label>
-				<Label Grid.Row="0" Grid.Column="4" Style="{StaticResource TopLabel}">URL</Label>
-				<Label Grid.Row="0" Grid.Column="6" Style="{StaticResource TopLabel}">Accept</Label>
+				<Label Grid.Row="0" Grid.Column="0" Style="{StaticResource TopLabel}">Method</Label>
+				<Label Grid.Row="0" Grid.Column="2" Style="{StaticResource TopLabel}">URL</Label>
+				<Label Grid.Row="0" Grid.Column="4" Style="{StaticResource TopLabel}">Accept</Label>
 
-				<controls:MaloneButton Grid.Row="1" Grid.Column="0" x:Name="Send" Content="Send" IconData="{StaticResource paper_plane}" IconTop="-2" HorizontalAlignment="Left" cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action AddHeader()]" />
-				<ComboBox Grid.Row="1" Grid.Column="2" x:Name="Methods" Width="80" Style="{StaticResource DefaultComboBox}" />
-				<TextBox  Grid.Row="1" Grid.Column="4" x:Name="Url" metro:TextBoxHelper.Watermark="Enter URL or choose from history" Style="{StaticResource DefaultTextBox}"/>
-				<ComboBox Grid.Row="1" Grid.Column="6" x:Name="Methods3" Width="80"  />
+				<ComboBox Grid.Row="1" Grid.Column="0" x:Name="Methods" Width="70" Style="{StaticResource DefaultComboBox}" />
+				<TextBox  Grid.Row="1" Grid.Column="2" x:Name="Url" metro:TextBoxHelper.Watermark="Enter URL or choose from history" Style="{StaticResource DefaultTextBox}"/>
+				<ComboBox Grid.Row="1" Grid.Column="4" x:Name="Accepts" Width="130" Style="{StaticResource DefaultComboBox}" />
+
+				<controls:MaloneButton Grid.Row="3" Grid.Column="2" x:Name="Send" Content="Send" IconData="{StaticResource paper_plane}" IconTop="-2" HorizontalAlignment="Left" cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action AddHeader()]" />
+				<controls:MaloneButton Grid.Row="3" Grid.Column="2" HorizontalAlignment="Right"  Content="Reset" IconData="{StaticResource erase}" />
 			</Grid>
+
 			
-			
+
 			<StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
 			</StackPanel>
 
@@ -267,7 +266,7 @@
 								<ControlTemplate TargetType="{x:Type TabItem}">
 									<ContentPresenter Name="HeaderContentPresenter">
 										<ContentPresenter.Content>
-											<Label Name="Header" Style="{StaticResource H2}" Content="{TemplateBinding Header}" Padding="5 7 13 7" />
+											<Label Name="Header" Style="{StaticResource H2}" Content="{TemplateBinding Header}" Padding="9 17 13 7" />
 										</ContentPresenter.Content>
 									</ContentPresenter>
 									<ControlTemplate.Triggers>
