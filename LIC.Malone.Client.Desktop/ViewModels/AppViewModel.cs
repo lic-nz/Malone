@@ -15,6 +15,7 @@ using LIC.Malone.Core;
 using LIC.Malone.Core.Authentication;
 using LIC.Malone.Core.Authentication.OAuth;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using RestSharp;
 using RestSharp.Extensions;
 
@@ -121,9 +122,8 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 		private IEnumerable<string> _accepts = new List<string>
 		{
-			"application/xml",
-			"text/json",
-			"This isn't wired up yet"
+			"text/xml",
+			"application/json"
 		};
 		
 		public IEnumerable<string> Accepts
@@ -224,19 +224,53 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 		{
 			get
 			{
-				if (!string.IsNullOrWhiteSpace(_responseBody.Text))
-				{
-					if (GetContentType(ResponseContentType) == ContentType.Xml)
-						_responseBody.Text = XDocument.Parse(_responseBody.Text).ToString();
-				}
-
+				_responseBody.Text = Prettify(_responseBody.Text, ResponseContentType);
 				return _responseBody;
 			}
 			set
 			{
+				_responseBody.Text = Prettify(_responseBody.Text, ResponseContentType);
 				_responseBody = value;
 				NotifyOfPropertyChange(() => ResponseBody);
 			}
+		}
+
+		private string Prettify(string content, string contentType)
+		{
+			content = content ?? string.Empty;
+
+			if (string.IsNullOrWhiteSpace(content))
+				return content;
+
+			var type = GetContentType(contentType);
+
+			if (type == ContentType.Xml)
+			{
+				try
+				{
+					return XDocument.Parse(content).ToString();
+				}
+				catch
+				{
+					return content;
+				}
+			}
+
+			if (type == ContentType.Json)
+			{
+				try
+				{
+					var json = JObject.Parse(content);
+					return json.ToString(Formatting.Indented);
+				}
+				catch
+				{
+					return content;
+				}
+			}
+
+			// For ContentType.Unknown, the parameter "content" is returned as-is for the out parameter "indentedContent".
+			return content;
 		}
 
 		private string _responseContentType;
@@ -347,7 +381,11 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 			var request = new Request(Url, SelectedMethod)
 			{
-				Body = RequestBody.Text
+				Body = RequestBody.Text,
+				Headers = new List<Header>
+				{
+					new Header("Accept", SelectedAccept)
+				}
 			};
 
 			if (SelectedToken != null)
@@ -405,7 +443,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			if (parts.Contains("application/xml") || parts.Contains("text/xml"))
 				return ContentType.Xml;
 
-			if (parts.Contains("text/json"))
+			if (parts.Contains("application/json"))
 				return ContentType.Json;
 
 			return ContentType.Unknown;
@@ -571,6 +609,28 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 		{
 			Tokens.Add(message.NamedAuthorizationState);
 			SelectedToken = Tokens.Last();
+		}
+
+		public void WindowResized(ActionExecutionContext context)
+		{
+			// TODO: bug where you maximize, reduce history column to min-width, then un-maximize: the request column will be off the window.
+			//var window = context.Source as Window;
+
+			//if (window == null)
+			//	return;
+
+			//var grid = window.FindName("MainGrid") as Grid;
+			//var historyColumn = window.FindName("HistoryColumn") as ColumnDefinition;
+			////var requestColumn = window.FindName("HistoryColumn") as ColumnDefinition;
+
+			//if (grid == null || historyColumn == null)
+			//	return;
+
+			//var ratio = grid.ActualWidth/historyColumn.ActualWidth;
+			//var width = new GridLength(window.ActualWidth/3);
+
+			//if (ratio > 3)
+			//	historyColumn.Width = width;
 		}
 	}
 }

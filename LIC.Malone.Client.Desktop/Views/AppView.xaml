@@ -19,13 +19,14 @@
 	GlowBrush="{DynamicResource AccentColorBrush}"
 	WindowStartupLocation="CenterScreen"
 	MinWidth="1000" MinHeight="730"
-	Width="1000" Height="730">
+	Width="1000" Height="730"
+	cal:Message.Attach="[Event SizeChanged] = [Action WindowResized($executionContext)]">
 
 	<Grid Name="MainGrid">
 		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="1*" MinWidth="280" />
+			<ColumnDefinition Name="HistoryColumn" Width="1*" MinWidth="280" />
 			<ColumnDefinition Width="Auto" />
-			<ColumnDefinition Width="3*" MinWidth="500" />
+			<ColumnDefinition Width="2*" MinWidth="500" />
 		</Grid.ColumnDefinitions>
 
 		<TabControl Grid.Column="0" Margin="-2 -2 0 0" Padding="0">

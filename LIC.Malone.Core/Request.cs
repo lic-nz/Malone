@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using LIC.Malone.Core.Authentication.OAuth;
 using Newtonsoft.Json;
 using RestSharp;
@@ -14,6 +15,7 @@ namespace LIC.Malone.Core
 		public string Url { get; set; }
 		public Method Method { get; set; }
 		public string Body { get; set; }
+		public List<Header> Headers { get; set; }
 		public Response Response { get; set; }
 
 		public NamedAuthorizationState NamedAuthorizationState { get; set; }
@@ -62,11 +64,12 @@ namespace LIC.Malone.Core
 			
 		}
 
-		public Request(string url, Method method)
+		public Request(string url, Method method, List<Header> headers = null)
 		{
 			Guid = Guid.NewGuid();
 			Url = url;
 			Method = method;
+			Headers = headers ?? new List<Header>();
 		}
 
 		public MaloneRestRequest ToMaloneRestRequest()
@@ -79,7 +82,9 @@ namespace LIC.Malone.Core
 
 			request.AddBody(Body);
 
-			request.AddHeader("Accept", "text/xml");
+			foreach (var header in Headers)
+				request.AddHeader(header.Name, header.Value);
+
 			request.AddHeader("Accept-Encoding", "gzip,deflate");
 
 			if (NamedAuthorizationState != null && NamedAuthorizationState.AuthorizationState != null && NamedAuthorizationState.AuthorizationState.AccessToken != null)
