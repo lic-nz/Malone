@@ -16,7 +16,7 @@
 	TitleCaps="False"
 	Icon="Malone.ico"
 	ShowIconOnTitleBar="False"
-	GlowBrush="{DynamicResource AccentColorBrush}"
+	GlowBrush="{StaticResource WindowColorBrush}"
 	WindowStartupLocation="CenterScreen"
 	MinWidth="1000" MinHeight="730"
 	Width="1000" Height="730"

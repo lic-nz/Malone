@@ -6,7 +6,10 @@
 	<Application.Resources>
 		<ResourceDictionary>
 
-			<Color x:Key="H1Color">#60B2E0</Color>
+			<Color x:Key="WindowColor">#41B1E1</Color>
+			<SolidColorBrush x:Key="WindowColorBrush" Color="{StaticResource WindowColor}"></SolidColorBrush>
+			
+			<Color x:Key="H1Color">#222222</Color>
 			<SolidColorBrush x:Key="H1Brush" Color="{StaticResource H1Color}"></SolidColorBrush>
 
 			<Color x:Key="HyperlinkColor">#337ab7</Color>
@@ -48,13 +51,13 @@
 
 			<Style x:Key="H1" TargetType="Label">
 				<Setter Property="FontFamily" Value="Segoe UI Light" />
-				<Setter Property="FontSize" Value="24" />
+				<Setter Property="FontSize" Value="30" />
 				<Setter Property="Foreground" Value="{StaticResource H1Brush}" />
 			</Style>
 
 			<Style x:Key="H2" TargetType="Label">
 				<Setter Property="FontFamily" Value="Segoe UI Light" />
-				<Setter Property="FontSize" Value="18" />
+				<Setter Property="FontSize" Value="24" />
 				<Setter Property="Foreground" Value="{StaticResource H1Brush}" />
 			</Style>
 

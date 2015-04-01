@@ -13,7 +13,7 @@
 	ShowTitleBar="False"
 	ResizeMode="NoResize"
 	Width="900" Height="850"
-	GlowBrush="{DynamicResource AccentColorBrush}">
+	GlowBrush="{StaticResource WindowColorBrush}">
 
 	<Window.Resources>
 		<Style x:Key="FormLabel" TargetType="Label">
