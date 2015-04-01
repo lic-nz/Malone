@@ -251,8 +251,8 @@
 					<ComboBox Grid.Row="1" Grid.Column="4" x:Name="Accepts" Width="130" Style="{StaticResource DefaultComboBox}" />
 
 					<StackPanel Grid.Row="3" Grid.Column="2" Orientation="Horizontal">
-						<controls:MaloneButton x:Name="Send" Content="Send" IconData="{StaticResource paper_plane}" IconTop="-2" HorizontalAlignment="Left" />
-						<controls:MaloneButton x:Name="Reset" HorizontalAlignment="Left" Content="Reset" IconData="{StaticResource erase}" Margin="15 0 0 0" />
+						<controls:IconButton x:Name="Send" Content="Send" IconData="{StaticResource paper_plane}" IconMargin="{StaticResource paper_plane_icon_margin}" HorizontalAlignment="Left" />
+						<controls:IconLink x:Name="Reset" HorizontalAlignment="Left" Content="Reset" IconData="{StaticResource erase}" Margin="15 0 0 0" />
 
 					</StackPanel>
 				</Grid>
@@ -319,7 +319,7 @@
 													</DataTrigger>
 												</Style.Triggers>
 											</Style>
-											<Style TargetType="controls:MaloneButton">
+											<Style TargetType="controls:IconButton">
 												<Style.Triggers>
 													<DataTrigger Binding="{Binding Name}" Value="Accept">
 														<Setter Property="Visibility" Value="Hidden"/>
@@ -336,7 +336,7 @@
 												</Grid.ColumnDefinitions>
 												<TextBox Grid.Column="0" Text="{Binding Name}" />
 												<TextBox Grid.Column="1" Text="{Binding Value}" />
-												<controls:MaloneButton Grid.Column="2" Content="Remove" IconData="{StaticResource circle_with_minus}" HorizontalAlignment="Right"
+												<controls:IconButton Grid.Column="2" Content="Remove" IconData="{StaticResource circle_with_minus}" HorizontalAlignment="Right"
 													cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action RemoveFromHeaders($this)]" />
 											</Grid>
 										</Border>
@@ -344,7 +344,7 @@
 								</ItemsControl.ItemTemplate>
 							</ItemsControl>
 
-							<controls:MaloneButton DockPanel.Dock="Top" HorizontalAlignment="Left" Margin="0 20 0 0" Content="Add" IconData="{StaticResource plus}" IconTop="-2" cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action AddHeader()]" />
+							<controls:IconButton DockPanel.Dock="Top" HorizontalAlignment="Left" Margin="0 20 0 0" Content="Add" IconData="{StaticResource plus}" IconMargin="{StaticResource plus_icon_margin}" cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action AddHeader()]" />
 						</DockPanel>
 					</TabItem>
 
@@ -368,7 +368,7 @@
 									</ComboBox.ItemTemplate>
 								</ComboBox>
 
-								<controls:MaloneButton Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,0" Content="Add" IconData="{StaticResource plus}" IconTop="-2" cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action AddToken()]" />
+								<controls:IconButton Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,0" Content="Add" IconData="{StaticResource plus}" IconMargin="{StaticResource plus_icon_margin}"  cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action AddToken()]" />
 
 							</Grid>
 

@@ -67,7 +67,7 @@
 			<TextBox x:Name="Password" Style="{StaticResource FormTextBox}" />
 		</StackPanel>
 
-		<controls:MaloneButton x:Name="Authenticate" Style="{StaticResource FormButton}" Content="Authenticate" IconData="{StaticResource fingerprint}" />
+		<controls:IconButton x:Name="Authenticate" Style="{StaticResource FormButton}" Content="Authenticate" IconData="{StaticResource fingerprint}" IconMargin="{StaticResource fingerprint_icon_margin}" />
 
 		<StackPanel Orientation="Horizontal">
 			<Label Content="Response" Style="{StaticResource FormLabel}"/>
@@ -82,7 +82,7 @@
 			<TextBox x:Name="TokenName" Style="{StaticResource FormTextBox}" />
 		</StackPanel>
 
-		<controls:MaloneButton x:Name="SaveToken" Style="{StaticResource FormButton}" Content="Save token" IconData="{StaticResource save}" />
+		<controls:IconButton x:Name="SaveToken" Style="{StaticResource FormButton}" Content="Save token" IconData="{StaticResource save}" IconMargin="{StaticResource save_icon_margin}" />
 
 	</StackPanel>
 

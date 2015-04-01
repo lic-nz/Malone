@@ -1,4 +1,4 @@
-﻿<Button x:Class="LIC.Malone.Client.Desktop.Controls.MaloneButton"
+﻿<Button x:Class="LIC.Malone.Client.Desktop.Controls.IconLink"
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -8,16 +8,16 @@
 
 	<Button.Template>
 		<ControlTemplate>
-			<Border Name="Border" BorderBrush="#2e6da4" BorderThickness="2" Background="#337ab7" Height="30" Padding="5 0 10 0">
+			<Border BorderThickness="0" Height="30" Padding="5 0 10 0">
 				<StackPanel Orientation="Horizontal" VerticalAlignment="Center">
 					<Canvas>
-						<Path VerticalAlignment="Center" Fill="White"
+						<Path Name="Icon" VerticalAlignment="Center" Fill="#4D89C1"
 							Data="{Binding IconData, RelativeSource={RelativeSource TemplatedParent}}"
 							Canvas.Top="{Binding IconTop, RelativeSource={RelativeSource TemplatedParent}}" />
 					</Canvas>
-					<TextBlock Padding="5 0 0 0" VerticalAlignment="Center" Foreground="White" FontFamily="Calibri" FontSize="14"
+					<TextBlock Name="Text" Padding="8 0 0 0" VerticalAlignment="Center" Foreground="#4D89C1"
 						Text="{Binding Content, RelativeSource={RelativeSource TemplatedParent}}"
-						Margin="{Binding TextMargin, RelativeSource={RelativeSource TemplatedParent}}" />
+						Margin="{Binding TextMargin, RelativeSource={RelativeSource TemplatedParent}}"/>
 				</StackPanel>
 			</Border>
 
@@ -30,13 +30,10 @@
 			</ControlTemplate.Resources>
 
 			<ControlTemplate.Triggers>
-				<Trigger Property="IsEnabled" Value="False">
-					<Setter TargetName="Border" Property="Background" Value="{StaticResource RecededColorBrush}"/>
-					<Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource RecededColorBrush}"/>
-					<Setter Property="ToolTip" Value="Waiting on a valid URL"/>
-				</Trigger>
 				<Trigger Property="IsMouseOver" Value="True">
-					<Setter TargetName="Border" Property="Background" Value="#2e6da4"/>
+					<Setter TargetName="Icon" Property="Fill" Value="#2061A1"/>
+					<Setter TargetName="Text" Property="Foreground" Value="#2061A1"/>
+					<Setter Property="Cursor" Value="Hand"></Setter>
 				</Trigger>
 			</ControlTemplate.Triggers>
 

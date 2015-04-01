@@ -125,14 +125,17 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="BubbleScrollEvent.cs" />
+    <Compile Include="Controls\IconLink.xaml.cs">
+      <DependentUpon>IconLink.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Extensions\ShowOnHistoryConverter.cs" />
     <Compile Include="Extensions\HideOnHistoryConverter.cs" />
     <Compile Include="Extensions\HistoryWidthConverter.cs" />
     <Compile Include="HyperlinkButton.cs" />
     <Compile Include="Colors.cs" />
     <Compile Include="Extensions\HttpStatusCodeExtensions.cs" />
-    <Compile Include="Controls\MaloneButton.xaml.cs">
-      <DependentUpon>MaloneButton.xaml</DependentUpon>
+    <Compile Include="Controls\IconButton.xaml.cs">
+      <DependentUpon>IconButton.xaml</DependentUpon>
     </Compile>
     <Compile Include="MaloneListBox.cs" />
     <Compile Include="Messages\ConfigurationLoaded.cs" />
@@ -148,7 +151,11 @@
     <Compile Include="DialogManager.cs" />
     <Compile Include="Extensions\HttpStatusCodeConverters.cs" />
     <Compile Include="ViewModels\HttpStatusCodeViewModel.cs" />
-    <Page Include="Controls\MaloneButton.xaml">
+    <Page Include="Controls\IconLink.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\IconButton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
