@@ -166,11 +166,11 @@
 			<DockPanel LastChildFill="True">
 
 				<DockPanel DockPanel.Dock="Top">
-					<Label Margin="4 0 0 0" Style="{StaticResource H1}" Content="Request" />
+					<Label Style="{StaticResource H1}" Content="Request" />
 					<controls:IconLink x:Name="Reset" HorizontalAlignment="Right" Content="" IconData="{StaticResource IconErase}" IconMargin="{StaticResource IconEraseMargin}" ToolTip="Clear this request" />
 				</DockPanel>
 
-				<Grid DockPanel.Dock="Top" Margin="10 0">
+				<Grid DockPanel.Dock="Top" Margin="15 0">
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="70"/>
 						<ColumnDefinition Width="10"/>
@@ -199,15 +199,10 @@
 					<TextBox  Grid.Row="1" Grid.Column="2" x:Name="Url" metro:TextBoxHelper.Watermark="Enter URL or choose from history" Style="{StaticResource DefaultTextBox}"/>
 					<ComboBox Grid.Row="1" Grid.Column="4" x:Name="Accepts" Width="130" Style="{StaticResource DefaultComboBox}" />
 
-					<StackPanel Grid.Row="3" Grid.Column="2" Orientation="Horizontal">
-						<controls:IconButton x:Name="Send" Content="Send" IconData="{StaticResource IconPaperPlane}" IconMargin="{StaticResource IconPaperPlaneMargin}" HorizontalAlignment="Left" />
-					</StackPanel>
+					<controls:IconButton Grid.Row="3" Grid.Column="2" x:Name="Send" Content="Send" IconData="{StaticResource IconPaperPlane}" IconMargin="{StaticResource IconPaperPlaneMargin}" HorizontalAlignment="Left" />
 				</Grid>
 
-				<StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
-				</StackPanel>
-
-				<TabControl DockPanel.Dock="Top" Padding="0">
+				<TabControl DockPanel.Dock="Top" Margin="4 5 0 0">
 
 					<TabControl.Resources>
 						<Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource TabHeader}"></Style>
@@ -216,7 +211,7 @@
 					<TabItem Header="Body">
 
 						<!--TODO: Highlight based on accept header.-->
-						<ae:TextEditor Document="{Binding RequestBody}" VerticalScrollBarVisibility="Disabled" SyntaxHighlighting="XML" FontFamily="Consolas" FontSize="10pt" ShowLineNumbers="True" IsReadOnly="False">
+						<ae:TextEditor Document="{Binding RequestBody}" VerticalScrollBarVisibility="Disabled" SyntaxHighlighting="XML" IsReadOnly="False">
 							<i:Interaction.Behaviors>
 								<local:BubbleScrollEvent/>
 							</i:Interaction.Behaviors>
@@ -334,7 +329,7 @@
 						</Label>
 					</DockPanel>
 
-					<ae:TextEditor DockPanel.Dock="Top" VerticalScrollBarVisibility="Disabled" Document="{Binding ResponseBody}" SyntaxHighlighting="{Binding ResponseBodyHighlighting}" FontFamily="Consolas" FontSize="10pt" ShowLineNumbers="True" IsReadOnly="False">
+					<ae:TextEditor DockPanel.Dock="Top" Margin="15 0 0 0" VerticalScrollBarVisibility="Disabled" Document="{Binding ResponseBody}" SyntaxHighlighting="{Binding ResponseBodyHighlighting}">
 						<i:Interaction.Behaviors>
 							<local:BubbleScrollEvent/>
 						</i:Interaction.Behaviors>
