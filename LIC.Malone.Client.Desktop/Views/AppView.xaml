@@ -264,8 +264,8 @@
 						<DockPanel Margin="7 0 15 0" LastChildFill="False">
 							<Border DockPanel.Dock="Top">
 								<StackPanel Orientation="Horizontal">
-									<Label Width="200">Name</Label>
-									<Label>Value</Label>
+									<Label Style="{StaticResource DefaultLabel}" Width="200">Name</Label>
+									<Label Style="{StaticResource DefaultLabel}">Value</Label>
 								</StackPanel>
 							</Border>
 							<ItemsControl DockPanel.Dock="Top" x:Name="Headers">
