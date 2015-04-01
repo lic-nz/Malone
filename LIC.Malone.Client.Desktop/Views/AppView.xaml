@@ -42,7 +42,7 @@
 					<Grid>
 
 						<StackPanel Orientation="Vertical" Visibility="{Binding History, Converter={StaticResource HideOnHistoryConverter}}" HorizontalAlignment="Center" VerticalAlignment="Center">
-							<ContentControl Content="{StaticResource appbar_smiley_frown}" />
+							<ContentControl Content="{StaticResource IconSmileyFrown}" />
 							<TextBlock Style="{StaticResource EmptyListMessage}">Nothing to see here. Try sending a request!</TextBlock>
 						</StackPanel>
 
@@ -126,7 +126,7 @@
 				<TabItem.Content>
 					<Grid>
 						<StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
-							<ContentControl Content="{StaticResource appbar_smiley_frown}" />
+							<ContentControl Content="{StaticResource IconSmileyFrown}" />
 							<TextBlock Style="{StaticResource EmptyListMessage}">Collections are super-nifty. Why not create one?</TextBlock>
 						</StackPanel>
 
@@ -167,7 +167,7 @@
 
 				<DockPanel DockPanel.Dock="Top">
 					<Label Margin="4 0 0 0" Style="{StaticResource H1}" Content="Request" />
-					<controls:IconLink x:Name="Reset" HorizontalAlignment="Right" Content="Clear" IconData="{StaticResource IconErase}" IconMargin="{StaticResource IconEraseMargin}" />
+					<controls:IconLink x:Name="Reset" HorizontalAlignment="Right" Content="" IconData="{StaticResource IconErase}" IconMargin="{StaticResource IconEraseMargin}" />
 				</DockPanel>
 
 
