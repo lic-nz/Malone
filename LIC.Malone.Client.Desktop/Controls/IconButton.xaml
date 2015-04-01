@@ -29,8 +29,6 @@
 			<ControlTemplate.Triggers>
 				<Trigger Property="IsEnabled" Value="False">
 					<Setter TargetName="Border" Property="Background" Value="{StaticResource RecededColorBrush}"/>
-					<Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource RecededColorBrush}"/>
-					<Setter Property="ToolTip" Value="Waiting on a valid URL"/>
 				</Trigger>
 				<Trigger Property="IsMouseOver" Value="True">
 					<Setter TargetName="Border" Property="Background" Value="#2061A1"/>

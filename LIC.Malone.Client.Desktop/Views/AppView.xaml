@@ -81,7 +81,7 @@
 										</ControlTemplate.Triggers>
 									</ControlTemplate>
 								</Button.Template>
-								<Path HorizontalAlignment="Center" VerticalAlignment="Center" Margin="-2 -2 0 0" Fill="White" Data="M10,1.6c-4.639,0-8.4,3.761-8.4,8.4s3.761,8.4,8.4,8.4s8.4-3.761,8.4-8.4S14.639,1.6,10,1.6z M14.789,13.061 L13.06,14.79L10,11.729l-3.061,3.06L5.21,13.06L8.272,10L5.211,6.939L6.94,5.211L10,8.271l3.061-3.061l1.729,1.729L11.728,10 L14.789,13.061z"/>
+								<Path HorizontalAlignment="Center" VerticalAlignment="Center" Margin="-2 -2 0 0" Fill="White" Data="{StaticResource circle_with_cross}"/>
 							</Button>
 						</Canvas>
 
@@ -185,7 +185,11 @@
 
 			<DockPanel LastChildFill="True">
 
-				<Label DockPanel.Dock="Top" Margin="4 0 0 0" Style="{StaticResource H1}" Content="Request" />
+				<DockPanel DockPanel.Dock="Top">
+					<Label Margin="4 0 0 0" Style="{StaticResource H1}" Content="Request" />
+					<controls:IconLink x:Name="Reset" HorizontalAlignment="Right" Content="Reset" IconData="{StaticResource erase}" IconMargin="{StaticResource erase_icon_margin}" />
+				</DockPanel>
+
 
 				<!--TODO: Implement tooltips.-->
 				<!--<Button Grid.Row="1" Grid.Column="1" x:Name="Send2" ToolTipService.ShowOnDisabled="True" HorizontalAlignment="Left" VerticalAlignment="Top" BorderThickness="1" Margin="90,9,0,0">
@@ -252,7 +256,6 @@
 
 					<StackPanel Grid.Row="3" Grid.Column="2" Orientation="Horizontal">
 						<controls:IconButton x:Name="Send" Content="Send" IconData="{StaticResource paper_plane}" IconMargin="{StaticResource paper_plane_icon_margin}" HorizontalAlignment="Left" />
-						<controls:IconLink x:Name="Reset" HorizontalAlignment="Left" Content="Reset" IconData="{StaticResource erase}" Margin="15 0 0 0" />
 
 					</StackPanel>
 				</Grid>
@@ -319,7 +322,7 @@
 													</DataTrigger>
 												</Style.Triggers>
 											</Style>
-											<Style TargetType="controls:IconButton">
+											<Style TargetType="controls:IconLink">
 												<Style.Triggers>
 													<DataTrigger Binding="{Binding Name}" Value="Accept">
 														<Setter Property="Visibility" Value="Hidden"/>
@@ -332,19 +335,20 @@
 												<Grid.ColumnDefinitions>
 													<ColumnDefinition Width="200"/>
 													<ColumnDefinition Width="*"/>
-													<ColumnDefinition Width="100"/>
+													<ColumnDefinition Width="40"/>
 												</Grid.ColumnDefinitions>
 												<TextBox Grid.Column="0" Text="{Binding Name}" />
 												<TextBox Grid.Column="1" Text="{Binding Value}" />
-												<controls:IconButton Grid.Column="2" Content="Remove" IconData="{StaticResource circle_with_minus}" HorizontalAlignment="Right"
-													cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action RemoveFromHeaders($this)]" />
+
+												<controls:IconLink Grid.Column="2" HorizontalAlignment="Right" Content="" IconData="{StaticResource circle_with_cross}" IconMargin="{StaticResource CircleWithCrossIconMargin}" cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action RemoveFromHeaders($this)]" />
 											</Grid>
 										</Border>
 									</DataTemplate>
 								</ItemsControl.ItemTemplate>
 							</ItemsControl>
 
-							<controls:IconButton DockPanel.Dock="Top" HorizontalAlignment="Left" Margin="0 20 0 0" Content="Add" IconData="{StaticResource plus}" IconMargin="{StaticResource plus_icon_margin}" cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action AddHeader()]" />
+							<controls:IconLink DockPanel.Dock="Top" HorizontalAlignment="Left" Content="Add" IconData="{StaticResource plus}" IconMargin="{StaticResource plus_icon_margin}" cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action AddHeader()]" />
+
 						</DockPanel>
 					</TabItem>
 
@@ -368,7 +372,7 @@
 									</ComboBox.ItemTemplate>
 								</ComboBox>
 
-								<controls:IconButton Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,0" Content="Add" IconData="{StaticResource plus}" IconMargin="{StaticResource plus_icon_margin}"  cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action AddToken()]" />
+								<controls:IconLink Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Bottom" Content="Add" IconData="{StaticResource plus}" IconMargin="{StaticResource plus_icon_margin}" cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action AddToken()]" />
 
 							</Grid>
 

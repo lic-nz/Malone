@@ -67,7 +67,7 @@
 			<TextBox x:Name="Password" Style="{StaticResource FormTextBox}" />
 		</StackPanel>
 
-		<controls:IconButton x:Name="Authenticate" Style="{StaticResource FormButton}" Content="Authenticate" IconData="{StaticResource fingerprint}" IconMargin="{StaticResource fingerprint_icon_margin}" />
+		<controls:IconLink x:Name="Authenticate" Style="{StaticResource FormButton}" Content="Authenticate" IconData="{StaticResource fingerprint}" IconMargin="{StaticResource fingerprint_icon_margin}" />
 
 		<StackPanel Orientation="Horizontal">
 			<Label Content="Response" Style="{StaticResource FormLabel}"/>

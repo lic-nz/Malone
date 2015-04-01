@@ -13,13 +13,6 @@ namespace LIC.Malone.Client.Desktop.Controls
 			set { SetValue(IconDataProperty, value); }
 		}
 
-		public static readonly DependencyProperty IconTopProperty = DependencyProperty.Register("IconTop", typeof(double), typeof(IconButton), new PropertyMetadata((double)-1));
-		public double IconTop
-		{
-			get { return (double)GetValue(IconTopProperty); }
-			set { SetValue(IconTopProperty, value); }
-		}
-
 		public static readonly DependencyProperty IconMarginProperty = DependencyProperty.Register("IconMargin", typeof(Thickness), typeof(IconButton), new PropertyMetadata());
 		public Thickness IconMargin
 		{

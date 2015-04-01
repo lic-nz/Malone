@@ -8,16 +8,14 @@
 
 	<Button.Template>
 		<ControlTemplate>
-			<Border BorderThickness="0" Height="30" Padding="5 0 10 0">
-				<StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-					<Canvas>
-						<Path Name="Icon" VerticalAlignment="Center" Fill="#4D89C1"
-							Data="{Binding IconData, RelativeSource={RelativeSource TemplatedParent}}"
-							Canvas.Top="{Binding IconTop, RelativeSource={RelativeSource TemplatedParent}}" />
-					</Canvas>
-					<TextBlock Name="Text" Padding="8 0 0 0" VerticalAlignment="Center" Foreground="#4D89C1"
-						Text="{Binding Content, RelativeSource={RelativeSource TemplatedParent}}"
-						Margin="{Binding TextMargin, RelativeSource={RelativeSource TemplatedParent}}"/>
+
+			<Border BorderThickness="0" Background="Transparent" Height="30" Padding="10 0">
+				<StackPanel Orientation="Horizontal" VerticalAlignment="Stretch">
+					<Path Name="Icon" VerticalAlignment="Center" Fill="#4D89C1"
+						Data="{Binding IconData, RelativeSource={RelativeSource TemplatedParent}}"
+						Margin="{Binding IconMargin, RelativeSource={RelativeSource TemplatedParent}}" />
+					<TextBlock Name="Text" Margin="6 -1 0 0" VerticalAlignment="Center" Foreground="#4D89C1"
+						Text="{Binding Content, RelativeSource={RelativeSource TemplatedParent}}" />
 				</StackPanel>
 			</Border>
 
@@ -30,10 +28,13 @@
 			</ControlTemplate.Resources>
 
 			<ControlTemplate.Triggers>
+				<Trigger Property="IsEnabled" Value="False">
+					<Setter TargetName="Icon" Property="Fill" Value="{StaticResource RecededColorBrush}"/>
+					<Setter TargetName="Text" Property="Foreground" Value="{StaticResource RecededColorBrush}"/>
+				</Trigger>
 				<Trigger Property="IsMouseOver" Value="True">
 					<Setter TargetName="Icon" Property="Fill" Value="#2061A1"/>
 					<Setter TargetName="Text" Property="Foreground" Value="#2061A1"/>
-					<Setter Property="Cursor" Value="Hand"></Setter>
 				</Trigger>
 			</ControlTemplate.Triggers>
 
