@@ -12,11 +12,11 @@
 			<Color x:Key="H1Color">#222222</Color>
 			<SolidColorBrush x:Key="H1Brush" Color="{StaticResource H1Color}"></SolidColorBrush>
 
-			<Color x:Key="HyperlinkColor">#337ab7</Color>
-			<SolidColorBrush x:Key="HyperlinkColorBrush" Color="{StaticResource HyperlinkColor}"></SolidColorBrush>
+			<Color x:Key="LinkColor">#4D89C1</Color>
+			<SolidColorBrush x:Key="LinkColorBrush" Color="{StaticResource LinkColor}"></SolidColorBrush>
 
-			<Color x:Key="HyperlinkHoverColor">#286090</Color>
-			<SolidColorBrush x:Key="HyperlinkHoverColorBrush" Color="{StaticResource HyperlinkHoverColor}"></SolidColorBrush>
+			<Color x:Key="LinkHoverColor">#2061A1</Color>
+			<SolidColorBrush x:Key="LinkHoverColorBrush" Color="{StaticResource LinkHoverColor}"></SolidColorBrush>
 
 			<Color x:Key="RecededColor">#FF9395A2</Color>
 			<SolidColorBrush x:Key="RecededColorBrush" Color="{StaticResource RecededColor}"></SolidColorBrush>
@@ -137,7 +137,7 @@
 
 							<ControlTemplate.Triggers>
 								<Trigger Property="IsMouseOver" Value="True">
-									<Setter Property="Foreground" Value="{StaticResource HyperlinkHoverColorBrush}"/>
+									<Setter Property="Foreground" Value="{StaticResource LinkHoverColorBrush}"/>
 									<Setter TargetName="Path" Property="Opacity" Value="1"/>
 									<Setter Property="Cursor" Value="Hand"/>
 								</Trigger>
@@ -180,7 +180,7 @@
 
 							<ControlTemplate.Triggers>
 								<Trigger Property="IsMouseOver" Value="True">
-									<Setter Property="Foreground" Value="{StaticResource HyperlinkHoverColorBrush}"/>
+									<Setter Property="Foreground" Value="{StaticResource LinkHoverColorBrush}"/>
 									<Setter TargetName="Path" Property="Opacity" Value="1"/>
 									<Setter Property="Cursor" Value="Hand"/>
 								</Trigger>

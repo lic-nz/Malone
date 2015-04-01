@@ -40,7 +40,7 @@
 							<ControlTemplate TargetType="{x:Type TabItem}">
 								<ContentPresenter Name="HeaderContentPresenter">
 									<ContentPresenter.Content>
-										<Label Name="Header" Style="{StaticResource H1}" Content="{TemplateBinding Header}" Padding="13 7 7 7" />
+										<Label Name="Header" Style="{StaticResource H2}" Content="{TemplateBinding Header}" Padding="13 7 7 7" />
 									</ContentPresenter.Content>
 								</ContentPresenter>
 								<ControlTemplate.Triggers>
@@ -48,7 +48,7 @@
 										<Setter TargetName="Header" Property="Foreground" Value="LightGray"></Setter>
 									</Trigger>
 									<Trigger SourceName="HeaderContentPresenter" Property="IsMouseOver" Value="True">
-										<Setter TargetName="Header" Property="Foreground" Value="{StaticResource HyperlinkHoverColorBrush}"></Setter>
+										<Setter TargetName="Header" Property="Foreground" Value="{StaticResource LinkHoverColorBrush}"></Setter>
 									</Trigger>
 								</ControlTemplate.Triggers>
 							</ControlTemplate>
@@ -282,7 +282,7 @@
 												<Setter TargetName="Header" Property="Foreground" Value="LightGray"></Setter>
 											</Trigger>
 											<Trigger SourceName="HeaderContentPresenter" Property="IsMouseOver" Value="True">
-												<Setter TargetName="Header" Property="Foreground" Value="{StaticResource HyperlinkHoverColorBrush}"></Setter>
+												<Setter TargetName="Header" Property="Foreground" Value="{StaticResource LinkHoverColorBrush}"></Setter>
 											</Trigger>
 										</ControlTemplate.Triggers>
 									</ControlTemplate>
