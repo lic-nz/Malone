@@ -4,10 +4,8 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
 using System.Xml.Linq;
 using Caliburn.Micro;
-using DotNetOpenAuth.OAuth2;
 using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Highlighting;
 using LIC.Malone.Client.Desktop.Messages;
@@ -17,7 +15,6 @@ using LIC.Malone.Core.Authentication.OAuth;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RestSharp;
-using RestSharp.Extensions;
 
 namespace LIC.Malone.Client.Desktop.ViewModels
 {
@@ -120,7 +117,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			}
 		}
 
-		private IEnumerable<string> _accepts = new List<string>
+		private static IEnumerable<string> _accepts = new List<string>
 		{
 			"text/xml",
 			"application/json"
@@ -143,11 +140,16 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			set
 			{
 				_selectedAccept = value;
+
+				var header = Headers.Single(h => h.Name == "Accept");
+				header.Value = _selectedAccept;
+
 				NotifyOfPropertyChange(() => SelectedAccept);
+				NotifyOfPropertyChange(() => Headers);
 			}
 		}
 
-		private IObservableCollection<Header> _headers = new BindableCollection<Header>();
+		private IObservableCollection<Header> _headers = new BindableCollection<Header>(new List<Header> { new Header("Accept", _accepts.First()) });
 		public IObservableCollection<Header> Headers
 		{
 			get { return _headers; }
@@ -233,44 +235,6 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 				_responseBody = value;
 				NotifyOfPropertyChange(() => ResponseBody);
 			}
-		}
-
-		private string Prettify(string content, string contentType)
-		{
-			content = content ?? string.Empty;
-
-			if (string.IsNullOrWhiteSpace(content))
-				return content;
-
-			var type = GetContentType(contentType);
-
-			if (type == ContentType.Xml)
-			{
-				try
-				{
-					return XDocument.Parse(content).ToString();
-				}
-				catch
-				{
-					return content;
-				}
-			}
-
-			if (type == ContentType.Json)
-			{
-				try
-				{
-					var json = JObject.Parse(content);
-					return json.ToString(Formatting.Indented);
-				}
-				catch
-				{
-					return content;
-				}
-			}
-
-			// For ContentType.Unknown, the parameter "content" is returned as-is for the out parameter "indentedContent".
-			return content;
 		}
 
 		private string _responseContentType;
@@ -382,10 +346,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			var request = new Request(Url, SelectedMethod)
 			{
 				Body = RequestBody.Text,
-				Headers = new List<Header>
-				{
-					new Header("Accept", SelectedAccept)
-				}
+				Headers = Headers.ToList()
 			};
 
 			if (SelectedToken != null)
@@ -609,6 +570,44 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 		{
 			Tokens.Add(message.NamedAuthorizationState);
 			SelectedToken = Tokens.Last();
+		}
+
+		private string Prettify(string content, string contentType)
+		{
+			content = content ?? string.Empty;
+
+			if (string.IsNullOrWhiteSpace(content))
+				return content;
+
+			var type = GetContentType(contentType);
+
+			if (type == ContentType.Xml)
+			{
+				try
+				{
+					return XDocument.Parse(content).ToString();
+				}
+				catch
+				{
+					return content;
+				}
+			}
+
+			if (type == ContentType.Json)
+			{
+				try
+				{
+					var json = JObject.Parse(content);
+					return json.ToString(Formatting.Indented);
+				}
+				catch
+				{
+					return content;
+				}
+			}
+
+			// For ContentType.Unknown, the parameter "content" is returned as-is for the out parameter "indentedContent".
+			return content;
 		}
 
 		public void WindowResized(ActionExecutionContext context)

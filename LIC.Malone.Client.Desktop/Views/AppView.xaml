@@ -298,7 +298,6 @@
 
 					<TabItem Header="Headers">
 						<DockPanel Margin="7 0 15 0" LastChildFill="False">
-							<TextBlock DockPanel.Dock="Top" FontSize="24" Padding="10" Foreground="OrangeRed">This isn't wired up yet.</TextBlock>
 							<Border DockPanel.Dock="Top" Padding="5" BorderThickness="0 0 0 2" BorderBrush="{StaticResource SeparatorColorBrush}">
 								<StackPanel Orientation="Horizontal">
 									<Label Width="200">Name</Label>
@@ -308,12 +307,28 @@
 							<ItemsControl DockPanel.Dock="Top" x:Name="Headers">
 								<ItemsControl.ItemTemplate>
 									<DataTemplate>
+										<DataTemplate.Resources>
+											<Style TargetType="TextBox" BasedOn="{StaticResource DefaultTextBox}">
+												<Style.Triggers>
+													<DataTrigger Binding="{Binding Name}" Value="Accept">
+														<Setter Property="IsEnabled" Value="False"/>
+													</DataTrigger>
+												</Style.Triggers>
+											</Style>
+											<Style TargetType="controls:MaloneButton">
+												<Style.Triggers>
+													<DataTrigger Binding="{Binding Name}" Value="Accept">
+														<Setter Property="Visibility" Value="Hidden"/>
+													</DataTrigger>
+												</Style.Triggers>
+											</Style>
+										</DataTemplate.Resources>
 										<Border Padding="0 10" BorderThickness="0 0 0 1" BorderBrush="{StaticResource SeparatorColorBrush}">
 											<StackPanel Orientation="Horizontal">
-												<TextBox Text="{Binding Name}" Width="200" Style="{StaticResource DefaultTextBox}" />
-												<TextBox Text="{Binding Value}" Width="300" Margin="15 0 0 0" Style="{StaticResource DefaultTextBox}" />
+												<TextBox Text="{Binding Name}" Width="200" />
+												<TextBox Text="{Binding Value}" Width="300" Margin="15 0 0 0" />
 												<controls:MaloneButton Content="Remove" IconData="{StaticResource circle_with_minus}" Margin="15 0 0 0" 
-												cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action RemoveFromHeaders($this)]" />
+													cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action RemoveFromHeaders($this)]" />
 											</StackPanel>
 										</Border>
 									</DataTemplate>
@@ -348,7 +363,11 @@
 
 							</Grid>
 
-							<ae:TextEditor Document="{Binding SelectedTokenJson, Mode=OneWay}" SyntaxHighlighting="JavaScript" FontFamily="Consolas" FontSize="10pt" IsReadOnly="True" ShowLineNumbers="True"  VerticalScrollBarVisibility="Disabled" />
+							<ae:TextEditor Document="{Binding SelectedTokenJson, Mode=OneWay}" SyntaxHighlighting="JavaScript" FontFamily="Consolas" FontSize="10pt" IsReadOnly="True" ShowLineNumbers="True"  VerticalScrollBarVisibility="Disabled">
+								<i:Interaction.Behaviors>
+									<local:BubbleScrollEvent/>
+								</i:Interaction.Behaviors>
+							</ae:TextEditor>
 
 						</DockPanel>
 					</TabItem>
