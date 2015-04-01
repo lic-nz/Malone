@@ -61,7 +61,7 @@
 										</ControlTemplate.Triggers>
 									</ControlTemplate>
 								</Button.Template>
-								<Path HorizontalAlignment="Center" VerticalAlignment="Center" Margin="-2 -2 0 0" Fill="White" Data="{StaticResource circle_with_cross}"/>
+								<Path HorizontalAlignment="Center" VerticalAlignment="Center" Margin="-2 -2 0 0" Fill="White" Data="{StaticResource IconCircleWithCross}"/>
 							</Button>
 						</Canvas>
 
@@ -167,7 +167,7 @@
 
 				<DockPanel DockPanel.Dock="Top">
 					<Label Margin="4 0 0 0" Style="{StaticResource H1}" Content="Request" />
-					<controls:IconLink x:Name="Reset" HorizontalAlignment="Right" Content="Reset" IconData="{StaticResource erase}" IconMargin="{StaticResource erase_icon_margin}" />
+					<controls:IconLink x:Name="Reset" HorizontalAlignment="Right" Content="Clear" IconData="{StaticResource IconErase}" IconMargin="{StaticResource IconEraseMargin}" />
 				</DockPanel>
 
 
@@ -235,7 +235,7 @@
 					<ComboBox Grid.Row="1" Grid.Column="4" x:Name="Accepts" Width="130" Style="{StaticResource DefaultComboBox}" />
 
 					<StackPanel Grid.Row="3" Grid.Column="2" Orientation="Horizontal">
-						<controls:IconButton x:Name="Send" Content="Send" IconData="{StaticResource paper_plane}" IconMargin="{StaticResource paper_plane_icon_margin}" HorizontalAlignment="Left" />
+						<controls:IconButton x:Name="Send" Content="Send" IconData="{StaticResource IconPaperPlane}" IconMargin="{StaticResource IconPaperPlaneMargin}" HorizontalAlignment="Left" />
 
 					</StackPanel>
 				</Grid>
@@ -298,14 +298,14 @@
 												<TextBox Grid.Column="0" Text="{Binding Name}" />
 												<TextBox Grid.Column="1" Text="{Binding Value}" />
 
-												<controls:IconLink Grid.Column="2" HorizontalAlignment="Right" Content="" IconData="{StaticResource circle_with_cross}" IconMargin="{StaticResource CircleWithCrossIconMargin}" cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action RemoveFromHeaders($this)]" />
+												<controls:IconLink Grid.Column="2" HorizontalAlignment="Right" Content="" IconData="{StaticResource IconCircleWithCross}" IconMargin="{StaticResource IconCircleWithCrossMargin}" cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action RemoveFromHeaders($this)]" />
 											</Grid>
 										</Border>
 									</DataTemplate>
 								</ItemsControl.ItemTemplate>
 							</ItemsControl>
 
-							<controls:IconLink DockPanel.Dock="Top" HorizontalAlignment="Left" Content="Add" IconData="{StaticResource plus}" IconMargin="{StaticResource plus_icon_margin}" cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action AddHeader()]" />
+							<controls:IconLink DockPanel.Dock="Top" HorizontalAlignment="Left" Content="Add" IconData="{StaticResource IconPlus}" IconMargin="{StaticResource IconPlusMargin}" cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action AddHeader()]" />
 
 						</DockPanel>
 					</TabItem>
@@ -330,7 +330,7 @@
 									</ComboBox.ItemTemplate>
 								</ComboBox>
 
-								<controls:IconLink Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Bottom" Content="Add" IconData="{StaticResource plus}" IconMargin="{StaticResource plus_icon_margin}" cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action AddToken()]" />
+								<controls:IconLink Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Bottom" Content="Add" IconData="{StaticResource IconPlus}" IconMargin="{StaticResource IconPlusMargin}" cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action AddToken()]" />
 
 							</Grid>
 

@@ -86,7 +86,7 @@
 									SnapsToDevicePixels="True"
 									VerticalAlignment="Center"
 									Fill="White" 
-									Data="{StaticResource circle_with_minus}" />
+									Data="{StaticResource IconCircleWithMinus}" />
 							</Border>
 							<ControlTemplate.Triggers>
 								<Trigger Property="IsMouseOver" Value="True">
