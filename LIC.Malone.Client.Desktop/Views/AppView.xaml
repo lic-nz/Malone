@@ -34,27 +34,7 @@
 			<TabControl.Resources>
 				<extensions:HideOnHistoryConverter x:Key="HideOnHistoryConverter" />
 				<extensions:ShowOnHistoryConverter x:Key="ShowOnHistoryConverter" />
-				<Style TargetType="{x:Type TabItem}">
-					<Setter Property="Template">
-						<Setter.Value>
-							<ControlTemplate TargetType="{x:Type TabItem}">
-								<ContentPresenter Name="HeaderContentPresenter">
-									<ContentPresenter.Content>
-										<Label Name="Header" Style="{StaticResource H2}" Content="{TemplateBinding Header}" Padding="13 7 7 7" />
-									</ContentPresenter.Content>
-								</ContentPresenter>
-								<ControlTemplate.Triggers>
-									<Trigger Property="IsSelected" Value="False">
-										<Setter TargetName="Header" Property="Foreground" Value="LightGray"></Setter>
-									</Trigger>
-									<Trigger SourceName="HeaderContentPresenter" Property="IsMouseOver" Value="True">
-										<Setter TargetName="Header" Property="Foreground" Value="{StaticResource LinkHoverColorBrush}"></Setter>
-									</Trigger>
-								</ControlTemplate.Triggers>
-							</ControlTemplate>
-						</Setter.Value>
-					</Setter>
-				</Style>
+				<Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource TabHeader}"></Style>
 			</TabControl.Resources>
 
 			<TabItem Header="History">
@@ -266,29 +246,7 @@
 				<TabControl DockPanel.Dock="Top" Padding="0">
 
 					<TabControl.Resources>
-						<extensions:HideOnHistoryConverter x:Key="HideOnHistoryConverter" />
-						<extensions:ShowOnHistoryConverter x:Key="ShowOnHistoryConverter" />
-						<Style TargetType="{x:Type TabItem}">
-							<Setter Property="Template">
-								<Setter.Value>
-									<ControlTemplate TargetType="{x:Type TabItem}">
-										<ContentPresenter Name="HeaderContentPresenter">
-											<ContentPresenter.Content>
-												<Label Name="Header" Style="{StaticResource H2}" Content="{TemplateBinding Header}" Padding="9 17 13 7" />
-											</ContentPresenter.Content>
-										</ContentPresenter>
-										<ControlTemplate.Triggers>
-											<Trigger Property="IsSelected" Value="False">
-												<Setter TargetName="Header" Property="Foreground" Value="LightGray"></Setter>
-											</Trigger>
-											<Trigger SourceName="HeaderContentPresenter" Property="IsMouseOver" Value="True">
-												<Setter TargetName="Header" Property="Foreground" Value="{StaticResource LinkHoverColorBrush}"></Setter>
-											</Trigger>
-										</ControlTemplate.Triggers>
-									</ControlTemplate>
-								</Setter.Value>
-							</Setter>
-						</Style>
+						<Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource TabHeader}"></Style>
 					</TabControl.Resources>
 
 					<TabItem Header="Body">

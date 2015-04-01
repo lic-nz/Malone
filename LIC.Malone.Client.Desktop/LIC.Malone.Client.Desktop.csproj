@@ -131,7 +131,6 @@
     <Compile Include="Extensions\ShowOnHistoryConverter.cs" />
     <Compile Include="Extensions\HideOnHistoryConverter.cs" />
     <Compile Include="Extensions\HistoryWidthConverter.cs" />
-    <Compile Include="HyperlinkButton.cs" />
     <Compile Include="Colors.cs" />
     <Compile Include="Extensions\HttpStatusCodeExtensions.cs" />
     <Compile Include="Controls\IconButton.xaml.cs">
