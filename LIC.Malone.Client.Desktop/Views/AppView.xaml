@@ -250,8 +250,11 @@
 					<TextBox  Grid.Row="1" Grid.Column="2" x:Name="Url" metro:TextBoxHelper.Watermark="Enter URL or choose from history" Style="{StaticResource DefaultTextBox}"/>
 					<ComboBox Grid.Row="1" Grid.Column="4" x:Name="Accepts" Width="130" Style="{StaticResource DefaultComboBox}" />
 
-					<controls:MaloneButton Grid.Row="3" Grid.Column="2" x:Name="Send" Content="Send" IconData="{StaticResource paper_plane}" IconTop="-2" HorizontalAlignment="Left" />
-					<controls:MaloneButton Grid.Row="3" Grid.Column="2" x:Name="Reset" HorizontalAlignment="Right" Content="Reset" IconData="{StaticResource erase}" />
+					<StackPanel Grid.Row="3" Grid.Column="2" Orientation="Horizontal">
+						<controls:MaloneButton x:Name="Send" Content="Send" IconData="{StaticResource paper_plane}" IconTop="-2" HorizontalAlignment="Left" />
+						<controls:MaloneButton x:Name="Reset" HorizontalAlignment="Left" Content="Reset" IconData="{StaticResource erase}" Margin="15 0 0 0" />
+
+					</StackPanel>
 				</Grid>
 
 				<StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
@@ -298,10 +301,10 @@
 
 					<TabItem Header="Headers">
 						<DockPanel Margin="7 0 15 0" LastChildFill="False">
-							<Border DockPanel.Dock="Top" Padding="5" BorderThickness="0 0 0 2" BorderBrush="{StaticResource SeparatorColorBrush}">
+							<Border DockPanel.Dock="Top">
 								<StackPanel Orientation="Horizontal">
 									<Label Width="200">Name</Label>
-									<Label Width="300" Margin="15 0 0 0">Value</Label>
+									<Label>Value</Label>
 								</StackPanel>
 							</Border>
 							<ItemsControl DockPanel.Dock="Top" x:Name="Headers">
@@ -309,6 +312,7 @@
 									<DataTemplate>
 										<DataTemplate.Resources>
 											<Style TargetType="TextBox" BasedOn="{StaticResource DefaultTextBox}">
+												<Setter Property="Margin" Value="0 0 10 0"/>
 												<Style.Triggers>
 													<DataTrigger Binding="{Binding Name}" Value="Accept">
 														<Setter Property="IsEnabled" Value="False"/>
@@ -323,13 +327,18 @@
 												</Style.Triggers>
 											</Style>
 										</DataTemplate.Resources>
-										<Border Padding="0 10" BorderThickness="0 0 0 1" BorderBrush="{StaticResource SeparatorColorBrush}">
-											<StackPanel Orientation="Horizontal">
-												<TextBox Text="{Binding Name}" Width="200" />
-												<TextBox Text="{Binding Value}" Width="300" Margin="15 0 0 0" />
-												<controls:MaloneButton Content="Remove" IconData="{StaticResource circle_with_minus}" Margin="15 0 0 0" 
+										<Border Padding="5">
+											<Grid>
+												<Grid.ColumnDefinitions>
+													<ColumnDefinition Width="200"/>
+													<ColumnDefinition Width="*"/>
+													<ColumnDefinition Width="100"/>
+												</Grid.ColumnDefinitions>
+												<TextBox Grid.Column="0" Text="{Binding Name}" />
+												<TextBox Grid.Column="1" Text="{Binding Value}" />
+												<controls:MaloneButton Grid.Column="2" Content="Remove" IconData="{StaticResource circle_with_minus}" HorizontalAlignment="Right"
 													cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action RemoveFromHeaders($this)]" />
-											</StackPanel>
+											</Grid>
 										</Border>
 									</DataTemplate>
 								</ItemsControl.ItemTemplate>
