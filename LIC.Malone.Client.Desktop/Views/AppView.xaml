@@ -345,6 +345,8 @@
 
 				</TabControl>
 
+				<Border DockPanel.Dock="Top" BorderBrush="#dddddd" BorderThickness="0 0 0 1" Margin="15 30 -20 10" />
+
 				<DockPanel LastChildFill="True">
 
 					<!--<Label DockPanel.Dock="Top" Style="{StaticResource H1Info}" HorizontalAlignment="Right" x:Name="SelectedHistory_AtLocalString" Content="Request Date">
@@ -354,6 +356,7 @@
 								</Label>-->
 
 					<DockPanel DockPanel.Dock="Top" LastChildFill="True"  Margin="0,10,15,0">
+
 						<Label DockPanel.Dock="Left" Style="{StaticResource H1}" Content="Response" />
 						<Label DockPanel.Dock="Right" x:Name="SelectedHistory_ResponseTime" HorizontalAlignment="Right" VerticalAlignment="Bottom" Content="Time" Margin="0 0 0 2" FontFamily="Segoe UI" FontSize="14" Foreground="#FF9395A2"/>
 					</DockPanel>
