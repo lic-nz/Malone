@@ -141,11 +141,13 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			{
 				_selectedAccept = value;
 
-				var header = Headers.Single(h => h.Name == "Accept");
+				// Must be a better way to do this.
+				var headers = new BindableCollection<Header>(Headers);
+				var header = headers.Single(h => h.Name == "Accept");
 				header.Value = _selectedAccept;
+				Headers = headers;
 
 				NotifyOfPropertyChange(() => SelectedAccept);
-				NotifyOfPropertyChange(() => Headers);
 			}
 		}
 
