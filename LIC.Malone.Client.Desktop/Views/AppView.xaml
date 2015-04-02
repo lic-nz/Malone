@@ -315,13 +315,12 @@
 								</Label>-->
 
 					<DockPanel DockPanel.Dock="Top" LastChildFill="True"  Margin="0,10,15,0">
-
 						<Label DockPanel.Dock="Left" Style="{StaticResource H1}" Content="Response" />
 						<Label DockPanel.Dock="Right" x:Name="SelectedHistory_ResponseTime" HorizontalAlignment="Right" VerticalAlignment="Bottom" Content="Time" Margin="0 0 0 2" FontFamily="Segoe UI" FontSize="14" Foreground="#FF9395A2"/>
 					</DockPanel>
 
 					<DockPanel Dock="Top" Height="40" Margin="7,0,15,0">
-						<ContentControl DockPanel.Dock="Left" x:Name="HttpStatusCode" VerticalAlignment="Bottom" HorizontalAlignment="Left" />
+						<controls:HttpStatus DockPanel.Dock="Left" HttpStatusCode="{Binding HttpStatusCode}"/>
 						<Label DockPanel.Dock="Right" x:Name="SelectedHistory_Response_AtLocalString" Content="Response Date" HorizontalContentAlignment="Right" HorizontalAlignment="Right" FontFamily="Segoe UI" FontSize="14" Foreground="#FF9395A2">
 							<Label.ToolTip>
 								<Label Content="{Binding Path=.SelectedHistory.Response.AtUtcString}"/>

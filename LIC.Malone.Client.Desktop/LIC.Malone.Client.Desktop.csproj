@@ -125,6 +125,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="BubbleScrollEvent.cs" />
+    <Compile Include="Controls\HttpStatus.xaml.cs">
+      <DependentUpon>HttpStatus.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\IconLink.xaml.cs">
       <DependentUpon>IconLink.xaml</DependentUpon>
     </Compile>
@@ -149,7 +152,10 @@
     <Compile Include="AppBootstrapper.cs" />
     <Compile Include="DialogManager.cs" />
     <Compile Include="Extensions\HttpStatusCodeConverters.cs" />
-    <Compile Include="ViewModels\HttpStatusCodeViewModel.cs" />
+    <Page Include="Controls\HttpStatus.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Controls\IconLink.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -171,10 +177,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\AppView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\HttpStatusCodeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

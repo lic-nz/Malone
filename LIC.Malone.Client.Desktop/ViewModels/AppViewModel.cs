@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Windows;
 using System.Xml.Linq;
 using Caliburn.Micro;
@@ -201,8 +202,8 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			}
 		}
 
-		private HttpStatusCodeViewModel _httpStatusCode;
-		public HttpStatusCodeViewModel HttpStatusCode
+		private HttpStatusCode? _httpStatusCode;
+		public HttpStatusCode? HttpStatusCode
 		{
 			get { return _httpStatusCode; }
 			set
@@ -376,7 +377,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 				ContentType = response.ContentType
 			};
 
-			HttpStatusCode = new HttpStatusCodeViewModel(response.StatusCode);
+			HttpStatusCode = response.StatusCode;
 
 			// Possibly detect response and format, e.g.:
 			// XDocument.Parse(response.Content).ToString();
@@ -485,7 +486,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			SelectedMethod = SelectedHistory.Method;
 			RequestBody = new TextDocument(SelectedHistory.Body);
 
-			HttpStatusCode = new HttpStatusCodeViewModel(SelectedHistory.Response.HttpStatusCode);
+			HttpStatusCode = SelectedHistory.Response.HttpStatusCode;
 			ResponseContentType = SelectedHistory.Response.ContentType;
 			ResponseBody = new TextDocument(SelectedHistory.Response.Content);
 
