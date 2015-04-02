@@ -304,11 +304,31 @@
 
 				</TabControl>
 
-				<Border DockPanel.Dock="Top" BorderBrush="#dddddd" BorderThickness="0 0 0 1" Margin="15 30 -20 10" />
+				<Line DockPanel.Dock="Top" Margin="0 20 0 0" HorizontalAlignment="Stretch" VerticalAlignment="Center" Stretch="Fill" StrokeThickness="1" X1="0" X2="1">
+					<Shape.Stroke>
+						<LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+							<GradientStop Color="Transparent" Offset="0" />
+							<GradientStop Color="#E1E1E1" Offset="0.2" />
+							<GradientStop Color="#E1E1E1" Offset="0.8"  />
+							<GradientStop Color="Transparent" Offset="1" />
+						</LinearGradientBrush>
+					</Shape.Stroke>
+				</Line>
 
+				<Line DockPanel.Dock="Top" Margin="0 0 0 8" HorizontalAlignment="Stretch" VerticalAlignment="Center" Stretch="Fill" StrokeThickness="2" X1="0" X2="1">
+					<Shape.Stroke>
+						<LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+							<GradientStop Color="Transparent" Offset="0" />
+							<GradientStop Color="#FAFAFA" Offset="0.2" />
+							<GradientStop Color="#FAFAFA" Offset="0.8"  />
+							<GradientStop Color="Transparent" Offset="1" />
+						</LinearGradientBrush>
+					</Shape.Stroke>
+				</Line>
+				
 				<DockPanel LastChildFill="True">
 
-					<DockPanel DockPanel.Dock="Top" LastChildFill="True"  Margin="0,10,15,0">
+					<DockPanel DockPanel.Dock="Top" LastChildFill="True">
 						<Label DockPanel.Dock="Left" Style="{StaticResource H1}" Content="Response" />
 						<controls:HttpStatus DockPanel.Dock="Right" HttpStatusCode="{Binding HttpStatusCode}" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="0 0 0 10"/>
 						<Label DockPanel.Dock="Right" x:Name="SelectedHistory_ResponseTime" Margin="0 0 10 5" Style="{StaticResource H2}" Foreground="{StaticResource RecededColorBrush}" VerticalAlignment="Bottom" HorizontalAlignment="Right" Content="Time">
