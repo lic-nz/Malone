@@ -71,7 +71,7 @@
 							<Label Name="HistoryHorizontalOffset" Visibility="Collapsed" />
 							<Label Name="HistoryVerticalScrollBarOffset" Visibility="Collapsed" />
 
-							<local:MaloneListBox x:Name="History" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" SelectionMode="Single"
+							<controls:MaloneListBox x:Name="History" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" SelectionMode="Single"
 								BorderThickness="0" Padding="0" Margin="-2"
 								cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action HistoryClicked($executionContext)]; [Event LayoutUpdated] = [Action HistoryLayoutUpdated($executionContext)]">
 
@@ -116,7 +116,7 @@
 									</DataTemplate>
 								</ListBox.ItemTemplate>
 
-							</local:MaloneListBox>
+							</controls:MaloneListBox>
 
 						</DockPanel>
 					</Grid>

@@ -9,6 +9,7 @@ using System.Xml.Linq;
 using Caliburn.Micro;
 using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Highlighting;
+using LIC.Malone.Client.Desktop.Controls;
 using LIC.Malone.Client.Desktop.Messages;
 using LIC.Malone.Core;
 using LIC.Malone.Core.Authentication;

@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
-namespace LIC.Malone.Client.Desktop
+namespace LIC.Malone.Client.Desktop.Controls
 {
 	// http://stackoverflow.com/questions/10293236/accessing-the-scrollviewer-of-a-listbox-from-c-sharp
 
