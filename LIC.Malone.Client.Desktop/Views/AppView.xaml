@@ -211,7 +211,7 @@
 					<TabItem Header="Body">
 
 						<!--TODO: Highlight based on accept header.-->
-						<ae:TextEditor Document="{Binding RequestBody}" VerticalScrollBarVisibility="Disabled" SyntaxHighlighting="XML" IsReadOnly="False">
+						<ae:TextEditor Document="{Binding RequestBody}" VerticalScrollBarVisibility="Disabled" SyntaxHighlighting="XML" IsReadOnly="False" MinHeight="95">
 							<i:Interaction.Behaviors>
 								<local:BubbleScrollEvent/>
 							</i:Interaction.Behaviors>
