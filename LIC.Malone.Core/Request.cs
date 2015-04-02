@@ -38,7 +38,8 @@ namespace LIC.Malone.Core
 			get
 			{
 				var diff = Response.At - this.At;
-				return string.Concat((int) diff.TotalMilliseconds, "ms");
+				var ms = diff.TotalMilliseconds;
+				return string.Format("{0:n0}ms", ms);
 			}
 		}
 
