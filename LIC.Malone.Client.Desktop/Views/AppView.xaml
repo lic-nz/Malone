@@ -33,8 +33,8 @@
 		<TabControl Grid.Column="0" Margin="-2 -2 0 0" Padding="0">
 
 			<TabControl.Resources>
-				<extensions:HideOnHistoryConverter x:Key="HideOnHistoryConverter" />
-				<extensions:ShowOnHistoryConverter x:Key="ShowOnHistoryConverter" />
+				<converters:HideOnHistoryConverter x:Key="HideOnHistoryConverter" />
+				<converters:ShowOnHistoryConverter x:Key="ShowOnHistoryConverter" />
 				<Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource TabHeader}"></Style>
 			</TabControl.Resources>
 
@@ -81,7 +81,7 @@
 											<Grid.Resources>
 												<converters:HttpStatusCodeToBrushConverter x:Key="HttpStatusCodeToBrushConverter" />
 												<converters:HttpStatusCodeToIntConverter x:Key="HttpStatusCodeToIntConverter" />
-												<extensions:HistoryWidthConverter x:Key="HistoryWidthConverter" />
+												<converters:HistoryWidthConverter x:Key="HistoryWidthConverter" />
 											</Grid.Resources>
 											<Grid.ColumnDefinitions>
 												<ColumnDefinition Width="40" />
