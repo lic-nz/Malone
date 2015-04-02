@@ -282,6 +282,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			SelectedAccept = Accepts.First();
 			Tokens = new BindableCollection<NamedAuthorizationState>(new List<NamedAuthorizationState> { new NamedAuthorizationState("<Anonymous>", null)});
 			SelectedToken = Tokens.First();
+			HttpStatusCode = null;
 
 			LoadConfig();
 		}
@@ -567,6 +568,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			RequestBody.Text = string.Empty;
 			ResponseBody.Text = string.Empty;
 			ResponseContentType = null;
+			HttpStatusCode = null;
 		}
 
 		public void Handle(TokenAdded message)
