@@ -30,7 +30,7 @@ namespace LIC.Malone.Core
 
 		public string AtUtcString
 		{
-			get { return string.Concat("UTC: ", At.ToString(DateFormatString)); }
+			get { return At.ToString(DateFormatString); }
 		}
 
 		public string ResponseTime

@@ -22,7 +22,7 @@ namespace LIC.Malone.Core
 
 		public string AtUtcString
 		{
-			get { return string.Concat("UTC: ", At.ToString(Request.DateFormatString)); }
+			get { return At.ToString(Request.DateFormatString); }
 		}
 
 		#endregion

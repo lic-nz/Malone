@@ -308,22 +308,21 @@
 
 				<DockPanel LastChildFill="True">
 
-					<!--<Label DockPanel.Dock="Top" Style="{StaticResource H1Info}" HorizontalAlignment="Right" x:Name="SelectedHistory_AtLocalString" Content="Request Date">
-									<Label.ToolTip>
-										<Label Content="{Binding Path=.SelectedHistory.AtUtcString}"/>
-									</Label.ToolTip>
-								</Label>-->
-
 					<DockPanel DockPanel.Dock="Top" LastChildFill="True"  Margin="0,10,15,0">
 						<Label DockPanel.Dock="Left" Style="{StaticResource H1}" Content="Response" />
-						<controls:HttpStatus DockPanel.Dock="Left" HttpStatusCode="{Binding HttpStatusCode}" VerticalAlignment="Bottom" Margin="8 0 0 3"/>
-						<Label DockPanel.Dock="Right" x:Name="SelectedHistory_ResponseTime" HorizontalAlignment="Right" VerticalAlignment="Center" Content="Time" Margin="0 0 0 2" FontFamily="Segoe UI" FontSize="14" Foreground="#FF9395A2"/>
-					</DockPanel>
-
-					<DockPanel Dock="Top" Height="40" Margin="7,0,15,0">
-						<Label DockPanel.Dock="Right" x:Name="SelectedHistory_Response_AtLocalString" Content="Response Date" HorizontalContentAlignment="Right" HorizontalAlignment="Right" FontFamily="Segoe UI" FontSize="14" Foreground="#FF9395A2">
+						<controls:HttpStatus DockPanel.Dock="Right" HttpStatusCode="{Binding HttpStatusCode}" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="0 0 0 10"/>
+						<Label DockPanel.Dock="Right" x:Name="SelectedHistory_ResponseTime" Margin="0 0 10 5" Style="{StaticResource H2}" Foreground="{StaticResource RecededColorBrush}" VerticalAlignment="Bottom" HorizontalAlignment="Right" Content="Time">
 							<Label.ToolTip>
-								<Label Content="{Binding Path=.SelectedHistory.Response.AtUtcString}"/>
+								<StackPanel Orientation="Vertical">
+									<StackPanel Orientation="Horizontal">
+										<Label Width="41">Local:</Label>
+										<Label Content="{Binding Path=.SelectedHistory.Response.AtLocalString}"/>
+									</StackPanel>
+									<StackPanel Orientation="Horizontal">
+										<Label Width="41">UTC:</Label>
+										<Label Content="{Binding Path=.SelectedHistory.Response.AtUtcString}"/>
+									</StackPanel>
+								</StackPanel>
 							</Label.ToolTip>
 						</Label>
 					</DockPanel>

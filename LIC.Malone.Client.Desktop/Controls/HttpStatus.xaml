@@ -8,12 +8,14 @@
 	<UserControl.Template>
 		<ControlTemplate>
 
-			<DockPanel Height="35" Visibility="{Binding ControlVisibility, RelativeSource={RelativeSource TemplatedParent}}">
-				<Border BorderBrush="{Binding CodeColor, RelativeSource={RelativeSource TemplatedParent}}" BorderThickness="10 1 1 1" VerticalAlignment="Top" Margin="0 0 5 0">
-					<Label Foreground="{Binding CodeColor, RelativeSource={RelativeSource TemplatedParent}}" Content="{Binding Code, RelativeSource={RelativeSource TemplatedParent}}"/>
-				</Border>
-				<Label Name="Description" Foreground="{StaticResource RecededColorBrush}" Margin="0 1 0 0" Content="{Binding Description, RelativeSource={RelativeSource TemplatedParent}}"/>
-			</DockPanel>
+			<Border BorderThickness="1 1 10 1"
+				BorderBrush="{Binding CodeColor, RelativeSource={RelativeSource TemplatedParent}}"
+				ToolTip="{Binding Description, RelativeSource={RelativeSource TemplatedParent}}"
+				Visibility="{Binding ControlVisibility, RelativeSource={RelativeSource TemplatedParent}}">
+				
+				<Label Foreground="{Binding CodeColor, RelativeSource={RelativeSource TemplatedParent}}" Content="{Binding Code, RelativeSource={RelativeSource TemplatedParent}}"/>
+				
+			</Border>
 
 		</ControlTemplate>
 	</UserControl.Template>
