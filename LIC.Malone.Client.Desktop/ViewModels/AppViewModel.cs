@@ -379,6 +379,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			};
 
 			HttpStatusCode = response.StatusCode;
+			ResponseContentType = response.ContentType;
 
 			// Possibly detect response and format, e.g.:
 			// XDocument.Parse(response.Content).ToString();
