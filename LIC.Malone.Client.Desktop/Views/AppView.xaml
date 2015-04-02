@@ -11,6 +11,7 @@
 	xmlns:local="clr-namespace:LIC.Malone.Client.Desktop"
 	xmlns:controls="clr-namespace:LIC.Malone.Client.Desktop.Controls"
 	xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+	xmlns:converters="clr-namespace:LIC.Malone.Client.Desktop.Converters"
 	mc:Ignorable="d"
 	Title="Malone"
 	TitleCaps="False"
@@ -78,8 +79,8 @@
 									<DataTemplate>
 										<Grid Margin="7,3" Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBox}}, Path=Width}">
 											<Grid.Resources>
-												<extensions:HttpStatusCodeToBrushConverter x:Key="HttpStatusCodeToBrushConverter" />
-												<extensions:HttpStatusCodeToIntConverter x:Key="HttpStatusCodeToIntConverter" />
+												<converters:HttpStatusCodeToBrushConverter x:Key="HttpStatusCodeToBrushConverter" />
+												<converters:HttpStatusCodeToIntConverter x:Key="HttpStatusCodeToIntConverter" />
 												<extensions:HistoryWidthConverter x:Key="HistoryWidthConverter" />
 											</Grid.Resources>
 											<Grid.ColumnDefinitions>
@@ -325,35 +326,45 @@
 						</LinearGradientBrush>
 					</Shape.Stroke>
 				</Line>
-				
-				<DockPanel LastChildFill="True">
 
-					<DockPanel DockPanel.Dock="Top" LastChildFill="True">
-						<Label DockPanel.Dock="Left" Style="{StaticResource H1}" Content="Response" />
-						<controls:HttpStatus DockPanel.Dock="Right" HttpStatusCode="{Binding HttpStatusCode}" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="0 0 0 10"/>
-						<Label DockPanel.Dock="Right" x:Name="SelectedHistory_ResponseTime" Margin="0 0 10 5" Style="{StaticResource H2}" Foreground="{StaticResource RecededColorBrush}" VerticalAlignment="Bottom" HorizontalAlignment="Right" Content="Time">
-							<Label.ToolTip>
-								<StackPanel Orientation="Vertical">
-									<StackPanel Orientation="Horizontal">
-										<Label Width="41">Local:</Label>
-										<Label Content="{Binding Path=.SelectedHistory.Response.AtLocalString}"/>
+				<Grid>
+
+					<Grid.Resources>
+						<converters:HttpStatusCodeToVisibilityConverter x:Key="HttpStatusCodeToVisibilityConverter" />
+					</Grid.Resources>
+					
+					<ContentControl Content="{StaticResource IconClourIrc}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+
+					<DockPanel LastChildFill="True" Visibility="{Binding HttpStatusCode, Converter={StaticResource HttpStatusCodeToVisibilityConverter}}">
+
+						<DockPanel DockPanel.Dock="Top" LastChildFill="True">
+							<Label DockPanel.Dock="Left" Style="{StaticResource H1}" Content="Response" />
+							<controls:HttpStatus DockPanel.Dock="Right" HttpStatusCode="{Binding HttpStatusCode}" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="0 0 0 10"/>
+							<Label DockPanel.Dock="Right" x:Name="SelectedHistory_ResponseTime" Margin="0 0 10 5" Style="{StaticResource H2}" Foreground="{StaticResource RecededColorBrush}" VerticalAlignment="Bottom" HorizontalAlignment="Right" Content="Time">
+								<Label.ToolTip>
+									<StackPanel Orientation="Vertical">
+										<StackPanel Orientation="Horizontal">
+											<Label Width="41">Local:</Label>
+											<Label Content="{Binding Path=.SelectedHistory.Response.AtLocalString}"/>
+										</StackPanel>
+										<StackPanel Orientation="Horizontal">
+											<Label Width="41">UTC:</Label>
+											<Label Content="{Binding Path=.SelectedHistory.Response.AtUtcString}"/>
+										</StackPanel>
 									</StackPanel>
-									<StackPanel Orientation="Horizontal">
-										<Label Width="41">UTC:</Label>
-										<Label Content="{Binding Path=.SelectedHistory.Response.AtUtcString}"/>
-									</StackPanel>
-								</StackPanel>
-							</Label.ToolTip>
-						</Label>
+								</Label.ToolTip>
+							</Label>
+						</DockPanel>
+
+						<ae:TextEditor DockPanel.Dock="Top" Margin="15 0 0 0" VerticalScrollBarVisibility="Disabled" Document="{Binding ResponseBody}" SyntaxHighlighting="{Binding ResponseBodyHighlighting}">
+							<i:Interaction.Behaviors>
+								<local:BubbleScrollEvent/>
+							</i:Interaction.Behaviors>
+						</ae:TextEditor>
+
 					</DockPanel>
 
-					<ae:TextEditor DockPanel.Dock="Top" Margin="15 0 0 0" VerticalScrollBarVisibility="Disabled" Document="{Binding ResponseBody}" SyntaxHighlighting="{Binding ResponseBodyHighlighting}">
-						<i:Interaction.Behaviors>
-							<local:BubbleScrollEvent/>
-						</i:Interaction.Behaviors>
-					</ae:TextEditor>
-
-				</DockPanel>
+				</Grid>
 
 			</DockPanel>
 

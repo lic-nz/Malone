@@ -151,7 +151,7 @@
     </Compile>
     <Compile Include="AppBootstrapper.cs" />
     <Compile Include="DialogManager.cs" />
-    <Compile Include="Extensions\HttpStatusCodeConverters.cs" />
+    <Compile Include="Converters\HttpStatusCodeConverters.cs" />
     <Page Include="Controls\HttpStatus.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
