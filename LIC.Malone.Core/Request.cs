@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Xml;
+using System.Xml.Linq;
 using LIC.Malone.Core.Authentication.OAuth;
 using Newtonsoft.Json;
 using RestSharp;
@@ -81,7 +83,8 @@ namespace LIC.Malone.Core
 
 			var request = new MaloneRestRequest(url, baseUrl, resourcePath, Method);
 
-			request.AddBody(Body);
+			// TODO: Make content type dynamic.
+			request.AddParameter("text/xml", Body, ParameterType.RequestBody);
 
 			foreach (var header in Headers)
 				request.AddHeader(header.Name, header.Value);
