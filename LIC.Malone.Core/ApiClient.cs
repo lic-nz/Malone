@@ -20,7 +20,7 @@ namespace LIC.Malone.Core
 			var response = client.Execute(request);
 			result.ReceivedAt = DateTimeOffset.UtcNow;
 			result.Response = response;
-
+			
 			return result;
 		}
 	}

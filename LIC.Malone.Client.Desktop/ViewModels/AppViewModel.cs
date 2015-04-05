@@ -153,7 +153,41 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			}
 		}
 
-		private IObservableCollection<Header> _headers = new BindableCollection<Header>(new List<Header> { new Header("Accept", _accepts.First()) });
+		private static IEnumerable<string> _contentTypes = new List<string>
+		{
+			"text/xml",
+			"application/json"
+		};
+
+		public IEnumerable<string> ContentTypes
+		{
+			get { return _contentTypes; }
+			set
+			{
+				_contentTypes = value;
+				NotifyOfPropertyChange(() => ContentTypes);
+			}
+		}
+
+		private string _selectedContentType;
+		public string SelectedContentType
+		{
+			get { return _selectedContentType; }
+			set
+			{
+				_selectedContentType = value;
+
+				// Must be a better way to do this.
+				var headers = new BindableCollection<Header>(Headers);
+				var header = headers.Single(h => h.Name == "Content-Type");
+				header.Value = _selectedContentType;
+				Headers = headers;
+
+				NotifyOfPropertyChange(() => SelectedContentType);
+			}
+		}
+
+		private IObservableCollection<Header> _headers = new BindableCollection<Header>(new List<Header> { new Header("Accept", _accepts.First()), new Header("Content-Type", _contentTypes.First()) });
 		public IObservableCollection<Header> Headers
 		{
 			get { return _headers; }
@@ -281,6 +315,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			_addTokenViewModel = new AddTokenViewModel(_bus, _windowManager);
 
 			SelectedAccept = Accepts.First();
+			SelectedContentType = ContentTypes.First();
 			Tokens = new BindableCollection<NamedAuthorizationState>(new List<NamedAuthorizationState> { new NamedAuthorizationState("<Anonymous>", null)});
 			SelectedToken = Tokens.First();
 			HttpStatusCode = null;
@@ -350,8 +385,8 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 			var request = new Request(Url, SelectedMethod)
 			{
-				Body = RequestBody.Text,
-				Headers = Headers.ToList()
+				Headers = Headers.ToList(),
+				Body = RequestBody.Text
 			};
 
 			if (SelectedToken != null)
@@ -382,9 +417,6 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			HttpStatusCode = response.StatusCode;
 			ResponseContentType = response.ContentType;
 
-			// Possibly detect response and format, e.g.:
-			// XDocument.Parse(response.Content).ToString();
-			// JsonConvert.SerializeObject(response, Formatting.Indented);
 			ResponseBody = new TextDocument(response.Content);
 			
 			AddToHistory(request);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 using LIC.Malone.Core.Authentication.OAuth;
@@ -82,17 +83,16 @@ namespace LIC.Malone.Core
 			var resourcePath = GetResourcePath(url);
 
 			var request = new MaloneRestRequest(url, baseUrl, resourcePath, Method);
-
-			// TODO: Make content type dynamic.
-			request.AddParameter("text/xml", Body, ParameterType.RequestBody);
-
-			foreach (var header in Headers)
+			
+			foreach (var header in Headers.Where(h => h.Name != "Content-Type"))
 				request.AddHeader(header.Name, header.Value);
 
 			request.AddHeader("Accept-Encoding", "gzip,deflate");
 
 			if (NamedAuthorizationState != null && NamedAuthorizationState.AuthorizationState != null && NamedAuthorizationState.AuthorizationState.AccessToken != null)
 				request.AddHeader("Authorization", string.Concat("Bearer ", NamedAuthorizationState.AuthorizationState.AccessToken));
+
+			request.AddParameter(Headers.Single(h => h.Name == "Content-Type").Value, Body, ParameterType.RequestBody);
 
 			return request;
 		}

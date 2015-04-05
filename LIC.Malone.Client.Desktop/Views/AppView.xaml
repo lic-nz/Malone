@@ -211,12 +211,18 @@
 
 					<TabItem Header="Body">
 
-						<!--TODO: Highlight based on accept header.-->
-						<ae:TextEditor Document="{Binding RequestBody}" VerticalScrollBarVisibility="Disabled" SyntaxHighlighting="XML" IsReadOnly="False" MinHeight="95">
-							<i:Interaction.Behaviors>
-								<local:BubbleScrollEvent/>
-							</i:Interaction.Behaviors>
-						</ae:TextEditor>
+						<StackPanel>
+
+							<ComboBox x:Name="ContentTypes" Margin="10 0 0 15" Width="130" Style="{StaticResource DefaultComboBox}" HorizontalAlignment="Left" />
+
+							<!--TODO: Highlight based on accept header.-->
+							<ae:TextEditor Document="{Binding RequestBody}" VerticalScrollBarVisibility="Disabled" SyntaxHighlighting="XML" IsReadOnly="False" MinHeight="95">
+								<i:Interaction.Behaviors>
+									<local:BubbleScrollEvent/>
+								</i:Interaction.Behaviors>
+							</ae:TextEditor>
+
+						</StackPanel>
 
 					</TabItem>
 
@@ -332,7 +338,7 @@
 					<Grid.Resources>
 						<converters:HttpStatusCodeToVisibilityConverter x:Key="HttpStatusCodeToVisibilityConverter" />
 					</Grid.Resources>
-					
+
 					<ContentControl Content="{StaticResource IconClourIrc}" HorizontalAlignment="Center" VerticalAlignment="Center" />
 
 					<DockPanel LastChildFill="True" Visibility="{Binding HttpStatusCode, Converter={StaticResource HttpStatusCodeToVisibilityConverter}}">
