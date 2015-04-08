@@ -259,6 +259,17 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			}
 		}
 
+		private Visibility _responseVisibility;
+		public Visibility ResponseVisibility
+		{
+			get { return _responseVisibility; }
+			set
+			{
+				_responseVisibility = value;
+				NotifyOfPropertyChange(() => ResponseVisibility);
+			}
+		}
+
 		private TextDocument _responseBody = new TextDocument();
 		public TextDocument ResponseBody
 		{
@@ -331,12 +342,12 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			SelectedToken = Tokens.First();
 			HttpStatusCode = null;
 
-			LoadRequest(Request.Empty());
+			DisplayRequest(new Request());
 
 			LoadConfig();
 		}
 
-		private void LoadRequest(Request request)
+		private void DisplayRequest(Request request)
 		{
 			SelectedHistory = null;
 
@@ -344,17 +355,23 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			var accept = acceptHeader == null ? string.Empty : acceptHeader.Value;
 			var responseTime = request.ResponseTime == "0ms" ? string.Empty : request.ResponseTime;
 
+			var response = request.Response;
+			var hasResponse = response != null;
+			var responseBody = hasResponse ? response.Body : string.Empty;
+			var responseContentType = hasResponse ? response.ContentType : string.Empty;
+			var httpStatusCode = hasResponse ? response.HttpStatusCode : 0;
+
 			SelectedMethod = request.Method;
 			Url = request.Url;
 			SelectedAccept = accept;
 			RequestBody.Text = request.Body;
-			ResponseBody.Text = request.Response.Content;
-			ResponseContentType = request.Response.ContentType;
 
-			//if (request.Response.HttpStatusCode != 0)
-				HttpStatusCode = request.Response.HttpStatusCode;
+			ResponseVisibility = hasResponse ? Visibility.Visible : Visibility.Collapsed;
 
 			ResponseTime = responseTime;
+			ResponseBody.Text = responseBody;
+			ResponseContentType = responseContentType;
+			HttpStatusCode = httpStatusCode;
 		}
 
 		private void LoadConfig()
@@ -444,7 +461,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 				Guid = Guid.NewGuid(),
 				At = result.ReceivedAt,
 				HttpStatusCode = response.StatusCode,
-				Content = response.Content,
+				Body = response.Content,
 				ContentType = response.ContentType
 			};
 
@@ -549,7 +566,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			if (SelectedHistory == null)
 				return;
 
-			LoadRequest(SelectedHistory);
+			DisplayRequest(SelectedHistory);
 
 			return;
 
@@ -563,7 +580,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 			HttpStatusCode = SelectedHistory.Response.HttpStatusCode;
 			ResponseContentType = SelectedHistory.Response.ContentType;
-			ResponseBody = new TextDocument(SelectedHistory.Response.Content);
+			ResponseBody = new TextDocument(SelectedHistory.Response.Body);
 
 			SelectedToken = Tokens.First();
 			var historicalTokens = Tokens.Where(t => t.NamedAuthorizationStateOrigin == NamedAuthorizationStateOrigin.History).ToList();
@@ -633,7 +650,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 		public void Reset()
 		{
-			LoadRequest(Request.Empty());
+			DisplayRequest(new Request());
 			//SelectedHistory = null;
 
 			//// TODO: Bind all properties to a Request object.

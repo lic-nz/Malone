@@ -40,6 +40,9 @@ namespace LIC.Malone.Core
 		{
 			get
 			{
+				if (Response == null)
+					return string.Empty;
+
 				var diff = Response.At - this.At;
 				var ms = diff.TotalMilliseconds;
 				return string.Format("{0:n0}ms", ms);
@@ -59,7 +62,7 @@ namespace LIC.Malone.Core
 		}
 
 		[JsonConstructor]
-		public Request()
+		public Request() : this(string.Empty)
 		{
 		}
 
@@ -73,19 +76,8 @@ namespace LIC.Malone.Core
 			Guid = Guid.NewGuid();
 			Url = url;
 			Method = method;
+			Body = string.Empty;
 			Headers = headers ?? new List<Header>();
-		}
-
-		public static Request Empty()
-		{
-			return new Request(string.Empty)
-			{
-				Body = string.Empty,
-				Response = new Response
-				{
-					Content = string.Empty
-				}
-			};
 		}
 
 		public MaloneRestRequest ToMaloneRestRequest()

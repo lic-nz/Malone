@@ -9,8 +9,12 @@ namespace LIC.Malone.Core
 		public DateTimeOffset At { get; set; }
 		public HttpStatusCode HttpStatusCode { get; set; }
 		public string ContentType { get; set; }
+		public string Body { get; set; }
 
-		public string Content { get; set; }
+		public Response()
+		{
+			Body = string.Empty;
+		}
 
 		// TODO: Don't pollute core with Caliburn shiz.
 		#region Caliburn workarounds

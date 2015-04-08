@@ -341,7 +341,7 @@
 
 					<ContentControl Content="{StaticResource IconClourIrc}" HorizontalAlignment="Center" VerticalAlignment="Center" />
 
-					<DockPanel LastChildFill="True" Visibility="{Binding HttpStatusCode, Converter={StaticResource HttpStatusCodeToVisibilityConverter}}">
+					<DockPanel LastChildFill="True" Visibility="{Binding ResponseVisibility}">
 
 						<DockPanel DockPanel.Dock="Top" LastChildFill="True">
 							<Label DockPanel.Dock="Left" Style="{StaticResource H1}" Content="Response" />
