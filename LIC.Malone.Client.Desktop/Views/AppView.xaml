@@ -346,7 +346,7 @@
 						<DockPanel DockPanel.Dock="Top" LastChildFill="True">
 							<Label DockPanel.Dock="Left" Style="{StaticResource H1}" Content="Response" />
 							<controls:HttpStatus DockPanel.Dock="Right" HttpStatusCode="{Binding HttpStatusCode}" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="0 0 0 10"/>
-							<Label DockPanel.Dock="Right" x:Name="SelectedHistory_ResponseTime" Margin="0 0 10 5" Style="{StaticResource H2}" Foreground="{StaticResource RecededColorBrush}" VerticalAlignment="Bottom" HorizontalAlignment="Right" Content="Time">
+							<Label DockPanel.Dock="Right" x:Name="ResponseTime" Margin="0 0 10 5" Style="{StaticResource H2}" Foreground="{StaticResource RecededColorBrush}" VerticalAlignment="Bottom" HorizontalAlignment="Right" Content="Time">
 								<Label.ToolTip>
 									<StackPanel Orientation="Vertical">
 										<StackPanel Orientation="Horizontal">

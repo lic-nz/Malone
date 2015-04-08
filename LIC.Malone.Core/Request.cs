@@ -76,6 +76,18 @@ namespace LIC.Malone.Core
 			Headers = headers ?? new List<Header>();
 		}
 
+		public static Request Empty()
+		{
+			return new Request(string.Empty)
+			{
+				Body = string.Empty,
+				Response = new Response
+				{
+					Content = string.Empty
+				}
+			};
+		}
+
 		public MaloneRestRequest ToMaloneRestRequest()
 		{
 			var url = GetUri();

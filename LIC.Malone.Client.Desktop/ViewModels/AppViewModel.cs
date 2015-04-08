@@ -287,6 +287,17 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			}
 		}
 
+		private string _responseTime;
+		public string ResponseTime
+		{
+			get { return _responseTime; }
+			set
+			{
+				_responseTime = value;
+				NotifyOfPropertyChange(() => ResponseTime);
+			}
+		}
+
 		public IHighlightingDefinition ResponseBodyHighlighting
 		{
 			get
@@ -320,7 +331,30 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			SelectedToken = Tokens.First();
 			HttpStatusCode = null;
 
+			LoadRequest(Request.Empty());
+
 			LoadConfig();
+		}
+
+		private void LoadRequest(Request request)
+		{
+			SelectedHistory = null;
+
+			var acceptHeader = request.Headers.FirstOrDefault(h => h.Name == "Accept");
+			var accept = acceptHeader == null ? string.Empty : acceptHeader.Value;
+			var responseTime = request.ResponseTime == "0ms" ? string.Empty : request.ResponseTime;
+
+			SelectedMethod = request.Method;
+			Url = request.Url;
+			SelectedAccept = accept;
+			RequestBody.Text = request.Body;
+			ResponseBody.Text = request.Response.Content;
+			ResponseContentType = request.Response.ContentType;
+
+			//if (request.Response.HttpStatusCode != 0)
+				HttpStatusCode = request.Response.HttpStatusCode;
+
+			ResponseTime = responseTime;
 		}
 
 		private void LoadConfig()
@@ -515,6 +549,12 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			if (SelectedHistory == null)
 				return;
 
+			LoadRequest(SelectedHistory);
+
+			return;
+
+			// TODO:
+
 			// Rebind.
 
 			Url = SelectedHistory.Url;
@@ -593,16 +633,17 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 		public void Reset()
 		{
-			SelectedHistory = null;
+			LoadRequest(Request.Empty());
+			//SelectedHistory = null;
 
-			// TODO: Bind all properties to a Request object.
-			SelectedMethod = Methods.First();
-			Url = null;
-			SelectedAccept = Accepts.First();
-			RequestBody.Text = string.Empty;
-			ResponseBody.Text = string.Empty;
-			ResponseContentType = null;
-			HttpStatusCode = null;
+			//// TODO: Bind all properties to a Request object.
+			//SelectedMethod = Methods.First();
+			//Url = null;
+			//SelectedAccept = Accepts.First();
+			//RequestBody.Text = string.Empty;
+			//ResponseBody.Text = string.Empty;
+			//ResponseContentType = null;
+			//HttpStatusCode = null;
 		}
 
 		public void Handle(TokenAdded message)
