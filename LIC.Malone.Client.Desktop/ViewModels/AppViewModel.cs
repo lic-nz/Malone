@@ -360,7 +360,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			SelectedMethod = request.Method;
 			Url = request.Url;
 			SelectedAccept = accept;
-			RequestBody.Text = request.Body;
+			RequestBody.Text = Prettify(request.Body, contentType);
 			SelectedContentType = contentType;
 
 			var response = request.Response;
@@ -368,7 +368,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 			ResponseVisibility = hasResponse ? Visibility.Visible : Visibility.Collapsed;
 			ResponseTime = hasResponse ? request.ResponseTime : string.Empty;
-			ResponseBody.Text = hasResponse ? response.Body : string.Empty;
+			ResponseBody.Text = hasResponse ? Prettify(response.Body, response.ContentType) : string.Empty;
 			ResponseContentType = hasResponse ? response.ContentType : string.Empty;
 			HttpStatusCode = hasResponse ? response.HttpStatusCode : 0;
 		}
