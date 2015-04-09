@@ -336,11 +336,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 			_addTokenViewModel = new AddTokenViewModel(_bus, _windowManager);
 
-			SelectedAccept = Accepts.First();
-			SelectedContentType = ContentTypes.First();
 			Tokens = new BindableCollection<NamedAuthorizationState>(new List<NamedAuthorizationState> { new NamedAuthorizationState("<Anonymous>", null)});
-			SelectedToken = Tokens.First();
-			HttpStatusCode = null;
 
 			DisplayRequest(new Request());
 
@@ -349,29 +345,25 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 		private void DisplayRequest(Request request)
 		{
-			SelectedHistory = null;
-
 			var acceptHeader = request.Headers.FirstOrDefault(h => h.Name == "Accept");
-			var accept = acceptHeader == null ? string.Empty : acceptHeader.Value;
-			var responseTime = request.ResponseTime == "0ms" ? string.Empty : request.ResponseTime;
-
-			var response = request.Response;
-			var hasResponse = response != null;
-			var responseBody = hasResponse ? response.Body : string.Empty;
-			var responseContentType = hasResponse ? response.ContentType : string.Empty;
-			var httpStatusCode = hasResponse ? response.HttpStatusCode : 0;
+			var accept = acceptHeader != null ? acceptHeader.Value : Accepts.First();
+			var contentTypeHeader = request.Headers.FirstOrDefault(h => h.Name == "Content-Type");
+			var contentType = contentTypeHeader != null ? contentTypeHeader.Value : ContentTypes.First();
 
 			SelectedMethod = request.Method;
 			Url = request.Url;
 			SelectedAccept = accept;
 			RequestBody.Text = request.Body;
+			SelectedContentType = contentType;
+
+			var response = request.Response;
+			var hasResponse = response != null;
 
 			ResponseVisibility = hasResponse ? Visibility.Visible : Visibility.Collapsed;
-
-			ResponseTime = responseTime;
-			ResponseBody.Text = responseBody;
-			ResponseContentType = responseContentType;
-			HttpStatusCode = httpStatusCode;
+			ResponseTime = hasResponse ? request.ResponseTime : string.Empty;
+			ResponseBody.Text = hasResponse ? response.Body : string.Empty;
+			ResponseContentType = hasResponse ? response.ContentType : string.Empty;
+			HttpStatusCode = hasResponse ? response.HttpStatusCode : 0;
 		}
 
 		private void LoadConfig()
@@ -426,17 +418,20 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 		public async void Send()
 		{
-			// Reset.
-			ResponseBody = new TextDocument();
-			HttpStatusCode = null;
-			SelectedHistory = null;
-
 			if (string.IsNullOrWhiteSpace(Url))
 				return;
 
+			SelectedHistory = null;
+
+			ResponseVisibility = Visibility.Collapsed;
+
+			// There was something strange going on with Headers being a BindableCollection or something - it would somehow overwrite the headers
+			// for previous requests in the History when just calling Headers.ToList(). This is begging for a unit test, but for now make a copy.
+			var headers = Headers.Select(h => new Header(h.Name, h.Value)).ToList();
+
 			var request = new Request(Url, SelectedMethod)
 			{
-				Headers = Headers.ToList(),
+				Headers = headers,
 				Body = RequestBody.Text
 			};
 
@@ -465,12 +460,9 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 				ContentType = response.ContentType
 			};
 
-			HttpStatusCode = response.StatusCode;
-			ResponseContentType = response.ContentType;
-
-			ResponseBody = new TextDocument(response.Content);
-			
 			AddToHistory(request);
+
+			DisplayRequest(request);
 		}
 
 		private enum ContentType
@@ -572,16 +564,6 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 			// TODO:
 
-			// Rebind.
-
-			Url = SelectedHistory.Url;
-			SelectedMethod = SelectedHistory.Method;
-			RequestBody = new TextDocument(SelectedHistory.Body);
-
-			HttpStatusCode = SelectedHistory.Response.HttpStatusCode;
-			ResponseContentType = SelectedHistory.Response.ContentType;
-			ResponseBody = new TextDocument(SelectedHistory.Response.Body);
-
 			SelectedToken = Tokens.First();
 			var historicalTokens = Tokens.Where(t => t.NamedAuthorizationStateOrigin == NamedAuthorizationStateOrigin.History).ToList();
 			Tokens.RemoveRange(historicalTokens);
@@ -650,17 +632,8 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 		public void Reset()
 		{
+			SelectedHistory = null;
 			DisplayRequest(new Request());
-			//SelectedHistory = null;
-
-			//// TODO: Bind all properties to a Request object.
-			//SelectedMethod = Methods.First();
-			//Url = null;
-			//SelectedAccept = Accepts.First();
-			//RequestBody.Text = string.Empty;
-			//ResponseBody.Text = string.Empty;
-			//ResponseContentType = null;
-			//HttpStatusCode = null;
 		}
 
 		public void Handle(TokenAdded message)
