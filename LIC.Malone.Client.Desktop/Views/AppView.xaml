@@ -168,6 +168,7 @@
 
 				<DockPanel DockPanel.Dock="Top">
 					<Label Style="{StaticResource H1}" Content="Request" />
+					<Label x:Name="Dirty" Style="{StaticResource H1}"/>
 					<controls:IconLink x:Name="Reset" HorizontalAlignment="Right" IconData="{StaticResource IconErase}" IconMargin="{StaticResource IconEraseMargin}" ToolTip="Clear this request" />
 				</DockPanel>
 

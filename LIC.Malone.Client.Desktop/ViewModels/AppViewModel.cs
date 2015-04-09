@@ -79,6 +79,11 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			}
 		}
 
+		public string Dirty
+		{
+			get { return IsRequestDirty() ? "*" : string.Empty; }
+		}
+
 		private string _url;
 		public string Url
 		{
@@ -87,6 +92,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			{
 				_url = value;
 				NotifyOfPropertyChange(() => Url);
+				NotifyOfPropertyChange(() => Dirty);
 				NotifyOfPropertyChange(() => CanSend);
 			}
 		}
@@ -116,6 +122,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			{
 				_selectedMethod = value;
 				NotifyOfPropertyChange(() => SelectedMethod);
+				NotifyOfPropertyChange(() => Dirty);
 			}
 		}
 
@@ -364,6 +371,24 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			ResponseBody.Text = hasResponse ? response.Body : string.Empty;
 			ResponseContentType = hasResponse ? response.ContentType : string.Empty;
 			HttpStatusCode = hasResponse ? response.HttpStatusCode : 0;
+		}
+
+		private bool IsRequestDirty()
+		{
+			var request = SelectedHistory;
+
+			if (request == null)
+				return false;
+
+			// TODO: Compare against raw requests.
+
+			if (SelectedMethod != request.Method)
+				return true;
+
+			if (Url != request.Url)
+				return true;
+			
+			return false;
 		}
 
 		private void LoadConfig()
