@@ -585,9 +585,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 			DisplayRequest(SelectedHistory);
 
-			return;
-
-			// TODO:
+			// TODO: Sort out the concept of historical tokens versus session tokens.
 
 			SelectedToken = Tokens.First();
 			var historicalTokens = Tokens.Where(t => t.NamedAuthorizationStateOrigin == NamedAuthorizationStateOrigin.History).ToList();
