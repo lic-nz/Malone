@@ -4,6 +4,7 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Windows;
 using System.Xml.Linq;
 using Caliburn.Micro;
@@ -499,7 +500,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 			if (responseError != null)
 			{
-				var dialogResult = await _dialogManager.Show("Oh dear", "I'll be honest with you: we've hit a snag. Not sure exactly what the problem is but I suggest you've got the URL wrong or forgotten to plug in your Internet. Double check those things and we'll have another go.\n\nBTW, the low level reponse was: " + responseError);
+				var dialogResult = await _dialogManager.Show("Oh dear", "Nope, that didn't work.\n\n" + responseError);
 				return;
 			}
 
@@ -586,22 +587,41 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 		{
 			if (response == null)
 				return "Uhm, response was null?";
+
+			var sb = new StringBuilder();
 			
 			switch (response.ResponseStatus)
 			{
 				case ResponseStatus.None:
-					return "Uh, not sure what happened. Didn't get a response?";
+					sb.AppendLine("Apparently, none.");
+					break;
 				case ResponseStatus.Completed:
 					return null;
 				case ResponseStatus.Error:
-					return "Error. Network might be down, DNS failed, or sunspots messed up the signal.";
+					sb.AppendLine("Error.");
+					break;
 				case ResponseStatus.TimedOut:
-					return "Timed out.";
+					sb.AppendLine("Timed out.");
+					break;
 				case ResponseStatus.Aborted:
-					return "Aborted.";
+					sb.AppendLine("Aborted.");
+					break;
 				default:
 					return null;
 			}
+
+			sb.AppendLine();
+
+			if (!string.IsNullOrWhiteSpace(response.ErrorMessage))
+				sb.AppendLine(response.ErrorMessage);
+
+			if (response.ErrorException != null)
+			{
+				sb.AppendLine(response.ErrorException.Message);
+				sb.AppendLine(response.ErrorException.StackTrace);
+			}
+			
+			return sb.ToString();
 		}
 
 		public void HistoryLayoutUpdated(object e)
