@@ -336,10 +336,6 @@
 
 				<Grid>
 
-					<Grid.Resources>
-						<converters:HttpStatusCodeToVisibilityConverter x:Key="HttpStatusCodeToVisibilityConverter" />
-					</Grid.Resources>
-
 					<ContentControl Content="{StaticResource IconClourIrc}" HorizontalAlignment="Center" VerticalAlignment="Center" />
 
 					<DockPanel LastChildFill="True" Visibility="{Binding ResponseVisibility}">

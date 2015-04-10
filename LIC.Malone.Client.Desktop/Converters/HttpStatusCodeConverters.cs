@@ -33,19 +33,4 @@ namespace LIC.Malone.Client.Desktop.Converters
 			throw new NotSupportedException();
 		}
 	}
-
-	public class HttpStatusCodeToVisibilityConverter : IValueConverter
-	{
-		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-		{
-			var code = (HttpStatusCode?)value;
-
-			return code.HasValue ? Visibility.Visible : Visibility.Hidden;
-		}
-
-		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-		{
-			throw new NotSupportedException();
-		}
-	}
 }
