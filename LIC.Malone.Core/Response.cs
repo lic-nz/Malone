@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 
 namespace LIC.Malone.Core
@@ -10,6 +11,7 @@ namespace LIC.Malone.Core
 		public HttpStatusCode HttpStatusCode { get; set; }
 		public string ContentType { get; set; }
 		public string Body { get; set; }
+		public List<Header> Headers { get; set; }
 
 		public Response()
 		{

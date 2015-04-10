@@ -388,16 +388,15 @@
 								<Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource TabHeader}"></Style>
 							</TabControl.Resources>
 
-							<TabItem Header="Body" Margin="0,6,0,-6">
+							<TabItem Header="Body">
 
 								<StackPanel>
 
 									<!--TODO: Highlight based on accept header.-->
 
-									<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 -40 0 0">
+									<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 -45 0 0">
 										<Label x:Name="ResponseContentType" Style="{StaticResource DefaultLabel}" Margin="3 2 0 0">content/type</Label>
 									</StackPanel>
-
 
 									<ae:TextEditor DockPanel.Dock="Top" Margin="15 0 0 0" VerticalScrollBarVisibility="Disabled" Document="{Binding ResponseBody}" SyntaxHighlighting="{Binding ResponseBodyHighlighting}">
 										<i:Interaction.Behaviors>
@@ -407,6 +406,64 @@
 
 								</StackPanel>
 
+							</TabItem>
+
+							<TabItem Header="Headers">
+								
+								<DockPanel Margin="7 0 15 0" LastChildFill="False">
+									
+									<Border DockPanel.Dock="Top">
+										<StackPanel Orientation="Horizontal">
+											<Label Style="{StaticResource DefaultLabel}" Width="200">Name</Label>
+											<Label Style="{StaticResource DefaultLabel}">Value</Label>
+										</StackPanel>
+									</Border>
+									
+									<ItemsControl DockPanel.Dock="Top" x:Name="ResponseHeaders">
+										<ItemsControl.ItemTemplate>
+											<DataTemplate>
+												
+												<DataTemplate.Resources>
+													
+													<Style TargetType="TextBox" BasedOn="{StaticResource DefaultTextBox}">
+														<Setter Property="Margin" Value="-6 -5 5 -5"/>
+														<Setter Property="IsReadOnly" Value="True"/>
+														<Setter Property="IsReadOnlyCaretVisible" Value="True"/>
+														<Setter Property="BorderBrush" Value="Transparent"/>
+														<Style.Triggers>
+															<DataTrigger Binding="{Binding Name}" Value="Accept">
+																<Setter Property="IsEnabled" Value="False"/>
+															</DataTrigger>
+														</Style.Triggers>
+													</Style>
+													
+													<Style TargetType="controls:IconLink">
+														<Style.Triggers>
+															<DataTrigger Binding="{Binding Name}" Value="Accept">
+																<Setter Property="Visibility" Value="Hidden"/>
+															</DataTrigger>
+														</Style.Triggers>
+													</Style>
+													
+												</DataTemplate.Resources>
+												
+												<Border Padding="5">
+													<Grid>
+														<Grid.ColumnDefinitions>
+															<ColumnDefinition Width="200"/>
+															<ColumnDefinition Width="*"/>
+															<ColumnDefinition Width="40"/>
+														</Grid.ColumnDefinitions>
+														<TextBox Grid.Column="0" Text="{Binding Name}" />
+														<TextBox Grid.Column="1" Text="{Binding Value}" />
+													</Grid>
+												</Border>
+												
+											</DataTemplate>
+										</ItemsControl.ItemTemplate>
+									</ItemsControl>
+
+								</DockPanel>
 							</TabItem>
 
 						</TabControl>

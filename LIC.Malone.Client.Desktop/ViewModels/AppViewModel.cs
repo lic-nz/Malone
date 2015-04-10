@@ -206,6 +206,17 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			}
 		}
 
+		private IObservableCollection<Header> _responseHeaders;
+		public IObservableCollection<Header> ResponseHeaders
+		{
+			get { return _responseHeaders; }
+			set
+			{
+				_responseHeaders = value;
+				NotifyOfPropertyChange(() => ResponseHeaders);
+			}
+		}
+
 		private IObservableCollection<NamedAuthorizationState> _tokens;
 		public IObservableCollection<NamedAuthorizationState> Tokens
 		{
@@ -372,10 +383,15 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			var hasResponse = response != null;
 
 			RequestHasResponseVisibility = hasResponse ? Visibility.Visible : Visibility.Collapsed;
-			ResponseTime = hasResponse ? request.ResponseTime : string.Empty;
-			ResponseBody.Text = hasResponse ? Prettify(response.Body, response.ContentType) : string.Empty;
-			ResponseContentType = hasResponse ? response.ContentType : string.Empty;
-			HttpStatusCode = hasResponse ? response.HttpStatusCode : 0;
+
+			if (!hasResponse)
+				return;
+
+			ResponseTime = request.ResponseTime;
+			ResponseBody.Text = Prettify(response.Body, response.ContentType);
+			ResponseContentType = response.ContentType;
+			HttpStatusCode = response.HttpStatusCode;
+			ResponseHeaders = new BindableCollection<Header>(response.Headers);
 		}
 
 		private bool IsRequestDirty()
@@ -481,13 +497,21 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			}
 
 			request.At = result.SentAt;
+
+			var responseHeaders = response
+				.Headers
+				.Where(p => p.Type == ParameterType.HttpHeader)
+				.Select(p => new Header(p.Name, p.Value.ToString()))
+				.ToList();
+
 			request.Response = new Response
 			{
 				Guid = Guid.NewGuid(),
 				At = result.ReceivedAt,
 				HttpStatusCode = response.StatusCode,
 				Body = response.Content,
-				ContentType = response.ContentType
+				ContentType = response.ContentType,
+				Headers = responseHeaders
 			};
 
 			AddToHistory(request);
