@@ -14,7 +14,10 @@ namespace LIC.Malone.Core
 		{
 			var result = new SendResult();
 
-			var client = new RestClient(request.BaseUrl);
+			var client = new RestClient(request.BaseUrl)
+			{
+				FollowRedirects = false
+			};
 
 			result.SentAt = DateTimeOffset.UtcNow;
 			var response = client.Execute(request);
