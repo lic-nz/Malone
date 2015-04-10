@@ -32,6 +32,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 		private AddCollectionViewModel _addCollectionViewModel = new AddCollectionViewModel();
 		private AddTokenViewModel _addTokenViewModel;
+		private readonly NamedAuthorizationState _anonymousToken = new NamedAuthorizationState("<Anonymous>", null);
 
 		private string _historyJsonPath;
 
@@ -362,7 +363,8 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 			_addTokenViewModel = new AddTokenViewModel(_bus, _windowManager);
 
-			Tokens = new BindableCollection<NamedAuthorizationState>(new List<NamedAuthorizationState> { new NamedAuthorizationState("<Anonymous>", null)});
+			Tokens = new BindableCollection<NamedAuthorizationState>(new List<NamedAuthorizationState> { _anonymousToken });
+			SelectedToken = _anonymousToken;
 
 			DisplayRequest(new Request());
 
@@ -386,6 +388,20 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			SelectedAccept = accept;
 			RequestBody.Text = Prettify(request.Body, contentType);
 			SelectedContentType = contentType;
+
+			var token = request.NamedAuthorizationState;
+
+			if (token == null || token.AuthorizationState == null)
+			{
+				SelectedToken = _anonymousToken;
+			}
+			else
+			{
+				if (Tokens.All(t => t.Guid != token.Guid))
+					Tokens.Add(token);
+
+				SelectedToken = token;
+			}
 
 			var response = request.Response;
 			var hasResponse = response != null;
@@ -640,20 +656,6 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 				return;
 
 			DisplayRequest(SelectedHistory);
-
-			// TODO: Sort out the concept of historical tokens versus session tokens.
-
-			SelectedToken = Tokens.First();
-			var historicalTokens = Tokens.Where(t => t.NamedAuthorizationStateOrigin == NamedAuthorizationStateOrigin.History).ToList();
-			Tokens.RemoveRange(historicalTokens);
-
-			var state = SelectedHistory.NamedAuthorizationState;
-
-			if (state != null)
-			{
-				Tokens.Add(SelectedHistory.NamedAuthorizationState);
-				SelectedToken = SelectedHistory.NamedAuthorizationState;
-			}
 		}
 
 		public void RemoveFromHistory(object e)

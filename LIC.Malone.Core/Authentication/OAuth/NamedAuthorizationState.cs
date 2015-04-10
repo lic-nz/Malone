@@ -4,16 +4,9 @@ using Newtonsoft.Json;
 
 namespace LIC.Malone.Core.Authentication.OAuth
 {
-	public enum NamedAuthorizationStateOrigin
-	{
-		History,
-		Current
-	}
-
 	public class NamedAuthorizationState
 	{
 		public Guid Guid { get; set; }
-		public NamedAuthorizationStateOrigin NamedAuthorizationStateOrigin { get; set; }
 		public string Name { get; set; }
 		public IAuthorizationState AuthorizationState { get; set; }
 
@@ -21,7 +14,6 @@ namespace LIC.Malone.Core.Authentication.OAuth
 		public NamedAuthorizationState(Guid guid, string name, AuthorizationState authorizationState)
 		{
 			Guid = guid;
-			NamedAuthorizationStateOrigin = NamedAuthorizationStateOrigin.History;
 			Name = name;
 			AuthorizationState = authorizationState;
 		}
@@ -29,7 +21,6 @@ namespace LIC.Malone.Core.Authentication.OAuth
 		public NamedAuthorizationState(string name, IAuthorizationState authorizationState)
 		{
 			Guid = Guid.NewGuid();
-			NamedAuthorizationStateOrigin = NamedAuthorizationStateOrigin.Current;
 			Name = name;
 			AuthorizationState = authorizationState;
 		}
