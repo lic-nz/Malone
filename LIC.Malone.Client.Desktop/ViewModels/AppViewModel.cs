@@ -370,8 +370,15 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 		private void DisplayRequest(Request request)
 		{
-			var accept = request.Headers.GetValue(Header.Accept) ?? string.Empty;
-			var contentType = request.Headers.GetValue(Header.ContentType) ?? string.Empty;
+			var accept = request.Headers.GetValue(Header.Accept);
+
+			if (!Accepts.Contains(accept))
+				accept = Accepts.First();
+
+			var contentType = request.Headers.GetValue(Header.ContentType);
+
+			if (!ContentTypes.Contains(contentType))
+				contentType = ContentTypes.First();
 
 			SelectedMethod = request.Method;
 			Url = request.Url;
