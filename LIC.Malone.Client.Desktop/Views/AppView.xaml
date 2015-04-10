@@ -213,8 +213,31 @@
 					<TabItem Header="Body">
 
 						<StackPanel>
+							
 
-							<ComboBox x:Name="ContentTypes" Margin="10 0 0 15" Width="130" Style="{StaticResource DefaultComboBox}" HorizontalAlignment="Left" />
+							<Canvas>
+								<Grid ZIndex="1000" Canvas.Right="-5" Canvas.Top="-67" DockPanel.Dock="Top" Margin="15 0" HorizontalAlignment="Right">
+									<Grid.ColumnDefinitions>
+										<ColumnDefinition Width="130"/>
+									</Grid.ColumnDefinitions>
+									<Grid.RowDefinitions>
+										<RowDefinition />
+										<RowDefinition />
+									</Grid.RowDefinitions>
+
+									<Grid.Resources>
+										<Style x:Key="TopLabel" TargetType="Label" BasedOn="{StaticResource DefaultLabel}">
+											<Setter Property="Margin" Value="-5 0 0 0"/>
+										</Style>
+									</Grid.Resources>
+
+									<Label Grid.Row="0" Style="{StaticResource TopLabel}" Content="Content-Type"/>
+
+									<ComboBox Grid.Row="1" x:Name="ContentTypes" Width="130" Style="{StaticResource DefaultComboBox}" />
+								</Grid>
+							</Canvas>
+
+
 
 							<!--TODO: Highlight based on accept header.-->
 							<ae:TextEditor Document="{Binding RequestBody}" VerticalScrollBarVisibility="Disabled" SyntaxHighlighting="XML" IsReadOnly="False" MinHeight="95">
@@ -342,7 +365,7 @@
 
 						<DockPanel DockPanel.Dock="Top" LastChildFill="True">
 							<Label DockPanel.Dock="Left" Style="{StaticResource H1}" Content="Response" />
-							<controls:HttpStatus DockPanel.Dock="Right" HttpStatusCode="{Binding HttpStatusCode}" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="0 0 0 10"/>
+							<controls:HttpStatus DockPanel.Dock="Right" HttpStatusCode="{Binding HttpStatusCode}" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="0 0 10 10"/>
 							<Label DockPanel.Dock="Right" x:Name="ResponseTime" Margin="0 0 10 5" Style="{StaticResource H2}" Foreground="{StaticResource RecededColorBrush}" VerticalAlignment="Bottom" HorizontalAlignment="Right" Content="Time">
 								<Label.ToolTip>
 									<StackPanel Orientation="Vertical">
@@ -359,25 +382,21 @@
 							</Label>
 						</DockPanel>
 
-
-						<TabControl DockPanel.Dock="Top" Margin="4 5 0 0">
+						<TabControl DockPanel.Dock="Top" Margin="4 -9 0 0">
 
 							<TabControl.Resources>
 								<Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource TabHeader}"></Style>
 							</TabControl.Resources>
 
-							<TabItem Header="Body">
-								
+							<TabItem Header="Body" Margin="0,6,0,-6">
+
 								<StackPanel>
 
-									<!--<ComboBox x:Name="ContentTypes" Margin="10 0 0 15" Width="130" Style="{StaticResource DefaultComboBox}" HorizontalAlignment="Left" />
+									<!--TODO: Highlight based on accept header.-->
 
-									--><!--TODO: Highlight based on accept header.--><!--
-									<ae:TextEditor Document="{Binding RequestBody}" VerticalScrollBarVisibility="Disabled" SyntaxHighlighting="XML" IsReadOnly="False" MinHeight="95">
-										<i:Interaction.Behaviors>
-											<local:BubbleScrollEvent/>
-										</i:Interaction.Behaviors>
-									</ae:TextEditor>-->
+									<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 -40 0 0">
+										<Label x:Name="ResponseContentType" Style="{StaticResource DefaultLabel}" Margin="3 2 0 0">content/type</Label>
+									</StackPanel>
 
 
 									<ae:TextEditor DockPanel.Dock="Top" Margin="15 0 0 0" VerticalScrollBarVisibility="Disabled" Document="{Binding ResponseBody}" SyntaxHighlighting="{Binding ResponseBodyHighlighting}">
@@ -389,7 +408,7 @@
 								</StackPanel>
 
 							</TabItem>
-							
+
 						</TabControl>
 
 					</DockPanel>
