@@ -249,11 +249,17 @@
 													<DataTrigger Binding="{Binding Name}" Value="Accept">
 														<Setter Property="IsEnabled" Value="False"/>
 													</DataTrigger>
+													<DataTrigger Binding="{Binding Name}" Value="Content-Type">
+														<Setter Property="IsEnabled" Value="False"/>
+													</DataTrigger>
 												</Style.Triggers>
 											</Style>
 											<Style TargetType="controls:IconLink">
 												<Style.Triggers>
 													<DataTrigger Binding="{Binding Name}" Value="Accept">
+														<Setter Property="Visibility" Value="Hidden"/>
+													</DataTrigger>
+													<DataTrigger Binding="{Binding Name}" Value="Content-Type">
 														<Setter Property="Visibility" Value="Hidden"/>
 													</DataTrigger>
 												</Style.Triggers>
