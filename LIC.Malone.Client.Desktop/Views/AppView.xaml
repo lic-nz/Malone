@@ -213,28 +213,9 @@
 					<TabItem Header="Body">
 
 						<StackPanel>
-							
 
 							<Canvas>
-								<Grid ZIndex="1000" Canvas.Right="-5" Canvas.Top="-67" DockPanel.Dock="Top" Margin="15 0" HorizontalAlignment="Right">
-									<Grid.ColumnDefinitions>
-										<ColumnDefinition Width="130"/>
-									</Grid.ColumnDefinitions>
-									<Grid.RowDefinitions>
-										<RowDefinition />
-										<RowDefinition />
-									</Grid.RowDefinitions>
-
-									<Grid.Resources>
-										<Style x:Key="TopLabel" TargetType="Label" BasedOn="{StaticResource DefaultLabel}">
-											<Setter Property="Margin" Value="-5 0 0 0"/>
-										</Style>
-									</Grid.Resources>
-
-									<Label Grid.Row="0" Style="{StaticResource TopLabel}" Content="Content-Type"/>
-
-									<ComboBox Grid.Row="1" x:Name="ContentTypes" Width="130" Style="{StaticResource DefaultComboBox}" />
-								</Grid>
+								<ComboBox x:Name="ContentTypes" Canvas.Right="10" Canvas.Top="-42" HorizontalAlignment="Right" Width="130" Style="{StaticResource DefaultComboBox}" />
 							</Canvas>
 
 
@@ -251,7 +232,7 @@
 					</TabItem>
 
 					<TabItem Header="Headers">
-						<DockPanel Margin="7 0 15 0" LastChildFill="False">
+						<DockPanel Margin="7 -8 15 0" LastChildFill="False">
 							<Border DockPanel.Dock="Top">
 								<StackPanel Orientation="Horizontal">
 									<Label Style="{StaticResource DefaultLabel}" Width="200">Name</Label>
@@ -304,7 +285,7 @@
 
 						<DockPanel>
 
-							<Grid DockPanel.Dock="Top">
+							<Grid DockPanel.Dock="Top" Margin="0 -8 0 0">
 								<Grid.RowDefinitions>
 									<RowDefinition Height="60" />
 									<RowDefinition Height="40" />
@@ -409,22 +390,22 @@
 							</TabItem>
 
 							<TabItem Header="Headers">
-								
-								<DockPanel Margin="7 0 15 0" LastChildFill="False">
-									
+
+								<DockPanel Margin="7 -8 15 0" LastChildFill="False">
+
 									<Border DockPanel.Dock="Top">
 										<StackPanel Orientation="Horizontal">
 											<Label Style="{StaticResource DefaultLabel}" Width="200">Name</Label>
 											<Label Style="{StaticResource DefaultLabel}">Value</Label>
 										</StackPanel>
 									</Border>
-									
+
 									<ItemsControl DockPanel.Dock="Top" x:Name="ResponseHeaders">
 										<ItemsControl.ItemTemplate>
 											<DataTemplate>
-												
+
 												<DataTemplate.Resources>
-													
+
 													<Style TargetType="TextBox" BasedOn="{StaticResource DefaultTextBox}">
 														<Setter Property="Margin" Value="-6 -5 5 -5"/>
 														<Setter Property="IsReadOnly" Value="True"/>
@@ -436,7 +417,7 @@
 															</DataTrigger>
 														</Style.Triggers>
 													</Style>
-													
+
 													<Style TargetType="controls:IconLink">
 														<Style.Triggers>
 															<DataTrigger Binding="{Binding Name}" Value="Accept">
@@ -444,9 +425,9 @@
 															</DataTrigger>
 														</Style.Triggers>
 													</Style>
-													
+
 												</DataTemplate.Resources>
-												
+
 												<Border Padding="5">
 													<Grid>
 														<Grid.ColumnDefinitions>
@@ -458,7 +439,7 @@
 														<TextBox Grid.Column="1" Text="{Binding Value}" />
 													</Grid>
 												</Border>
-												
+
 											</DataTemplate>
 										</ItemsControl.ItemTemplate>
 									</ItemsControl>
