@@ -2,6 +2,9 @@
 {
 	public class Header
 	{
+		public const string Accept = "Accept";
+		public const string ContentType = "Content-Type";
+
 		public string Name { get; set; }
 		public string Value { get; set; }
 

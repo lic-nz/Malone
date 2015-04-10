@@ -10,6 +10,7 @@ using Caliburn.Micro;
 using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Highlighting;
 using LIC.Malone.Client.Desktop.Controls;
+using LIC.Malone.Client.Desktop.Extensions;
 using LIC.Malone.Client.Desktop.Messages;
 using LIC.Malone.Core;
 using LIC.Malone.Core.Authentication;
@@ -152,7 +153,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 				// Must be a better way to do this.
 				var headers = new BindableCollection<Header>(Headers);
-				var header = headers.Single(h => h.Name == "Accept");
+				var header = headers.Single(h => h.Name == Header.Accept);
 				header.Value = _selectedAccept;
 				Headers = headers;
 
@@ -186,7 +187,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 				// Must be a better way to do this.
 				var headers = new BindableCollection<Header>(Headers);
-				var header = headers.Single(h => h.Name == "Content-Type");
+				var header = headers.Single(h => h.Name == Header.ContentType);
 				header.Value = _selectedContentType;
 				Headers = headers;
 
@@ -194,7 +195,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			}
 		}
 
-		private IObservableCollection<Header> _headers = new BindableCollection<Header>(new List<Header> { new Header("Accept", _accepts.First()), new Header("Content-Type", _contentTypes.First()) });
+		private IObservableCollection<Header> _headers = new BindableCollection<Header>(new List<Header> { new Header(Header.Accept, _accepts.First()), new Header(Header.ContentType, _contentTypes.First()) });
 		public IObservableCollection<Header> Headers
 		{
 			get { return _headers; }
@@ -358,10 +359,8 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 		private void DisplayRequest(Request request)
 		{
-			var acceptHeader = request.Headers.FirstOrDefault(h => h.Name == "Accept");
-			var accept = acceptHeader != null ? acceptHeader.Value : Accepts.First();
-			var contentTypeHeader = request.Headers.FirstOrDefault(h => h.Name == "Content-Type");
-			var contentType = contentTypeHeader != null ? contentTypeHeader.Value : ContentTypes.First();
+			var accept = request.Headers.GetValue(Header.Accept) ?? string.Empty;
+			var contentType = request.Headers.GetValue(Header.ContentType) ?? string.Empty;
 
 			SelectedMethod = request.Method;
 			Url = request.Url;
