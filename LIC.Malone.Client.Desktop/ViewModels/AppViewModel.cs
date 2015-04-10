@@ -266,15 +266,21 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			}
 		}
 
-		private Visibility _responseVisibility;
-		public Visibility ResponseVisibility
+		private Visibility _requestHasResponseVisibility;
+		public Visibility RequestHasResponseVisibility
 		{
-			get { return _responseVisibility; }
+			get { return _requestHasResponseVisibility; }
 			set
 			{
-				_responseVisibility = value;
-				NotifyOfPropertyChange(() => ResponseVisibility);
+				_requestHasResponseVisibility = value;
+				NotifyOfPropertyChange(() => RequestHasResponseVisibility);
+				NotifyOfPropertyChange(() => RequestHasNoResponseVisibility);
 			}
+		}
+
+		public Visibility RequestHasNoResponseVisibility
+		{
+			get { return RequestHasResponseVisibility == Visibility.Visible ? Visibility.Hidden : Visibility.Visible; }
 		}
 
 		private TextDocument _responseBody = new TextDocument();
@@ -366,7 +372,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			var response = request.Response;
 			var hasResponse = response != null;
 
-			ResponseVisibility = hasResponse ? Visibility.Visible : Visibility.Collapsed;
+			RequestHasResponseVisibility = hasResponse ? Visibility.Visible : Visibility.Collapsed;
 			ResponseTime = hasResponse ? request.ResponseTime : string.Empty;
 			ResponseBody.Text = hasResponse ? Prettify(response.Body, response.ContentType) : string.Empty;
 			ResponseContentType = hasResponse ? response.ContentType : string.Empty;
@@ -448,7 +454,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 			SelectedHistory = null;
 
-			ResponseVisibility = Visibility.Collapsed;
+			RequestHasResponseVisibility = Visibility.Collapsed;
 
 			// There was something strange going on with Headers being a BindableCollection or something - it would somehow overwrite the headers
 			// for previous requests in the History when just calling Headers.ToList(). This is begging for a unit test, but for now make a copy.

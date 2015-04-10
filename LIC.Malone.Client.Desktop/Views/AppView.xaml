@@ -336,9 +336,9 @@
 
 				<Grid>
 
-					<ContentControl Content="{StaticResource IconClourIrc}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+					<ContentControl Content="{StaticResource IconClourIrc}" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding RequestHasNoResponseVisibility}" />
 
-					<DockPanel LastChildFill="True" Visibility="{Binding ResponseVisibility}">
+					<DockPanel LastChildFill="True" Visibility="{Binding RequestHasResponseVisibility}">
 
 						<DockPanel DockPanel.Dock="Top" LastChildFill="True">
 							<Label DockPanel.Dock="Left" Style="{StaticResource H1}" Content="Response" />
@@ -359,11 +359,38 @@
 							</Label>
 						</DockPanel>
 
-						<ae:TextEditor DockPanel.Dock="Top" Margin="15 0 0 0" VerticalScrollBarVisibility="Disabled" Document="{Binding ResponseBody}" SyntaxHighlighting="{Binding ResponseBodyHighlighting}">
-							<i:Interaction.Behaviors>
-								<local:BubbleScrollEvent/>
-							</i:Interaction.Behaviors>
-						</ae:TextEditor>
+
+						<TabControl DockPanel.Dock="Top" Margin="4 5 0 0">
+
+							<TabControl.Resources>
+								<Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource TabHeader}"></Style>
+							</TabControl.Resources>
+
+							<TabItem Header="Body">
+								
+								<StackPanel>
+
+									<!--<ComboBox x:Name="ContentTypes" Margin="10 0 0 15" Width="130" Style="{StaticResource DefaultComboBox}" HorizontalAlignment="Left" />
+
+									--><!--TODO: Highlight based on accept header.--><!--
+									<ae:TextEditor Document="{Binding RequestBody}" VerticalScrollBarVisibility="Disabled" SyntaxHighlighting="XML" IsReadOnly="False" MinHeight="95">
+										<i:Interaction.Behaviors>
+											<local:BubbleScrollEvent/>
+										</i:Interaction.Behaviors>
+									</ae:TextEditor>-->
+
+
+									<ae:TextEditor DockPanel.Dock="Top" Margin="15 0 0 0" VerticalScrollBarVisibility="Disabled" Document="{Binding ResponseBody}" SyntaxHighlighting="{Binding ResponseBodyHighlighting}">
+										<i:Interaction.Behaviors>
+											<local:BubbleScrollEvent/>
+										</i:Interaction.Behaviors>
+									</ae:TextEditor>
+
+								</StackPanel>
+
+							</TabItem>
+							
+						</TabControl>
 
 					</DockPanel>
 
