@@ -135,7 +135,7 @@ namespace LIC.Malone.Core
 
 		private string GetResourcePath(Uri url)
 		{
-			var path = url.AbsolutePath;
+			var path = url.PathAndQuery;
 
 			// Remove leading slash to keep RestSharp happy.
 			if (path.StartsWith("/"))
