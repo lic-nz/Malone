@@ -172,7 +172,7 @@
 					<controls:IconLink x:Name="Reset" HorizontalAlignment="Right" IconData="{StaticResource IconErase}" IconMargin="{StaticResource IconEraseMargin}" ToolTip="Clear this request" />
 				</DockPanel>
 
-				<Grid DockPanel.Dock="Top" Margin="15 0">
+				<Grid DockPanel.Dock="Top" Margin="15 10 15 0">
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="70"/>
 						<ColumnDefinition Width="10"/>
@@ -182,26 +182,15 @@
 					</Grid.ColumnDefinitions>
 					<Grid.RowDefinitions>
 						<RowDefinition />
-						<RowDefinition />
 						<RowDefinition Height="10"/>
 						<RowDefinition />
 					</Grid.RowDefinitions>
 
-					<Grid.Resources>
-						<Style x:Key="TopLabel" TargetType="Label" BasedOn="{StaticResource DefaultLabel}">
-							<Setter Property="Margin" Value="-5 0 0 0"/>
-						</Style>
-					</Grid.Resources>
+					<ComboBox Grid.Row="0" Grid.Column="0" x:Name="Methods" Width="70" Style="{StaticResource DefaultComboBox}" />
+					<TextBox  Grid.Row="0" Grid.Column="2" x:Name="Url" metro:TextBoxHelper.Watermark="Enter URL or choose from history" Style="{StaticResource DefaultTextBox}"/>
+					<ComboBox Grid.Row="0" Grid.Column="4" x:Name="Accepts" Width="130" Style="{StaticResource DefaultComboBox}" />
 
-					<Label Grid.Row="0" Grid.Column="0" Style="{StaticResource TopLabel}">Method</Label>
-					<Label Grid.Row="0" Grid.Column="2" Style="{StaticResource TopLabel}">URL</Label>
-					<Label Grid.Row="0" Grid.Column="4" Style="{StaticResource TopLabel}">Accept</Label>
-
-					<ComboBox Grid.Row="1" Grid.Column="0" x:Name="Methods" Width="70" Style="{StaticResource DefaultComboBox}" />
-					<TextBox  Grid.Row="1" Grid.Column="2" x:Name="Url" metro:TextBoxHelper.Watermark="Enter URL or choose from history" Style="{StaticResource DefaultTextBox}"/>
-					<ComboBox Grid.Row="1" Grid.Column="4" x:Name="Accepts" Width="130" Style="{StaticResource DefaultComboBox}" />
-
-					<controls:IconButton Grid.Row="3" Grid.Column="2" x:Name="Send" Content="Send" IconData="{StaticResource IconPaperPlane}" IconMargin="{StaticResource IconPaperPlaneMargin}" HorizontalAlignment="Left" />
+					<controls:IconButton Grid.Row="2" Grid.Column="2" x:Name="Send" Content="Send" IconData="{StaticResource IconPaperPlane}" IconMargin="{StaticResource IconPaperPlaneMargin}" HorizontalAlignment="Left" />
 				</Grid>
 
 				<TabControl DockPanel.Dock="Top" Margin="4 5 0 0">
@@ -231,12 +220,6 @@
 
 					<TabItem Header="Headers">
 						<DockPanel Margin="3 -8 15 0" LastChildFill="False">
-							<Border DockPanel.Dock="Top">
-								<StackPanel Orientation="Horizontal">
-									<Label Style="{StaticResource DefaultLabel}" Width="200">Name</Label>
-									<Label Style="{StaticResource DefaultLabel}">Value</Label>
-								</StackPanel>
-							</Border>
 							<ItemsControl DockPanel.Dock="Top" x:Name="Headers">
 								<ItemsControl.ItemTemplate>
 									<DataTemplate>
@@ -270,8 +253,8 @@
 													<ColumnDefinition Width="*"/>
 													<ColumnDefinition Width="40"/>
 												</Grid.ColumnDefinitions>
-												<TextBox Grid.Column="0" Text="{Binding Name}" />
-												<TextBox Grid.Column="1" Text="{Binding Value}" />
+												<TextBox Grid.Column="0" Text="{Binding Name}" metro:TextBoxHelper.Watermark="Name" />
+												<TextBox Grid.Column="1" Text="{Binding Value}" metro:TextBoxHelper.Watermark="Value" />
 
 												<controls:IconLink Grid.Column="2" HorizontalAlignment="Right" Content="" IconData="{StaticResource IconCircleWithCross}" IconMargin="{StaticResource IconCircleWithCrossMargin}" cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action RemoveFromHeaders($this)]" />
 											</Grid>
@@ -287,13 +270,9 @@
 
 					<TabItem Header="Authentication">
 
-						<DockPanel>
+						<DockPanel Margin="3 -3 15 0">
 
-							<Grid DockPanel.Dock="Top" Margin="0 -8 0 0">
-								<Grid.RowDefinitions>
-									<RowDefinition Height="60" />
-								</Grid.RowDefinitions>
-								<Label Content="Send request as" HorizontalAlignment="Left" FontFamily="Segoe UI" FontSize="14" Foreground="#FF9395A2"/>
+							<Grid DockPanel.Dock="Top">
 								<ComboBox x:Name="Tokens" VerticalAlignment="Bottom" Margin="5,0,96,0" Padding="3" Height="30" >
 									<ComboBox.ItemTemplate>
 										<DataTemplate>
@@ -391,13 +370,6 @@
 							<TabItem Header="Headers">
 
 								<DockPanel Margin="3 -8 15 0" LastChildFill="False">
-
-									<Border DockPanel.Dock="Top">
-										<StackPanel Orientation="Horizontal">
-											<Label Style="{StaticResource DefaultLabel}" Width="200">Name</Label>
-											<Label Style="{StaticResource DefaultLabel}">Value</Label>
-										</StackPanel>
-									</Border>
 
 									<ItemsControl DockPanel.Dock="Top" x:Name="ResponseHeaders">
 										<ItemsControl.ItemTemplate>
