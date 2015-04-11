@@ -219,13 +219,26 @@
 					</TabItem>
 
 					<TabItem Header="Headers">
-						<DockPanel Margin="3 -8 15 0" LastChildFill="False">
+						<DockPanel Margin="8 -8 15 0" LastChildFill="False">
+
+							<DockPanel.Resources>
+								<Style x:Key="HeaderNameBase" TargetType="TextBox" BasedOn="{StaticResource DefaultTextBox}">
+									<Setter Property="Margin" Value="0 5 10 5"/>
+								</Style>
+								<Style x:Key="HeaderValueBase" TargetType="TextBox" BasedOn="{StaticResource DefaultTextBox}">
+									<Setter Property="Margin" Value="0 5 0 5"/>
+								</Style>
+								<Style x:Key="HeaderActionBase" TargetType="controls:IconLink">
+									<Setter Property="Margin" Value="-3 -10 -10 0"/>
+									<Setter Property="HorizontalAlignment" Value="Right"/>
+								</Style>
+							</DockPanel.Resources>
+
 							<ItemsControl DockPanel.Dock="Top" x:Name="Headers">
 								<ItemsControl.ItemTemplate>
 									<DataTemplate>
 										<DataTemplate.Resources>
-											<Style TargetType="TextBox" BasedOn="{StaticResource DefaultTextBox}">
-												<Setter Property="Margin" Value="0 0 10 0"/>
+											<Style x:Key="HeaderName" TargetType="TextBox" BasedOn="{StaticResource HeaderNameBase}">
 												<Style.Triggers>
 													<DataTrigger Binding="{Binding Name}" Value="Accept">
 														<Setter Property="IsEnabled" Value="False"/>
@@ -235,35 +248,51 @@
 													</DataTrigger>
 												</Style.Triggers>
 											</Style>
-											<Style TargetType="controls:IconLink">
+											<Style x:Key="HeaderValue" TargetType="TextBox" BasedOn="{StaticResource HeaderValueBase}">
 												<Style.Triggers>
 													<DataTrigger Binding="{Binding Name}" Value="Accept">
-														<Setter Property="Visibility" Value="Hidden"/>
+														<Setter Property="IsEnabled" Value="False"/>
 													</DataTrigger>
 													<DataTrigger Binding="{Binding Name}" Value="Content-Type">
-														<Setter Property="Visibility" Value="Hidden"/>
+														<Setter Property="IsEnabled" Value="False"/>
+													</DataTrigger>
+												</Style.Triggers>
+											</Style>
+											<Style x:Key="HeaderAction"  TargetType="controls:IconLink" BasedOn="{StaticResource HeaderActionBase}">
+												<Style.Triggers>
+													<DataTrigger Binding="{Binding Name}" Value="Accept">
+														<Setter Property="Visibility" Value="Collapsed"/>
+													</DataTrigger>
+													<DataTrigger Binding="{Binding Name}" Value="Content-Type">
+														<Setter Property="Visibility" Value="Collapsed"/>
 													</DataTrigger>
 												</Style.Triggers>
 											</Style>
 										</DataTemplate.Resources>
-										<Border Padding="5">
-											<Grid>
-												<Grid.ColumnDefinitions>
-													<ColumnDefinition Width="200"/>
-													<ColumnDefinition Width="*"/>
-													<ColumnDefinition Width="40"/>
-												</Grid.ColumnDefinitions>
-												<TextBox Grid.Column="0" Text="{Binding Name}" metro:TextBoxHelper.Watermark="Name" />
-												<TextBox Grid.Column="1" Text="{Binding Value}" metro:TextBoxHelper.Watermark="Value" />
-
-												<controls:IconLink Grid.Column="2" HorizontalAlignment="Right" Content="" IconData="{StaticResource IconCircleWithCross}" IconMargin="{StaticResource IconCircleWithCrossMargin}" cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action RemoveFromHeaders($this)]" />
-											</Grid>
-										</Border>
+										<Grid>
+											<Grid.ColumnDefinitions>
+												<ColumnDefinition Width="220"/>
+												<ColumnDefinition Width="*"/>
+												<ColumnDefinition Width="24"/>
+											</Grid.ColumnDefinitions>
+											<TextBox Grid.Column="0" Style="{StaticResource HeaderName}" Text="{Binding Name}" metro:TextBoxHelper.Watermark="Name" />
+											<TextBox Grid.Column="1" Style="{StaticResource HeaderValue}" Text="{Binding Value}" metro:TextBoxHelper.Watermark="Value" />
+											<controls:IconLink Grid.Column="2" Style="{StaticResource HeaderAction}" IconData="{StaticResource IconMinus}" cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action RemoveFromHeaders($this)]" />
+										</Grid>
 									</DataTemplate>
 								</ItemsControl.ItemTemplate>
 							</ItemsControl>
 
-							<controls:IconLink DockPanel.Dock="Top" HorizontalAlignment="Left" Content="Add" IconData="{StaticResource IconPlus}" IconMargin="{StaticResource IconPlusMargin}" cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action AddHeader()]" />
+							<Grid DockPanel.Dock="Top">
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="220"/>
+									<ColumnDefinition Width="*"/>
+									<ColumnDefinition Width="24"/>
+								</Grid.ColumnDefinitions>
+								<TextBox Grid.Column="0" Style="{StaticResource HeaderNameBase}" Text="{Binding Name}" metro:TextBoxHelper.Watermark="Name" />
+								<TextBox Grid.Column="1" Style="{StaticResource HeaderValueBase}"  Text="{Binding Value}" metro:TextBoxHelper.Watermark="Value" />
+								<controls:IconLink Grid.Column="2" Style="{StaticResource HeaderActionBase}" IconData="{StaticResource IconPlus}" IconMargin="0 5 0 0" cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action AddHeader()]" />
+							</Grid>
 
 						</DockPanel>
 					</TabItem>
@@ -402,7 +431,7 @@
 												<Border Padding="5">
 													<Grid>
 														<Grid.ColumnDefinitions>
-															<ColumnDefinition Width="200"/>
+															<ColumnDefinition Width="220"/>
 															<ColumnDefinition Width="*"/>
 															<ColumnDefinition Width="40"/>
 														</Grid.ColumnDefinitions>
