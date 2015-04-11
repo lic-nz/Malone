@@ -336,6 +336,29 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			}
 		}
 
+		private string _headerName;
+		public string HeaderName
+		{
+			get { return _headerName; }
+			set
+			{
+				_headerName = value;
+				NotifyOfPropertyChange(() => HeaderName);
+				NotifyOfPropertyChange(() => CanAddHeader);
+			}
+		}
+
+		private string _headerValue;
+		public string HeaderValue
+		{
+			get { return _headerValue; }
+			set
+			{
+				_headerValue = value;
+				NotifyOfPropertyChange(() => HeaderValue);
+			}
+		}
+
 		public IHighlightingDefinition ResponseBodyHighlighting
 		{
 			get
@@ -351,6 +374,11 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 				Uri url;
 				return Uri.TryCreate(Url, UriKind.Absolute, out url) && _allowedSchemes.Contains(url.Scheme);
 			}
+		}
+
+		public bool CanAddHeader
+		{
+			get { return !string.IsNullOrWhiteSpace(HeaderName); }
 		}
 
 		#endregion
@@ -673,7 +701,9 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 		public void AddHeader()
 		{
-			Headers.Add(new Header());
+			Headers.Add(new Header(HeaderName, HeaderValue));
+			HeaderName = null;
+			HeaderValue = null;
 		}
 
 		public void ClearHistory(object e)
