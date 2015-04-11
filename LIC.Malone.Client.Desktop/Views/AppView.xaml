@@ -318,7 +318,7 @@
 
 				<Grid>
 
-					<ContentControl Content="{StaticResource IconClourIrc}" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding RequestHasNoResponseVisibility}" />
+					<ContentControl Content="{StaticResource IconCloudIrc}" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding RequestHasNoResponseVisibility}" />
 
 					<DockPanel LastChildFill="True" Visibility="{Binding RequestHasResponseVisibility}">
 
