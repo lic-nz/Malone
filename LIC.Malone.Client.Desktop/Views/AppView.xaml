@@ -168,7 +168,7 @@
 
 				<DockPanel DockPanel.Dock="Top">
 					<Label Style="{StaticResource H1}" Content="Request" />
-					<Label x:Name="Dirty" Style="{StaticResource H1}"/>
+					<Path Visibility="{Binding DirtyVisibility}" Margin="3 17 0 0" Fill="#FFD51C" Data="{StaticResource IconNew}" ToolTip="Request has been modified. Original response is still shown." />
 					<controls:IconLink x:Name="Reset" HorizontalAlignment="Right" IconData="{StaticResource IconErase}" IconMargin="{StaticResource IconEraseMargin}" ToolTip="Clear this request" />
 				</DockPanel>
 

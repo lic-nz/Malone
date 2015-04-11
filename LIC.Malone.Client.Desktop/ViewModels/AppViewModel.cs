@@ -82,9 +82,9 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			}
 		}
 
-		public string Dirty
+		public Visibility DirtyVisibility
 		{
-			get { return IsRequestDirty() ? "*" : string.Empty; }
+			get { return IsRequestDirty() ? Visibility.Visible : Visibility.Hidden; }
 		}
 
 		private string _url;
@@ -95,7 +95,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			{
 				_url = value;
 				NotifyOfPropertyChange(() => Url);
-				NotifyOfPropertyChange(() => Dirty);
+				NotifyOfPropertyChange(() => DirtyVisibility);
 				NotifyOfPropertyChange(() => CanSend);
 			}
 		}
@@ -125,7 +125,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			{
 				_selectedMethod = value;
 				NotifyOfPropertyChange(() => SelectedMethod);
-				NotifyOfPropertyChange(() => Dirty);
+				NotifyOfPropertyChange(() => DirtyVisibility);
 			}
 		}
 
