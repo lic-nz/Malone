@@ -4,7 +4,7 @@ using System.Windows;
 // Note: Shared assembly information is specified in SharedAssemblyInfo.cs
 
 [assembly: AssemblyTitle("Malone")]
-[assembly: AssemblyDescription("Slamdunk API testing.")]
+[assembly: AssemblyDescription("Slam dunk API testing.")]
 [assembly: AssemblyProduct("Malone")]
 
 //In order to begin building localizable applications, set 
