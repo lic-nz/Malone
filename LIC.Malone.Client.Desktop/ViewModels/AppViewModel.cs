@@ -29,6 +29,8 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 		private readonly IEventAggregator _bus;
 		private readonly DialogManager _dialogManager = new DialogManager();
 		private readonly List<string> _allowedSchemes = new List<string> { Uri.UriSchemeHttp, Uri.UriSchemeHttps };
+		private static IEnumerable<string> _defaultAccepts = new List<string> { "text/xml", "application/json" };
+		private static IEnumerable<string> _defaultContentTypes = new List<string> { "text/xml", "application/json" };
 
 		private AddCollectionViewModel _addCollectionViewModel = new AddCollectionViewModel();
 		private AddTokenViewModel _addTokenViewModel;
@@ -129,12 +131,8 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			}
 		}
 
-		private static IEnumerable<string> _accepts = new List<string>
-		{
-			"text/xml",
-			"application/json"
-		};
-		
+		private IEnumerable<string> _accepts = new List<string>(_defaultAccepts);
+
 		public IEnumerable<string> Accepts
 		{
 			get { return _accepts; }
@@ -152,22 +150,12 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			set
 			{
 				_selectedAccept = value;
-
-				// Must be a better way to do this.
-				var headers = new BindableCollection<Header>(Headers);
-				var header = headers.Single(h => h.Name == Header.Accept);
-				header.Value = _selectedAccept;
-				Headers = headers;
-
+				UpdateHeader(Header.Accept, value);
 				NotifyOfPropertyChange(() => SelectedAccept);
 			}
 		}
 
-		private static IEnumerable<string> _contentTypes = new List<string>
-		{
-			"text/xml",
-			"application/json"
-		};
+		private IEnumerable<string> _contentTypes = new List<string>(_defaultContentTypes);
 
 		public IEnumerable<string> ContentTypes
 		{
@@ -186,18 +174,12 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			set
 			{
 				_selectedContentType = value;
-
-				// Must be a better way to do this.
-				var headers = new BindableCollection<Header>(Headers);
-				var header = headers.Single(h => h.Name == Header.ContentType);
-				header.Value = _selectedContentType;
-				Headers = headers;
-
+				UpdateHeader(Header.ContentType, value);
 				NotifyOfPropertyChange(() => SelectedContentType);
 			}
 		}
 
-		private IObservableCollection<Header> _headers = new BindableCollection<Header>(new List<Header> { new Header(Header.Accept, _accepts.First()), new Header(Header.ContentType, _contentTypes.First()) });
+		private IObservableCollection<Header> _headers;
 		public IObservableCollection<Header> Headers
 		{
 			get { return _headers; }
@@ -382,7 +364,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 		}
 
 		#endregion
-		
+
 		public AppViewModel()
 		{
 			_windowManager = IoC.Get<WindowManager>();
@@ -390,6 +372,12 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			_bus.Subscribe(this);
 
 			_addTokenViewModel = new AddTokenViewModel(_bus, _windowManager);
+
+			Headers = new BindableCollection<Header>(new List<Header>
+			{
+				new Header(Header.Accept, _defaultAccepts.First()),
+				new Header(Header.ContentType, _defaultContentTypes.First())
+			});
 
 			Tokens = new BindableCollection<NamedAuthorizationState>(new List<NamedAuthorizationState> { _anonymousToken });
 			SelectedToken = _anonymousToken;
@@ -399,23 +387,50 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			LoadConfig();
 		}
 
+		private void UpdateHeader(string name, string value)
+		{
+			var headers = Headers;
+			var header = headers.FirstOrDefault(h => h.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+
+			if (header == null)
+				headers.Add(new Header(name, value));
+			else
+				header.Value = value;
+
+			Headers = new BindableCollection<Header>(headers.OrderBy(h => h.Name));
+		}
+
 		private void DisplayRequest(Request request)
 		{
-			var accept = request.Headers.GetValue(Header.Accept);
+			var headers = request.Headers ?? new List<Header>();
+
+			var accept = headers.GetValue(Header.Accept);
 
 			if (!Accepts.Contains(accept))
 				accept = Accepts.First();
 
-			var contentType = request.Headers.GetValue(Header.ContentType);
+			var contentType = headers.GetValue(Header.ContentType);
 
 			if (!ContentTypes.Contains(contentType))
 				contentType = ContentTypes.First();
+
+			headers = headers
+				.Where(h =>
+					!h.Name.Equals(Header.Accept, StringComparison.OrdinalIgnoreCase) &&
+					!h.Name.Equals(Header.ContentType, StringComparison.OrdinalIgnoreCase))
+				.ToList();
+
+			headers.Add(new Header(Header.Accept, accept));
+			headers.Add(new Header(Header.ContentType, contentType));
 
 			SelectedMethod = request.Method;
 			Url = request.Url;
 			SelectedAccept = accept;
 			RequestBody.Text = Prettify(request.Body, contentType);
 			SelectedContentType = contentType;
+			Headers = new BindableCollection<Header>(headers.OrderBy(h => h.Name));
+			HeaderName = null;
+			HeaderValue = null;
 
 			var token = request.NamedAuthorizationState;
 
@@ -443,7 +458,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			ResponseBody.Text = Prettify(response.Body, response.ContentType);
 			ResponseContentType = response.ContentType;
 			HttpStatusCode = response.HttpStatusCode;
-			ResponseHeaders = new BindableCollection<Header>(response.Headers);
+			ResponseHeaders = new BindableCollection<Header>(response.Headers.OrderBy(h => h.Name));
 		}
 
 		private bool IsRequestDirty()
@@ -460,7 +475,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 			if (Url != request.Url)
 				return true;
-			
+
 			return false;
 		}
 
@@ -584,9 +599,9 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 				return ContentType.Unknown;
 
 			var parts = contentType
-				   .Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries)
-				   .Select(s => s.Trim())
-				   .ToList();
+					.Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries)
+					.Select(s => s.Trim())
+					.ToList();
 
 			if (parts.Contains("application/xml") || parts.Contains("text/xml"))
 				return ContentType.Xml;
@@ -605,7 +620,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 		private IHighlightingDefinition GetHighlightingForContentType(ContentType contentType)
 		{
 			var manager = HighlightingManager.Instance;
-			
+
 			switch (contentType)
 			{
 				case ContentType.Xml:
@@ -615,7 +630,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 					return manager.GetDefinition("JavaScript");
 
 				default:
-					return null; 
+					return null;
 			}
 		}
 
@@ -633,7 +648,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 				return "Uhm, response was null?";
 
 			var sb = new StringBuilder();
-			
+
 			switch (response.ResponseStatus)
 			{
 				case ResponseStatus.None:
@@ -664,13 +679,13 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 				sb.AppendLine(response.ErrorException.Message);
 				sb.AppendLine(response.ErrorException.StackTrace);
 			}
-			
+
 			return sb.ToString();
 		}
 
 		public void HistoryLayoutUpdated(object e)
 		{
-			var listBox = (MaloneListBox) ((ActionExecutionContext) e).Source;
+			var listBox = (MaloneListBox)((ActionExecutionContext)e).Source;
 
 			HistoryHorizontalOffset = listBox.ScrollViewerHorizontalOffset;
 			HistoryVerticalScrollBarOffset = listBox.VerticalScrollBarVisibility == Visibility.Visible
@@ -688,14 +703,14 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 		public void RemoveFromHistory(object e)
 		{
-			var request = (Request) e;
+			var request = (Request)e;
 			History.Remove(request);
 			SaveHistory();
 		}
 
 		public void RemoveFromHeaders(object e)
 		{
-			var header = (Header) e;
+			var header = (Header)e;
 			Headers.Remove(header);
 		}
 
