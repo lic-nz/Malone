@@ -378,7 +378,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 		public bool CanAddHeader
 		{
-			get { return !string.IsNullOrWhiteSpace(HeaderName); }
+			get { return !string.IsNullOrWhiteSpace(HeaderName) && Headers.All(h => !h.Name.Equals(HeaderName, StringComparison.OrdinalIgnoreCase)); }
 		}
 
 		#endregion
