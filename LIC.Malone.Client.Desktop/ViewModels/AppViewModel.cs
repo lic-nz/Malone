@@ -153,6 +153,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 				_selectedAccept = value;
 				AddOrUpdateHeader(Header.Accept, value);
 				NotifyOfPropertyChange(() => SelectedAccept);
+				NotifyOfPropertyChange(() => DirtyVisibility);
 			}
 		}
 
@@ -178,6 +179,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 				AddOrUpdateHeader(Header.ContentType, value);
 				NotifyOfPropertyChange(() => SelectedContentType);
 				NotifyOfPropertyChange(() => RequestBodyHighlighting);
+				NotifyOfPropertyChange(() => DirtyVisibility);
 			}
 		}
 
@@ -224,6 +226,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 				NotifyOfPropertyChange(() => SelectedToken);
 				NotifyOfPropertyChange(() => SelectedTokenJson);
 				UpdateAuthorizationHeader(_selectedToken);
+				NotifyOfPropertyChange(() => DirtyVisibility);
 			}
 		}
 
@@ -395,9 +398,16 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			Tokens = new BindableCollection<NamedAuthorizationState>(new List<NamedAuthorizationState> { _anonymousToken });
 			SelectedToken = _anonymousToken;
 
+			_requestBody.TextChanged += RequestBody_TextChanged;
+
 			DisplayRequest(new Request());
 
 			LoadConfig();
+		}
+
+		private void RequestBody_TextChanged(object sender, EventArgs e)
+		{
+			NotifyOfPropertyChange(() => DirtyVisibility);
 		}
 
 		private void AddOrUpdateHeader(string name, string value)
@@ -495,12 +505,19 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			if (request == null)
 				return false;
 
-			// TODO: Compare against raw requests.
-
 			if (SelectedMethod != request.Method)
 				return true;
 
 			if (Url != request.Url)
+				return true;
+
+			if (SelectedContentType != request.Headers.GetValue(Header.ContentType))
+				return true;
+
+			if (RequestBody.Text != request.Body)
+				return true;
+
+			if (!Headers.SequenceEqual(request.Headers))
 				return true;
 
 			return false;
@@ -568,6 +585,8 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			// There was something strange going on with Headers being a BindableCollection or something - it would somehow overwrite the headers
 			// for previous requests in the History when just calling Headers.ToList(). This is begging for a unit test, but for now make a copy.
 			var headers = Headers.Select(h => new Header(h.Name, h.Value)).ToList();
+
+			RequestBody.Text = Prettify(RequestBody.Text, SelectedContentType);
 
 			var request = new Request(Url, SelectedMethod)
 			{
@@ -742,6 +761,8 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 			if (header.Name == Header.Authorization)
 				SelectedToken = _anonymousToken;
+
+			NotifyOfPropertyChange(() => DirtyVisibility);
 		}
 
 		public void AddHeader()
@@ -749,6 +770,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			Headers.Add(new Header(HeaderName, HeaderValue));
 			HeaderName = null;
 			HeaderValue = null;
+			NotifyOfPropertyChange(() => DirtyVisibility);
 		}
 
 		public void ClearHistory(object e)
