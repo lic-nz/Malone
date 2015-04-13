@@ -177,6 +177,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 				_selectedContentType = value;
 				AddOrUpdateHeader(Header.ContentType, value);
 				NotifyOfPropertyChange(() => SelectedContentType);
+				NotifyOfPropertyChange(() => RequestBodyHighlighting);
 			}
 		}
 
@@ -340,6 +341,14 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			{
 				_headerValue = value;
 				NotifyOfPropertyChange(() => HeaderValue);
+			}
+		}
+
+		public IHighlightingDefinition RequestBodyHighlighting
+		{
+			get
+			{
+				return GetHighlightingForContentType(SelectedContentType);
 			}
 		}
 
@@ -823,7 +832,6 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 				}
 			}
 
-			// For ContentType.Unknown, the parameter "content" is returned as-is for the out parameter "indentedContent".
 			return content;
 		}
 

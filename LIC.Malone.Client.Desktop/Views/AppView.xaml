@@ -207,8 +207,7 @@
 								<ComboBox x:Name="ContentTypes" Canvas.Right="10" Canvas.Top="-42" HorizontalAlignment="Right" Width="130" Style="{StaticResource DefaultComboBox}" />
 							</Canvas>
 
-							<!--TODO: Highlight based on accept header.-->
-							<ae:TextEditor Document="{Binding RequestBody}" VerticalScrollBarVisibility="Disabled" SyntaxHighlighting="XML" IsReadOnly="False" MinHeight="95">
+							<ae:TextEditor Document="{Binding RequestBody}" VerticalScrollBarVisibility="Disabled" SyntaxHighlighting="{Binding RequestBodyHighlighting}" IsReadOnly="False" MinHeight="95">
 								<i:Interaction.Behaviors>
 									<local:BubbleScrollEvent/>
 								</i:Interaction.Behaviors>
