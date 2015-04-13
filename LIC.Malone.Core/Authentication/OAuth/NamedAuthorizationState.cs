@@ -9,6 +9,7 @@ namespace LIC.Malone.Core.Authentication.OAuth
 		public Guid Guid { get; set; }
 		public string Name { get; set; }
 		public IAuthorizationState AuthorizationState { get; set; }
+		public bool IsHistorical { get; private set; }
 
 		[JsonConstructor]
 		public NamedAuthorizationState(Guid guid, string name, AuthorizationState authorizationState)
@@ -16,6 +17,7 @@ namespace LIC.Malone.Core.Authentication.OAuth
 			Guid = guid;
 			Name = name;
 			AuthorizationState = authorizationState;
+			IsHistorical = true;
 		}
 
 		public NamedAuthorizationState(string name, IAuthorizationState authorizationState)
@@ -23,6 +25,7 @@ namespace LIC.Malone.Core.Authentication.OAuth
 			Guid = Guid.NewGuid();
 			Name = name;
 			AuthorizationState = authorizationState;
+			IsHistorical = false;
 		}
 	}
 }

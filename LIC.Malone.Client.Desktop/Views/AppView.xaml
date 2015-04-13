@@ -7,7 +7,6 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:cal="http://www.caliburnproject.org"
 	xmlns:ae="http://icsharpcode.net/sharpdevelop/avalonedit"
-	xmlns:extensions="clr-namespace:LIC.Malone.Client.Desktop.Extensions"
 	xmlns:local="clr-namespace:LIC.Malone.Client.Desktop"
 	xmlns:controls="clr-namespace:LIC.Malone.Client.Desktop.Controls"
 	xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
@@ -277,7 +276,22 @@
 								<ComboBox x:Name="Tokens" Style="{StaticResource DefaultComboBox}" VerticalAlignment="Bottom" Margin="5,0,96,0" Padding="3" Height="30" >
 									<ComboBox.ItemTemplate>
 										<DataTemplate>
-											<TextBlock Text="{Binding Name}" />
+											<DataTemplate.Resources>
+												<Style x:Key="Historical" TargetType="TextBlock" BasedOn="{StaticResource DefaultTextBlock}">
+													<Style.Triggers>
+														<DataTrigger Binding="{Binding IsHistorical}" Value="True">
+															<Setter Property="Text" Value="History"/>
+														</DataTrigger>
+														<DataTrigger Binding="{Binding IsHistorical}" Value="False">
+															<Setter Property="Text" Value="Session"/>
+														</DataTrigger>
+													</Style.Triggers>
+												</Style>
+											</DataTemplate.Resources>
+											<DockPanel>
+												<TextBlock Style="{StaticResource Historical}" Width="50" Foreground="#666666"/>
+												<TextBlock Text="{Binding Name}" />
+											</DockPanel>
 										</DataTemplate>
 									</ComboBox.ItemTemplate>
 								</ComboBox>

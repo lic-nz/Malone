@@ -467,11 +467,6 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			HeaderName = null;
 			HeaderValue = null;
 
-			// TODO: Make better (don't rely on naive string suffix).
-			const string historySuffix = " (from history)";
-			SelectedToken = _anonymousToken;
-			Tokens.RemoveRange(Tokens.Where(h => h.Name.EndsWith(historySuffix)).ToList());
-
 			var token = request.NamedAuthorizationState;
 
 			if (token == null || token.AuthorizationState == null)
@@ -480,12 +475,9 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			}
 			else
 			{
-				if (!token.Name.EndsWith(historySuffix))
-					token.Name += historySuffix;
-
 				if (Tokens.All(t => t.Guid != token.Guid))
 					Tokens.Add(token);
-
+				
 				SelectedToken = token;
 			}
 
