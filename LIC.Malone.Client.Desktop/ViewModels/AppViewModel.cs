@@ -31,6 +31,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 		private readonly List<string> _allowedSchemes = new List<string> { Uri.UriSchemeHttp, Uri.UriSchemeHttps };
 		private static IEnumerable<string> _defaultAccepts = new List<string> { "text/xml", "application/json" };
 		private static IEnumerable<string> _defaultContentTypes = new List<string> { "text/xml", "application/json" };
+		private IEnumerable<Header> _defaultHeaders;
 
 		private AddCollectionViewModel _addCollectionViewModel = new AddCollectionViewModel();
 		private AddTokenViewModel _addTokenViewModel;
@@ -150,7 +151,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			set
 			{
 				_selectedAccept = value;
-				UpdateHeader(Header.Accept, value);
+				AddOrUpdateHeader(Header.Accept, value);
 				NotifyOfPropertyChange(() => SelectedAccept);
 			}
 		}
@@ -174,7 +175,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			set
 			{
 				_selectedContentType = value;
-				UpdateHeader(Header.ContentType, value);
+				AddOrUpdateHeader(Header.ContentType, value);
 				NotifyOfPropertyChange(() => SelectedContentType);
 			}
 		}
@@ -221,6 +222,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 				_selectedToken = value;
 				NotifyOfPropertyChange(() => SelectedToken);
 				NotifyOfPropertyChange(() => SelectedTokenJson);
+				UpdateAuthorizationHeader(_selectedToken);
 			}
 		}
 
@@ -373,12 +375,14 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 			_addTokenViewModel = new AddTokenViewModel(_bus, _windowManager);
 
-			Headers = new BindableCollection<Header>(new List<Header>
+			_defaultHeaders = new List<Header>
 			{
 				new Header(Header.Accept, _defaultAccepts.First()),
-				new Header(Header.ContentType, _defaultContentTypes.First())
-			});
+				new Header(Header.AcceptEncoding, Header.AcceptEncodingValue),
+				new Header(Header.ContentType, _defaultContentTypes.First()),
+			};
 
+			Headers = new BindableCollection<Header>(_defaultHeaders);
 			Tokens = new BindableCollection<NamedAuthorizationState>(new List<NamedAuthorizationState> { _anonymousToken });
 			SelectedToken = _anonymousToken;
 
@@ -387,7 +391,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			LoadConfig();
 		}
 
-		private void UpdateHeader(string name, string value)
+		private void AddOrUpdateHeader(string name, string value)
 		{
 			var headers = Headers;
 			var header = headers.FirstOrDefault(h => h.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
@@ -396,6 +400,18 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 				headers.Add(new Header(name, value));
 			else
 				header.Value = value;
+
+			Headers = new BindableCollection<Header>(headers.OrderBy(h => h.Name));
+		}
+
+		private void UpdateAuthorizationHeader(NamedAuthorizationState token)
+		{
+			var headers = Headers
+				.Where(h => !h.Name.Equals(Header.Authorization, StringComparison.OrdinalIgnoreCase))
+				.ToList();
+
+			if (token != _anonymousToken && token != null && token.AuthorizationState != null && token.AuthorizationState.AccessToken != null)
+				headers.Add(new Header(Header.Authorization, string.Concat("Bearer ", token.AuthorizationState.AccessToken)));
 
 			Headers = new BindableCollection<Header>(headers.OrderBy(h => h.Name));
 		}
@@ -417,10 +433,12 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			headers = headers
 				.Where(h =>
 					!h.Name.Equals(Header.Accept, StringComparison.OrdinalIgnoreCase) &&
+					!h.Name.Equals(Header.AcceptEncoding, StringComparison.OrdinalIgnoreCase) &&
 					!h.Name.Equals(Header.ContentType, StringComparison.OrdinalIgnoreCase))
 				.ToList();
 
 			headers.Add(new Header(Header.Accept, accept));
+			headers.Add(new Header(Header.AcceptEncoding, Header.AcceptEncodingValue));
 			headers.Add(new Header(Header.ContentType, contentType));
 
 			SelectedMethod = request.Method;
@@ -712,6 +730,9 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 		{
 			var header = (Header)e;
 			Headers.Remove(header);
+
+			if (header.Name == Header.Authorization)
+				SelectedToken = _anonymousToken;
 		}
 
 		public void AddHeader()

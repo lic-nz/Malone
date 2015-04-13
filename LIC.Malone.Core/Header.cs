@@ -3,6 +3,9 @@
 	public class Header
 	{
 		public const string Accept = "Accept";
+		public const string AcceptEncoding = "Accept-Encoding";
+		public const string AcceptEncodingValue = "gzip,deflate";
+		public const string Authorization = "Authorization";
 		public const string ContentType = "Content-Type";
 
 		public string Name { get; set; }

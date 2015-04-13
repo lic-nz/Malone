@@ -85,18 +85,12 @@ namespace LIC.Malone.Core
 			var url = GetUri();
 			var baseUrl = GetBaseUrl(url);
 			var resourcePath = GetResourcePath(url);
-
 			var request = new MaloneRestRequest(url, baseUrl, resourcePath, Method);
 			
-			foreach (var header in Headers.Where(h => h.Name != "Content-Type"))
+			foreach (var header in Headers.Where(h => h.Name != Header.ContentType))
 				request.AddHeader(header.Name, header.Value);
 
-			request.AddHeader("Accept-Encoding", "gzip,deflate");
-
-			if (NamedAuthorizationState != null && NamedAuthorizationState.AuthorizationState != null && NamedAuthorizationState.AuthorizationState.AccessToken != null)
-				request.AddHeader("Authorization", string.Concat("Bearer ", NamedAuthorizationState.AuthorizationState.AccessToken));
-
-			request.AddParameter(Headers.Single(h => h.Name == "Content-Type").Value, Body, ParameterType.RequestBody);
+			request.AddParameter(Headers.Single(h => h.Name == Header.ContentType).Value, Body, ParameterType.RequestBody);
 
 			return request;
 		}

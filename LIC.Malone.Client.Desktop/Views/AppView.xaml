@@ -230,6 +230,12 @@
 													<DataTrigger Binding="{Binding Name}" Value="Accept">
 														<Setter Property="Visibility" Value="Collapsed"/>
 													</DataTrigger>
+													<DataTrigger Binding="{Binding Name}" Value="Accept-Encoding">
+														<Setter Property="Visibility" Value="Collapsed"/>
+													</DataTrigger>
+													<DataTrigger Binding="{Binding Name}" Value="Authorization">
+														<Setter Property="Visibility" Value="Collapsed"/>
+													</DataTrigger>
 													<DataTrigger Binding="{Binding Name}" Value="Content-Type">
 														<Setter Property="Visibility" Value="Collapsed"/>
 													</DataTrigger>
