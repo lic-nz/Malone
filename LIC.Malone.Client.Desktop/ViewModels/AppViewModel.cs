@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -523,11 +522,12 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 		private void LoadConfig()
 		{
-			var configLocation = ConfigurationManager.AppSettings["ConfigLocation"];
+			// TODO: try/catch everything.
 
-			// TODO: Handle the case of no config.
-			if (string.IsNullOrWhiteSpace(configLocation))
-				return;
+			var configFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Malone", "config");
+
+			if (!Directory.Exists(configFolder))
+				Directory.CreateDirectory(configFolder);
 
 			var applications = new List<OAuthApplication>();
 			var authenticationUrls = new List<Uri>();
@@ -537,12 +537,12 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 				Password = string.Empty
 			};
 
-			var path = Path.Combine(configLocation, "oauth-applications.json");
+			var path = Path.Combine(configFolder, "oauth-applications.json");
 
 			if (File.Exists(path))
 				applications = JsonConvert.DeserializeObject<List<OAuthApplication>>(File.ReadAllText(path));
 
-			path = Path.Combine(configLocation, "oauth-authentication-urls.json");
+			path = Path.Combine(configFolder, "oauth-authentication-urls.json");
 
 			if (File.Exists(path))
 				authenticationUrls = JsonConvert
@@ -550,12 +550,12 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 					.Select(url => new Uri(url))
 					.ToList();
 
-			path = Path.Combine(configLocation, "oauth-user-credentials.json");
+			path = Path.Combine(configFolder, "oauth-user-credentials.json");
 
 			if (File.Exists(path))
 				userCredentials = JsonConvert.DeserializeObject<UserCredentials>(File.ReadAllText(path));
 
-			_historyJsonPath = Path.Combine(configLocation, "history.json");
+			_historyJsonPath = Path.Combine(configFolder, "history.json");
 
 			if (File.Exists(_historyJsonPath))
 			{
