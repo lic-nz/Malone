@@ -139,6 +139,8 @@
     <Compile Include="Converters\HideOnHistoryConverter.cs" />
     <Compile Include="Converters\HistoryWidthConverter.cs" />
     <Compile Include="Colors.cs" />
+    <Compile Include="DesignData\AppViewModelDesignData.cs" />
+    <Compile Include="DesignData\HistoryDesignData.cs" />
     <Compile Include="Extensions\HttpStatusCodeExtensions.cs" />
     <Compile Include="Controls\IconButton.xaml.cs">
       <DependentUpon>IconButton.xaml</DependentUpon>

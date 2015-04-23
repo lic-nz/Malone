@@ -11,6 +11,7 @@
 	xmlns:controls="clr-namespace:LIC.Malone.Client.Desktop.Controls"
 	xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
 	xmlns:converters="clr-namespace:LIC.Malone.Client.Desktop.Converters"
+	xmlns:designData="clr-namespace:LIC.Malone.Client.Desktop.DesignData"
 	mc:Ignorable="d"
 	Title="Malone"
 	TitleCaps="False"
@@ -20,7 +21,9 @@
 	WindowStartupLocation="CenterScreen"
 	MinWidth="1000" MinHeight="730"
 	Width="1000" Height="730"
-	cal:Message.Attach="[Event SizeChanged] = [Action WindowResized($executionContext)]">
+	cal:Message.Attach="[Event SizeChanged] = [Action WindowResized($executionContext)]"
+	d:DataContext="{d:DesignInstance Type=designData:AppViewModelDesignData, IsDesignTimeCreatable=True}"
+	cal:Bind.AtDesignTime="True">
 
 	<Grid Name="MainGrid">
 		<Grid.ColumnDefinitions>
