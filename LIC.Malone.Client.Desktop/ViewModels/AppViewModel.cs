@@ -234,7 +234,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 		{
 			get
 			{
-				if (SelectedToken == null ||SelectedToken.AuthorizationState == null)
+				if (SelectedToken == null || SelectedToken.AuthorizationState == null)
 					_selectedTokenJson.Text = string.Empty;
 				else
 					_selectedTokenJson.Text = JsonConvert.SerializeObject(SelectedToken.AuthorizationState, Formatting.Indented);
@@ -476,7 +476,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			{
 				if (Tokens.All(t => t.Guid != token.Guid))
 					Tokens.Add(token);
-				
+
 				SelectedToken = token;
 			}
 
@@ -522,52 +522,14 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 		private void LoadConfig()
 		{
-			// TODO: try/catch everything.
+			var config = new Config();
 
-			var configFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Malone", "config");
-
-			if (!Directory.Exists(configFolder))
-				Directory.CreateDirectory(configFolder);
-
-			var applications = new List<OAuthApplication>();
-			var authenticationUrls = new List<Uri>();
-			var userCredentials = new UserCredentials
-			{
-				Username = string.Empty,
-				Password = string.Empty
-			};
-
-			var path = Path.Combine(configFolder, "oauth-applications.json");
-
-			if (File.Exists(path))
-				applications = JsonConvert.DeserializeObject<List<OAuthApplication>>(File.ReadAllText(path));
-
-			path = Path.Combine(configFolder, "oauth-authentication-urls.json");
-
-			if (File.Exists(path))
-				authenticationUrls = JsonConvert
-					.DeserializeObject<List<string>>(File.ReadAllText(path))
-					.Select(url => new Uri(url))
-					.ToList();
-
-			path = Path.Combine(configFolder, "oauth-user-credentials.json");
-
-			if (File.Exists(path))
-				userCredentials = JsonConvert.DeserializeObject<UserCredentials>(File.ReadAllText(path));
-
-			_historyJsonPath = Path.Combine(configFolder, "history.json");
-
-			if (File.Exists(_historyJsonPath))
-			{
-				var json = File.ReadAllText(_historyJsonPath);
-
-				if (json.Any())
-				{
-					var history = JsonConvert.DeserializeObject<List<Request>>(json);
-					History.AddRange(history);
-				}
-			}
-
+			var history = config.GetHistory();
+			History.AddRange(history);
+			
+			var applications = config.GetOAuthApplications();
+			var authenticationUrls = config.GetOAuthAuthenticationUrls();
+			var userCredentials = config.GetUserCredentials();
 			_bus.PublishOnUIThread(new ConfigurationLoaded(applications, authenticationUrls, userCredentials));
 		}
 
