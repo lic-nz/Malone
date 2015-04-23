@@ -26,6 +26,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 	{
 		private readonly IWindowManager _windowManager;
 		private readonly IEventAggregator _bus;
+		private readonly Config _config;
 		private readonly DialogManager _dialogManager = new DialogManager();
 		private readonly List<string> _allowedSchemes = new List<string> { Uri.UriSchemeHttp, Uri.UriSchemeHttps };
 		private static IEnumerable<string> _defaultAccepts = new List<string> { "text/xml", "application/json" };
@@ -381,6 +382,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			_windowManager = IoC.Get<WindowManager>();
 			_bus = IoC.Get<EventAggregator>();
 			_bus.Subscribe(this);
+			_config = new Config();
 
 			_addTokenViewModel = new AddTokenViewModel(_bus, _windowManager);
 
@@ -400,6 +402,17 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			DisplayRequest(new Request());
 
 			LoadConfig();
+		}
+
+		private void LoadConfig()
+		{
+			var history = _config.GetHistory();
+			History.AddRange(history);
+
+			var applications = _config.GetOAuthApplications();
+			var authenticationUrls = _config.GetOAuthAuthenticationUrls();
+			var userCredentials = _config.GetUserCredentials();
+			_bus.PublishOnUIThread(new ConfigurationLoaded(applications, authenticationUrls, userCredentials));
 		}
 
 		private void RequestBody_TextChanged(object sender, EventArgs e)
@@ -518,19 +531,6 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 				return true;
 
 			return false;
-		}
-
-		private void LoadConfig()
-		{
-			var config = new Config();
-
-			var history = config.GetHistory();
-			History.AddRange(history);
-			
-			var applications = config.GetOAuthApplications();
-			var authenticationUrls = config.GetOAuthAuthenticationUrls();
-			var userCredentials = config.GetUserCredentials();
-			_bus.PublishOnUIThread(new ConfigurationLoaded(applications, authenticationUrls, userCredentials));
 		}
 
 		public async void Send()
@@ -741,8 +741,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 		private void SaveHistory()
 		{
-			var json = JsonConvert.SerializeObject(History, Formatting.Indented);
-			File.WriteAllText(_historyJsonPath, json);
+			_config.SaveHistory(History);
 		}
 
 		public void AddCollection()

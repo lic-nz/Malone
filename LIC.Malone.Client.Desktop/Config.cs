@@ -11,34 +11,41 @@ namespace LIC.Malone.Client.Desktop
 {
 	public class Config
 	{
-		private readonly string _configFolder;
+		private readonly string _historyFile;
+		private readonly string _oAuthApplicationsFile;
+		private readonly string _oAuthAuthenticationUrlsFile;
+		private readonly string _oAuthUserCredentialsFile;
 
 		public Config()
 		{
-			_configFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Malone", "config");
+			var configFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Malone", "config");
 
-			if (!Directory.Exists(_configFolder))
+			if (!Directory.Exists(configFolder))
 			{
 				try
 				{
-					Directory.CreateDirectory(_configFolder);
+					Directory.CreateDirectory(configFolder);
 				}
 				catch (Exception e)
 				{
-					throw new Exception("Can not create directory: " + _configFolder, e);
+					throw new Exception("Can not create directory: " + configFolder, e);
 				}
 			}
+
+			_historyFile = Path.Combine(configFolder, "history.json");
+			_oAuthApplicationsFile = Path.Combine(configFolder, "oauth-applications.json");
+			_oAuthAuthenticationUrlsFile = Path.Combine(configFolder, "oauth-authentication-urls.json");
+			_oAuthUserCredentialsFile = Path.Combine(configFolder, "oauth-user-credentials.json");
 		}
 
 		public List<Request> GetHistory()
 		{
 			var history = new List<Request>();
-			var path = Path.Combine(_configFolder, "history.json");
 
-			if (!File.Exists(path))
+			if (!File.Exists(_historyFile))
 				return history;
 
-			var json = File.ReadAllText(path);
+			var json = File.ReadAllText(_historyFile);
 
 			if (!json.Any())
 				return history;
@@ -49,21 +56,34 @@ namespace LIC.Malone.Client.Desktop
 			}
 			catch (Exception e)
 			{
-				throw new Exception("Could not deserialize history: " + path, e);
+				throw new Exception("Could not deserialize history: " + _historyFile, e);
 			}
 
 			return history;
 		}
 
+		public void SaveHistory(IEnumerable<Request> history)
+		{
+			var json = JsonConvert.SerializeObject(history, Formatting.Indented);
+
+			try
+			{
+				File.WriteAllText(_historyFile, json);
+			}
+			catch (Exception e)
+			{
+				throw new Exception("Could not write history: " + _historyFile, e);
+			}
+		}
+
 		public List<OAuthApplication> GetOAuthApplications()
 		{
 			var applications = new List<OAuthApplication>();
-			var path = Path.Combine(_configFolder, "oauth-applications.json");
 
-			if (!File.Exists(path))
+			if (!File.Exists(_oAuthApplicationsFile))
 				return applications;
 
-			var json = File.ReadAllText(path);
+			var json = File.ReadAllText(_oAuthApplicationsFile);
 
 			if (!json.Any())
 				return applications;
@@ -74,7 +94,7 @@ namespace LIC.Malone.Client.Desktop
 			}
 			catch (Exception e)
 			{
-				throw new Exception("Could not deserialize OAuth applications: " + path, e);
+				throw new Exception("Could not deserialize OAuth applications: " + _oAuthApplicationsFile, e);
 			}
 
 			return applications;
@@ -83,12 +103,11 @@ namespace LIC.Malone.Client.Desktop
 		public List<Uri> GetOAuthAuthenticationUrls()
 		{
 			var authenticationUrls = new List<Uri>();
-			var path = Path.Combine(_configFolder, "oauth-authentication-urls.json");
 
-			if (!File.Exists(path))
+			if (!File.Exists(_oAuthAuthenticationUrlsFile))
 				return authenticationUrls;
 
-			var json = File.ReadAllText(path);
+			var json = File.ReadAllText(_oAuthAuthenticationUrlsFile);
 
 			if (!json.Any())
 				return authenticationUrls;
@@ -102,7 +121,7 @@ namespace LIC.Malone.Client.Desktop
 			}
 			catch (Exception e)
 			{
-				throw new Exception("Could not deserialize OAuth URLs: " + path, e);
+				throw new Exception("Could not deserialize OAuth URLs: " + _oAuthAuthenticationUrlsFile, e);
 			}
 
 			return authenticationUrls;
@@ -116,12 +135,10 @@ namespace LIC.Malone.Client.Desktop
 				Password = string.Empty
 			};
 
-			var path = Path.Combine(_configFolder, "oauth-user-credentials.json");
-
-			if (!File.Exists(path))
+			if (!File.Exists(_oAuthUserCredentialsFile))
 				return userCredentials;
 
-			var json = File.ReadAllText(path);
+			var json = File.ReadAllText(_oAuthUserCredentialsFile);
 
 			if (!json.Any())
 				return userCredentials;
@@ -132,7 +149,7 @@ namespace LIC.Malone.Client.Desktop
 			}
 			catch (Exception e)
 			{
-				throw new Exception("Could not deserialize OAuth creds: " + path, e);
+				throw new Exception("Could not deserialize OAuth creds: " + _oAuthUserCredentialsFile, e);
 			}
 
 			return userCredentials;
