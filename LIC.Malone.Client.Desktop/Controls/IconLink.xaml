@@ -3,18 +3,22 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:converters="clr-namespace:LIC.Malone.Client.Desktop.Converters"
 	mc:Ignorable="d" 
 	d:DesignHeight="30" d:DesignWidth="130">
 
+	<Button.Resources>
+		<converters:IconLinkHeightConverter x:Key="IconLinkHeightConverter" />
+	</Button.Resources>
 	<Button.Template>
 		<ControlTemplate>
 
-			<Border BorderThickness="0" Background="Transparent" Height="30" Padding="10 0">
+			<Border BorderThickness="0" Background="{Binding BackgroundColor, RelativeSource={RelativeSource TemplatedParent}, TargetNullValue=Transparent}" Height="{Binding Height, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource IconLinkHeightConverter}}" Padding="10 0">
 				<StackPanel Orientation="Horizontal" VerticalAlignment="Stretch">
-					<Path Name="Icon" VerticalAlignment="Center" Fill="#4D89C1"
+					<Path Name="Icon" VerticalAlignment="Center" Fill="{StaticResource LinkColorBrush}"
 						Data="{Binding IconData, RelativeSource={RelativeSource TemplatedParent}}"
 						Margin="{Binding IconMargin, RelativeSource={RelativeSource TemplatedParent}}" />
-					<TextBlock Name="Text" Margin="6 -1 0 0" VerticalAlignment="Center" Foreground="#4D89C1"
+					<TextBlock Name="Text" Margin="6 -1 0 0" VerticalAlignment="Center" Foreground="{StaticResource LinkColorBrush}"
 						Text="{Binding Content, RelativeSource={RelativeSource TemplatedParent}}" />
 				</StackPanel>
 			</Border>
@@ -33,8 +37,8 @@
 					<Setter TargetName="Text" Property="Foreground" Value="{StaticResource RecededColorBrush}"/>
 				</Trigger>
 				<Trigger Property="IsMouseOver" Value="True">
-					<Setter TargetName="Icon" Property="Fill" Value="#2061A1"/>
-					<Setter TargetName="Text" Property="Foreground" Value="#2061A1"/>
+					<Setter TargetName="Icon" Property="Fill" Value="{Binding HoverColor, RelativeSource={RelativeSource TemplatedParent}, TargetNullValue={StaticResource LinkHoverColorBrush}}"/>
+					<Setter TargetName="Text" Property="Foreground" Value="{Binding HoverColor, RelativeSource={RelativeSource TemplatedParent}, TargetNullValue={StaticResource LinkHoverColorBrush}}"/>
 				</Trigger>
 			</ControlTemplate.Triggers>
 

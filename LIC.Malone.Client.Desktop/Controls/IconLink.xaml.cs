@@ -20,6 +20,20 @@ namespace LIC.Malone.Client.Desktop.Controls
 			set { SetValue(IconMarginProperty, value); }
 		}
 
+		public static readonly DependencyProperty HoverColorProperty = DependencyProperty.Register("HoverColor", typeof(SolidColorBrush), typeof(IconLink), new PropertyMetadata());
+		public SolidColorBrush HoverColor
+		{
+			get { return (SolidColorBrush)GetValue(HoverColorProperty); }
+			set { SetValue(HoverColorProperty, value); }
+		}
+
+		public static readonly DependencyProperty BackgroundColorProperty = DependencyProperty.Register("BackgroundColor", typeof(Brush), typeof(IconLink), new PropertyMetadata());
+		public Brush BackgroundColor
+		{
+			get { return (Brush)GetValue(BackgroundColorProperty); }
+			set { SetValue(BackgroundColorProperty, value); }
+		}
+
 		public IconLink()
 		{
 			InitializeComponent();

@@ -8,7 +8,7 @@
 
 	<Button.Template>
 		<ControlTemplate>
-			<Border Name="Border" BorderThickness="0" Background="#4D89C1" Height="30" Padding="10 0">
+			<Border Name="Border" BorderThickness="0" Background="{StaticResource LinkColorBrush}" Height="30" Padding="10 0">
 				<StackPanel Orientation="Horizontal" VerticalAlignment="Stretch">
 					<Path VerticalAlignment="Center" Fill="White"
 						Data="{Binding IconData, RelativeSource={RelativeSource TemplatedParent}}"
@@ -31,7 +31,7 @@
 					<Setter TargetName="Border" Property="Background" Value="{StaticResource RecededColorBrush}"/>
 				</Trigger>
 				<Trigger Property="IsMouseOver" Value="True">
-					<Setter TargetName="Border" Property="Background" Value="#2061A1"/>
+					<Setter TargetName="Border" Property="Background" Value="{StaticResource LinkHoverColorBrush}"/>
 				</Trigger>
 			</ControlTemplate.Triggers>
 

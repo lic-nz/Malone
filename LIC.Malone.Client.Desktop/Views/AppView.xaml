@@ -77,6 +77,27 @@
 								BorderThickness="0" Padding="0" Margin="-2"
 								cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action HistoryClicked($executionContext)]; [Event LayoutUpdated] = [Action HistoryLayoutUpdated($executionContext)]">
 
+								<controls:MaloneListBox.Resources>
+									<ResourceDictionary>
+										<Style x:Key="DeleteRequestBorder" TargetType="{x:Type Border}">
+											<Setter Property="Visibility" Value="Hidden" />
+											<Style.Triggers>
+												<DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}},Path=IsMouseOver}" Value="True">
+													<Setter Property="Visibility" Value="Visible" />
+												</DataTrigger>
+											</Style.Triggers>
+										</Style>
+										<Style x:Key="DeleteRequestButton" TargetType="{x:Type Button}">
+											<Setter Property="Visibility" Value="Hidden" />
+											<Style.Triggers>
+												<DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}},Path=IsMouseOver}" Value="True">
+													<Setter Property="Visibility" Value="Visible" />
+												</DataTrigger>
+											</Style.Triggers>
+										</Style>
+									</ResourceDictionary>
+								</controls:MaloneListBox.Resources>
+
 								<ListBox.ItemTemplate>
 									<DataTemplate>
 										<Grid Margin="7,3" Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBox}}, Path=Width}">
@@ -95,16 +116,31 @@
 											</Grid.RowDefinitions>
 
 											<Canvas Name="HistoryButtonCanvas" ZIndex="300" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Grid.RowSpan="2">
-												<Button Name="HistoryRemoveButton" Canvas.Top="-3" Style="{StaticResource ListBoxItemDelete}"
-													cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action RemoveFromHistory($this)]">
+
+												<Border Width="42" Height="42" Background="#CBE8F6" Canvas.Top="-4" Style="{StaticResource DeleteRequestBorder}">
 													<Canvas.Left>
 														<MultiBinding Converter="{StaticResource HistoryWidthConverter}">
 															<Binding ElementName="History" Path="ActualWidth" />
 															<Binding ElementName="HistoryHorizontalOffset" Path="Content" />
 															<Binding ElementName="HistoryVerticalScrollBarOffset" Path="Content" />
+															<Binding Source="Border" />
 														</MultiBinding>
 													</Canvas.Left>
-												</Button>
+												</Border>
+
+												<controls:IconLink
+													cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action RemoveFromHistory($this)]"
+													Canvas.Top="-3" Style="{StaticResource DeleteRequestButton}" HoverColor="{StaticResource LinkDangerHoverColorBrush}" Height="40" Width="40"
+													HorizontalAlignment="Left" IconData="{StaticResource IconCircleWithMinus}" IconMargin="0" BackgroundColor="White">
+													<Canvas.Left>
+														<MultiBinding Converter="{StaticResource HistoryWidthConverter}">
+															<Binding ElementName="History" Path="ActualWidth" />
+															<Binding ElementName="HistoryHorizontalOffset" Path="Content" />
+															<Binding ElementName="HistoryVerticalScrollBarOffset" Path="Content" />
+															<Binding Source="Button"></Binding>
+														</MultiBinding>
+													</Canvas.Left>
+												</controls:IconLink>
 											</Canvas>
 
 											<TextBlock Grid.Column="0" Grid.Row="0" Text="{Binding Method}" Style="{StaticResource History.BaseUrl}" />
@@ -162,7 +198,7 @@
 			</TabItem>
 		</TabControl>
 
-		<GridSplitter Grid.Column="1" Width="2" HorizontalAlignment="Stretch" />
+		<GridSplitter Grid.Column="1" Width="3" HorizontalAlignment="Stretch" />
 
 		<ScrollViewer Grid.Column="2" VerticalScrollBarVisibility="Visible">
 
@@ -193,6 +229,7 @@
 					<ComboBox Grid.Row="0" Grid.Column="4" x:Name="Accepts" Width="130" Style="{StaticResource DefaultComboBox}" />
 
 					<controls:IconButton Grid.Row="2" Grid.Column="2" x:Name="Send" Content="Send" IconData="{StaticResource IconPaperPlane}" IconMargin="{StaticResource IconPaperPlaneMargin}" HorizontalAlignment="Left" />
+
 				</Grid>
 
 				<TabControl DockPanel.Dock="Top" Margin="4 5 0 0">

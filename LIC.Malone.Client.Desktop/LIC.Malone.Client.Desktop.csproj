@@ -135,6 +135,7 @@
     <Compile Include="Controls\IconLink.xaml.cs">
       <DependentUpon>IconLink.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\IconLinkHeightConverter.cs" />
     <Compile Include="Converters\ShowOnHistoryConverter.cs" />
     <Compile Include="Converters\HideOnHistoryConverter.cs" />
     <Compile Include="Converters\HistoryWidthConverter.cs" />

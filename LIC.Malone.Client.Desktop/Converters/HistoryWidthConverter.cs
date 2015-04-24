@@ -8,13 +8,22 @@ namespace LIC.Malone.Client.Desktop.Converters
 	{
 		public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
 		{
-			const double buttonWidth = 51;
+			const double buttonWidth = 40;
+			const double padding = 14;
+			const double borderPadding = 1;
 
 			var historyWidth = (double)values[0];
 			var horizontalOffset = (double)values[1];
 			var historyVerticalScrollBarOffset = (double)values[2];
+			var source = (string)values[3];
+			var isBorder = source == "Border";
 
-			return historyWidth + horizontalOffset + historyVerticalScrollBarOffset - buttonWidth;
+			var width = historyWidth + horizontalOffset + historyVerticalScrollBarOffset - buttonWidth - padding;
+
+			if (isBorder)
+				width -= borderPadding;
+
+			return width;
 		}
 
 		public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
