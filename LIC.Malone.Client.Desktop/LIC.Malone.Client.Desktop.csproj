@@ -206,6 +206,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="App.config" />
     <None Include="LIC.Malone.Client.Desktop.nuspec" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
