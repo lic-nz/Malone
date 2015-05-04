@@ -804,8 +804,17 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			{
 				try
 				{
-					var json = JObject.Parse(content);
-					return json.ToString(Formatting.Indented);
+					if (content.StartsWith("["))
+					{
+						var json = JArray.Parse(content);
+						return json.ToString(Formatting.Indented);
+
+					}
+					else
+					{
+						var json = JObject.Parse(content);
+						return json.ToString(Formatting.Indented);
+					}
 				}
 				catch
 				{
