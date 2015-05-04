@@ -200,9 +200,7 @@
 
 		<GridSplitter Grid.Column="1" Width="3" HorizontalAlignment="Stretch" />
 
-		<ScrollViewer Grid.Column="2" VerticalScrollBarVisibility="Visible">
-
-			<DockPanel LastChildFill="True">
+			<DockPanel LastChildFill="True" Grid.Column="2">
 
 				<DockPanel DockPanel.Dock="Top">
 					<Label Style="{StaticResource H1}" Content="Request" />
@@ -403,17 +401,14 @@
 							</TabControl.Resources>
 
 							<TabItem Header="Body">
-								<StackPanel>
+								<DockPanel>
 									<!--TODO: Highlight based on accept header.-->
-									<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 -45 0 0">
+									<StackPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 -45 0 0">
 										<Label x:Name="ResponseContentType" Style="{StaticResource DefaultLabel}" Margin="3 2 0 0">content/type</Label>
 									</StackPanel>
-									<ae:TextEditor DockPanel.Dock="Top"  VerticalScrollBarVisibility="Disabled" Document="{Binding ResponseBody}" SyntaxHighlighting="{Binding ResponseBodyHighlighting}">
-										<i:Interaction.Behaviors>
-											<local:BubbleScrollEvent/>
-										</i:Interaction.Behaviors>
+									<ae:TextEditor Document="{Binding ResponseBody}" SyntaxHighlighting="{Binding ResponseBodyHighlighting}">
 									</ae:TextEditor>
-								</StackPanel>
+								</DockPanel>
 							</TabItem>
 
 							<TabItem Header="Headers">
@@ -443,8 +438,6 @@
 				</Grid>
 
 			</DockPanel>
-
-		</ScrollViewer>
 
 	</Grid>
 
