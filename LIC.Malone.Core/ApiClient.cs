@@ -1,16 +1,17 @@
 ﻿using System;
+using System.Threading.Tasks;
 using RestSharp;
 
 namespace LIC.Malone.Core
 {
 	public class ApiClient
 	{
-		public SendResult Send(Request request)
+		public async Task<SendResult> Send(Request request)
 		{
-			return Send(request.ToMaloneRestRequest());
+			return await Send(request.ToMaloneRestRequest());
 		}
 
-		private SendResult Send(MaloneRestRequest request)
+		private async Task<SendResult> Send(MaloneRestRequest request)
 		{
 			var result = new SendResult();
 
@@ -20,7 +21,7 @@ namespace LIC.Malone.Core
 			};
 
 			result.SentAt = DateTimeOffset.UtcNow;
-			var response = client.Execute(request);
+			var response = await client.ExecuteTaskAsync(request);
 			result.ReceivedAt = DateTimeOffset.UtcNow;
 			result.Response = response;
 			

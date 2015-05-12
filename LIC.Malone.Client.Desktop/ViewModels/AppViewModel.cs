@@ -558,7 +558,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 				request.NamedAuthorizationState = SelectedToken;
 
 			var client = new ApiClient();
-			var result = client.Send(request);
+			var result = await client.Send(request);
 			var response = result.Response;
 
 			var responseError = GetResponseError(response);
