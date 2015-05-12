@@ -200,15 +200,23 @@
 
 		<GridSplitter Grid.Column="1" Width="3" HorizontalAlignment="Stretch" />
 
-			<DockPanel LastChildFill="True" Grid.Column="2">
+			<Grid Grid.Column="2">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="*" />
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="2*" />
+				</Grid.RowDefinitions>
 
-				<DockPanel DockPanel.Dock="Top">
+				<DockPanel>
 					<Label Style="{StaticResource H1}" Content="Request" />
 					<Path Visibility="{Binding DirtyVisibility}" Margin="3 17 0 0" Fill="#FFD51C" Data="{StaticResource IconNew}" ToolTip="Request has been modified. Original response is still shown." />
 					<controls:IconLink x:Name="Reset" HorizontalAlignment="Right" IconData="{StaticResource IconErase}" IconMargin="{StaticResource IconEraseMargin}" ToolTip="Clear this request" />
 				</DockPanel>
 
-				<Grid DockPanel.Dock="Top" Margin="15 10 15 0">
+				<Grid Grid.Row="1" Margin="15 10 15 0">
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="70"/>
 						<ColumnDefinition Width="10"/>
@@ -230,7 +238,7 @@
 
 				</Grid>
 
-				<TabControl DockPanel.Dock="Top" Margin="4 5 0 0">
+				<TabControl Grid.Row="2" Margin="4 5 0 0">
 
 					<TabControl.Resources>
 						<Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource TabHeader}"></Style>
@@ -336,10 +344,7 @@
 								<controls:IconLink HorizontalAlignment="Right" VerticalAlignment="Bottom" Content="Add" IconData="{StaticResource IconPlus}" IconMargin="{StaticResource IconPlusMargin}" cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action AddToken()]" />
 							</Grid>
 
-							<ae:TextEditor Margin="0 10 0 0" Document="{Binding SelectedTokenJson, Mode=OneWay}" SyntaxHighlighting="JavaScript" VerticalScrollBarVisibility="Disabled">
-								<i:Interaction.Behaviors>
-									<local:BubbleScrollEvent/>
-								</i:Interaction.Behaviors>
+							<ae:TextEditor Margin="0 10 0 0" Document="{Binding SelectedTokenJson, Mode=OneWay}" SyntaxHighlighting="JavaScript">
 							</ae:TextEditor>
 
 						</DockPanel>
@@ -347,7 +352,7 @@
 
 				</TabControl>
 
-				<Line DockPanel.Dock="Top" Margin="0 20 0 0" HorizontalAlignment="Stretch" VerticalAlignment="Center" Stretch="Fill" StrokeThickness="1" X1="0" X2="1">
+				<Line Grid.Row="3" Margin="0 20 0 0" HorizontalAlignment="Stretch" VerticalAlignment="Center" Stretch="Fill" StrokeThickness="1" X1="0" X2="1">
 					<Shape.Stroke>
 						<LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
 							<GradientStop Color="Transparent" Offset="0" />
@@ -358,7 +363,7 @@
 					</Shape.Stroke>
 				</Line>
 
-				<Line DockPanel.Dock="Top" Margin="0 0 0 8" HorizontalAlignment="Stretch" VerticalAlignment="Center" Stretch="Fill" StrokeThickness="2" X1="0" X2="1">
+				<Line Grid.Row="4" Margin="0 0 0 8" HorizontalAlignment="Stretch" VerticalAlignment="Center" Stretch="Fill" StrokeThickness="2" X1="0" X2="1">
 					<Shape.Stroke>
 						<LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
 							<GradientStop Color="Transparent" Offset="0" />
@@ -369,7 +374,7 @@
 					</Shape.Stroke>
 				</Line>
 
-				<Grid>
+				<Grid Grid.Row="5">
 
 					<ContentControl Content="{StaticResource IconCloudIrc}" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding RequestHasNoResponseVisibility}" />
 
@@ -437,7 +442,7 @@
 
 				</Grid>
 
-			</DockPanel>
+			</Grid>
 
 	</Grid>
 
