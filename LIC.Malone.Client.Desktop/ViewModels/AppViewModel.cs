@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading;
 using System.Windows;
 using System.Xml.Linq;
 using Caliburn.Micro;
@@ -38,6 +39,19 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 		private readonly NamedAuthorizationState _anonymousToken = new NamedAuthorizationState("<Anonymous>", null);
 
 		private string _historyJsonPath;
+		private CancellationTokenSource _cancellationTokenSource;
+
+		public CancellationTokenSource CancellationTokenSource
+		{
+			get { return _cancellationTokenSource; }
+			set
+			{
+				_cancellationTokenSource = value;
+				NotifyOfPropertyChange(() => CanSend);
+				NotifyOfPropertyChange(() => CanCancel);
+				NotifyOfPropertyChange(() => RequestInProgress);
+			}
+		}
 
 		#region Databound properties
 
@@ -366,8 +380,18 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			get
 			{
 				Uri url;
-				return Uri.TryCreate(Url, UriKind.Absolute, out url) && _allowedSchemes.Contains(url.Scheme);
+				return Uri.TryCreate(Url, UriKind.Absolute, out url) && _allowedSchemes.Contains(url.Scheme) && !RequestInProgress;
 			}
+		}
+
+		public bool CanCancel
+		{
+			get { return RequestInProgress; }
+		}
+
+		public bool RequestInProgress
+		{
+			get { return _cancellationTokenSource != null; }
 		}
 
 		public bool CanAddHeader
@@ -557,39 +581,57 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			if (SelectedToken != null)
 				request.NamedAuthorizationState = SelectedToken;
 
-			var client = new ApiClient();
-			var result = await client.Send(request);
-			var response = result.Response;
-
-			var responseError = GetResponseError(response);
-
-			if (responseError != null)
+			CancellationTokenSource = new CancellationTokenSource();
+			try
 			{
-				var dialogResult = await _dialogManager.Show("Oh dear", "Nope, that didn't work.\n\n" + responseError);
-				return;
+				var client = new ApiClient();
+				var result = await client.Send(request, CancellationTokenSource.Token);
+				var response = result.Response;
+
+				var responseError = GetResponseError(response);
+
+				if (responseError != null)
+				{
+					var dialogResult = await _dialogManager.Show("Oh dear", "Nope, that didn't work.\n\n" + responseError);
+					return;
+				}
+
+				request.At = result.SentAt;
+
+				var responseHeaders = response
+					.Headers
+					.Where(p => p.Type == ParameterType.HttpHeader)
+					.Select(p => new Header(p.Name, p.Value.ToString()))
+					.ToList();
+
+				request.Response = new Response
+				{
+					Guid = Guid.NewGuid(),
+					At = result.ReceivedAt,
+					HttpStatusCode = response.StatusCode,
+					Body = response.Content,
+					ContentType = response.ContentType,
+					Headers = responseHeaders
+				};
+
+				AddToHistory(request);
+
+				DisplayRequest(request);
 			}
-
-			request.At = result.SentAt;
-
-			var responseHeaders = response
-				.Headers
-				.Where(p => p.Type == ParameterType.HttpHeader)
-				.Select(p => new Header(p.Name, p.Value.ToString()))
-				.ToList();
-
-			request.Response = new Response
+			catch (OperationCanceledException)
 			{
-				Guid = Guid.NewGuid(),
-				At = result.ReceivedAt,
-				HttpStatusCode = response.StatusCode,
-				Body = response.Content,
-				ContentType = response.ContentType,
-				Headers = responseHeaders
-			};
+			}
+			finally
+			{
+				CancellationTokenSource = null;
+			}
+		}
 
-			AddToHistory(request);
-
-			DisplayRequest(request);
+		public void Cancel()
+		{
+			var cts = CancellationTokenSource;
+			if (cts != null)
+				cts.Cancel();
 		}
 
 		private enum ContentType
