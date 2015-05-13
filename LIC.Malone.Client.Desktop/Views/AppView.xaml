@@ -24,6 +24,9 @@
 	cal:Message.Attach="[Event SizeChanged] = [Action WindowResized($executionContext)]"
 	d:DataContext="{d:DesignInstance Type=designData:AppViewModelDesignData, IsDesignTimeCreatable=True}"
 	cal:Bind.AtDesignTime="True">
+	<Window.Resources>
+		<converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+	</Window.Resources>
 
 	<Grid Name="MainGrid">
 		<Grid.ColumnDefinitions>
@@ -226,8 +229,10 @@
 				<TextBox  Grid.Row="0" Grid.Column="2" x:Name="Url" metro:TextBoxHelper.Watermark="Enter URL or choose from history" Style="{StaticResource DefaultTextBox}"/>
 				<ComboBox Grid.Row="0" Grid.Column="4" x:Name="Accepts" Width="130" Style="{StaticResource DefaultComboBox}" />
 
-				<controls:IconButton Grid.Row="2" Grid.Column="2" x:Name="Send" Content="Send" IconData="{StaticResource IconPaperPlane}" IconMargin="{StaticResource IconPaperPlaneMargin}" HorizontalAlignment="Left" />
-
+				<StackPanel Grid.Row="2" Grid.Column="2" Orientation="Horizontal">
+					<controls:IconButton x:Name="Send" Content="Send" IconData="{StaticResource IconPaperPlane}" IconMargin="{StaticResource IconPaperPlaneMargin}" />
+					<controls:IconButton x:Name="Cancel" Content="Cancel" Margin="10 0 0 0" />
+				</StackPanel>
 			</Grid>
 
 			<TabControl DockPanel.Dock="Top" Margin="4 5 0 0">
@@ -373,6 +378,7 @@
 			<Grid>
 
 				<ContentControl Content="{StaticResource IconCloudIrc}" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding RequestHasNoResponseVisibility}" />
+				<ProgressBar Margin="0 100 0 0" IsIndeterminate="True" HorizontalAlignment="Center" Width="200" Visibility="{Binding RequestInProgress, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
 				<DockPanel LastChildFill="True" Visibility="{Binding RequestHasResponseVisibility}">
 
