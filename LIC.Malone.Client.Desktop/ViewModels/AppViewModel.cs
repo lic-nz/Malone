@@ -47,6 +47,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			set
 			{
 				_cancellationTokenSource = value;
+				NotifyOfPropertyChange(() => CanSend);
 				NotifyOfPropertyChange(() => CanCancel);
 				NotifyOfPropertyChange(() => RequestInProgress);
 			}
@@ -379,13 +380,13 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			get
 			{
 				Uri url;
-				return Uri.TryCreate(Url, UriKind.Absolute, out url) && _allowedSchemes.Contains(url.Scheme);
+				return Uri.TryCreate(Url, UriKind.Absolute, out url) && _allowedSchemes.Contains(url.Scheme) && !RequestInProgress;
 			}
 		}
 
 		public bool CanCancel
 		{
-			get { return _cancellationTokenSource != null; }
+			get { return RequestInProgress; }
 		}
 
 		public bool RequestInProgress
