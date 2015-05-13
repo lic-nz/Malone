@@ -37,6 +37,8 @@
 			<TabControl.Resources>
 				<converters:HideOnHistoryConverter x:Key="HideOnHistoryConverter" />
 				<converters:ShowOnHistoryConverter x:Key="ShowOnHistoryConverter" />
+				<converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+				<converters:BooleanToVisibilityConverter x:Key="ReverseBooleanToVisibilityConverter" IsReversed="True" />
 				<Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource TabHeader}"></Style>
 			</TabControl.Resources>
 
@@ -375,6 +377,7 @@
 			<Grid>
 
 				<ContentControl Content="{StaticResource IconCloudIrc}" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding RequestHasNoResponseVisibility}" />
+				<ProgressBar Margin="0 100 0 0" IsIndeterminate="True" HorizontalAlignment="Center" Width="200" Visibility="{Binding RequestInProgress, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
 				<DockPanel LastChildFill="True" Visibility="{Binding RequestHasResponseVisibility}">
 

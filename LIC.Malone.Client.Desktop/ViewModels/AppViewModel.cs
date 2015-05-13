@@ -48,6 +48,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			{
 				_cancellationTokenSource = value;
 				NotifyOfPropertyChange(() => CanCancel);
+				NotifyOfPropertyChange(() => RequestInProgress);
 			}
 		}
 
@@ -383,6 +384,11 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 		}
 
 		public bool CanCancel
+		{
+			get { return _cancellationTokenSource != null; }
+		}
+
+		public bool RequestInProgress
 		{
 			get { return _cancellationTokenSource != null; }
 		}
