@@ -24,6 +24,9 @@
 	cal:Message.Attach="[Event SizeChanged] = [Action WindowResized($executionContext)]"
 	d:DataContext="{d:DesignInstance Type=designData:AppViewModelDesignData, IsDesignTimeCreatable=True}"
 	cal:Bind.AtDesignTime="True">
+	<Window.Resources>
+		<converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+	</Window.Resources>
 
 	<Grid Name="MainGrid">
 		<Grid.ColumnDefinitions>
@@ -37,8 +40,6 @@
 			<TabControl.Resources>
 				<converters:HideOnHistoryConverter x:Key="HideOnHistoryConverter" />
 				<converters:ShowOnHistoryConverter x:Key="ShowOnHistoryConverter" />
-				<converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-				<converters:BooleanToVisibilityConverter x:Key="ReverseBooleanToVisibilityConverter" IsReversed="True" />
 				<Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource TabHeader}"></Style>
 			</TabControl.Resources>
 
