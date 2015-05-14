@@ -378,7 +378,7 @@
 			<Grid>
 
 				<ContentControl Content="{StaticResource IconCloudIrc}" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding RequestHasNoResponseVisibility}" />
-				<ProgressBar Margin="0 100 0 0" IsIndeterminate="True" HorizontalAlignment="Center" Width="200" Visibility="{Binding RequestInProgress, Converter={StaticResource BooleanToVisibilityConverter}}" />
+				<metro:ProgressRing IsActive="{Binding RequestInProgress, Mode=OneWay}" />
 
 				<DockPanel LastChildFill="True" Visibility="{Binding RequestHasResponseVisibility}">
 
