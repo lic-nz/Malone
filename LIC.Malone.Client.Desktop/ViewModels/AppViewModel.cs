@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Xml.Linq;
 using Caliburn.Micro;
@@ -302,12 +303,10 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 		{
 			get
 			{
-				_responseBody.Text = Prettify(_responseBody.Text, ResponseContentType);
 				return _responseBody;
 			}
 			set
 			{
-				_responseBody.Text = Prettify(_responseBody.Text, ResponseContentType);
 				_responseBody = value;
 				NotifyOfPropertyChange(() => ResponseBody);
 			}
@@ -469,7 +468,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			Headers = new BindableCollection<Header>(headers.OrderBy(h => h.Name));
 		}
 
-		private void DisplayRequest(Request request)
+		private async void DisplayRequest(Request request)
 		{
 			var headers = request.Headers ?? new List<Header>();
 
@@ -497,7 +496,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			SelectedMethod = request.Method;
 			Url = request.Url;
 			SelectedAccept = accept;
-			RequestBody.Text = Prettify(request.Body, contentType);
+			RequestBody = new TextDocument(await Prettify(request.Body, contentType));
 			SelectedContentType = contentType;
 			Headers = new BindableCollection<Header>(headers.OrderBy(h => h.Name));
 			HeaderName = null;
@@ -526,7 +525,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 				return;
 
 			ResponseTime = request.ResponseTime;
-			ResponseBody.Text = Prettify(response.Body, response.ContentType);
+			ResponseBody = new TextDocument(await Prettify(response.Body, response.ContentType));
 			ResponseContentType = response.ContentType;
 			HttpStatusCode = response.HttpStatusCode;
 			ResponseHeaders = new BindableCollection<Header>(response.Headers.OrderBy(h => h.Name));
@@ -570,7 +569,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			// for previous requests in the History when just calling Headers.ToList(). This is begging for a unit test, but for now make a copy.
 			var headers = Headers.Select(h => new Header(h.Name, h.Value)).ToList();
 
-			RequestBody.Text = Prettify(RequestBody.Text, SelectedContentType);
+			RequestBody = new TextDocument(await Prettify(RequestBody.Text, SelectedContentType));
 
 			var request = new Request(Url, SelectedMethod)
 			{
@@ -821,50 +820,53 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			SelectedToken = Tokens.Last();
 		}
 
-		private string Prettify(string content, string contentType)
+		private async Task<string> Prettify(string content, string contentType)
 		{
-			content = content ?? string.Empty;
+			return await Task<string>.Run(() =>
+			{
+				content = content ?? string.Empty;
 
-			if (string.IsNullOrWhiteSpace(content))
+				if (string.IsNullOrWhiteSpace(content))
+					return content;
+
+				var type = GetContentType(contentType);
+
+				if (type == ContentType.Xml)
+				{
+					try
+					{
+						return XDocument.Parse(content).ToString();
+					}
+					catch
+					{
+						return content;
+					}
+				}
+
+				if (type == ContentType.Json)
+				{
+					try
+					{
+						if (content.StartsWith("["))
+						{
+							var json = JArray.Parse(content);
+							return json.ToString(Formatting.Indented);
+
+						}
+						else
+						{
+							var json = JObject.Parse(content);
+							return json.ToString(Formatting.Indented);
+						}
+					}
+					catch
+					{
+						return content;
+					}
+				}
+
 				return content;
-
-			var type = GetContentType(contentType);
-
-			if (type == ContentType.Xml)
-			{
-				try
-				{
-					return XDocument.Parse(content).ToString();
-				}
-				catch
-				{
-					return content;
-				}
-			}
-
-			if (type == ContentType.Json)
-			{
-				try
-				{
-					if (content.StartsWith("["))
-					{
-						var json = JArray.Parse(content);
-						return json.ToString(Formatting.Indented);
-
-					}
-					else
-					{
-						var json = JObject.Parse(content);
-						return json.ToString(Formatting.Indented);
-					}
-				}
-				catch
-				{
-					return content;
-				}
-			}
-
-			return content;
+			});
 		}
 
 		public void WindowResized(ActionExecutionContext context)
