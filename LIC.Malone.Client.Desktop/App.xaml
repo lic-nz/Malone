@@ -117,6 +117,32 @@
 				<Setter Property="Padding" Value="20"/>
 			</Style>
 
+			<Style x:Key="TabHeaderH1" TargetType="{x:Type TabItem}">
+				<Setter Property="Template">
+					<Setter.Value>
+						<ControlTemplate TargetType="{x:Type TabItem}">
+							<ContentPresenter Name="HeaderContentPresenter">
+								<ContentPresenter.Content>
+									<StackPanel Orientation="Vertical">
+										<Label Name="Header" Style="{StaticResource H1}" Content="{TemplateBinding Header}" Padding="10 10 10 3" />
+										<Border Name="Border" BorderThickness="0 0 0 2" BorderBrush="Transparent" Margin="11 0 11 5" />
+									</StackPanel>
+								</ContentPresenter.Content>
+							</ContentPresenter>
+							<ControlTemplate.Triggers>
+								<Trigger Property="IsSelected" Value="False">
+									<Setter TargetName="Header" Property="Foreground" Value="LightGray"></Setter>
+								</Trigger>
+								<Trigger SourceName="HeaderContentPresenter" Property="IsMouseOver" Value="True">
+									<Setter TargetName="Header" Property="Foreground" Value="{StaticResource LinkHoverColorBrush}"/>
+									<Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource LinkHoverColorBrush}"/>
+								</Trigger>
+							</ControlTemplate.Triggers>
+						</ControlTemplate>
+					</Setter.Value>
+				</Setter>
+			</Style>
+
 			<Style x:Key="TabHeader" TargetType="{x:Type TabItem}">
 				<Setter Property="Template">
 					<Setter.Value>

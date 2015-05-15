@@ -202,8 +202,12 @@
 		</TabControl>
 
 		<GridSplitter Grid.Column="1" Width="3" HorizontalAlignment="Stretch" />
-		
+
 		<TabControl Grid.Column="2">
+
+			<TabControl.Resources>
+				<Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource TabHeaderH1}"/>
+			</TabControl.Resources>
 
 			<TabItem Header="Request">
 				<TabItem.Content>
@@ -211,7 +215,7 @@
 					<DockPanel LastChildFill="True">
 
 						<DockPanel DockPanel.Dock="Top">
-							<Label Style="{StaticResource H1}" Content="Request" />
+							<!--TODO-->
 							<Path Visibility="{Binding DirtyVisibility}" Margin="3 17 0 0" Fill="#FFD51C" Data="{StaticResource IconNew}" ToolTip="Request has been modified. Original response is still shown." />
 							<controls:IconLink x:Name="Reset" HorizontalAlignment="Right" IconData="{StaticResource IconErase}" IconMargin="{StaticResource IconEraseMargin}" ToolTip="Clear this request" />
 						</DockPanel>
@@ -385,7 +389,6 @@
 				</TabItem.Content>
 			</TabItem>
 
-
 			<TabItem Header="Response">
 				<TabItem.Content>
 
@@ -397,7 +400,7 @@
 						<DockPanel LastChildFill="True" Visibility="{Binding RequestHasResponseVisibility}">
 
 							<DockPanel DockPanel.Dock="Top" LastChildFill="True">
-								<Label DockPanel.Dock="Left" Style="{StaticResource H1}" Content="Response" />
+								<!--TODO-->
 								<controls:HttpStatus DockPanel.Dock="Right" HttpStatusCode="{Binding HttpStatusCode}" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="0 0 10 10"/>
 								<Label DockPanel.Dock="Right" x:Name="ResponseTime" Margin="0 0 10 5" Style="{StaticResource H2}" Foreground="{StaticResource RecededColorBrush}" VerticalAlignment="Bottom" HorizontalAlignment="Right" Content="Time">
 									<Label.ToolTip>
@@ -460,7 +463,6 @@
 						</DockPanel>
 
 					</Grid>
-
 
 				</TabItem.Content>
 
