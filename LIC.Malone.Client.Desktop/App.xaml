@@ -123,9 +123,9 @@
 						<ControlTemplate TargetType="{x:Type TabItem}">
 							<ContentPresenter Name="HeaderContentPresenter">
 								<ContentPresenter.Content>
-									<StackPanel Orientation="Vertical">
+									<StackPanel Orientation="Vertical" Margin="-2">
 										<Label Name="Header" Style="{StaticResource H1}" Content="{TemplateBinding Header}" Padding="10 10 10 3" />
-										<Border Name="Border" BorderThickness="0 0 0 2" BorderBrush="Transparent" Margin="11 0 11 5" />
+										<Border Name="Border" BorderThickness="0 0 0 2" BorderBrush="Transparent" Margin="20 0 11 5" />
 									</StackPanel>
 								</ContentPresenter.Content>
 							</ContentPresenter>
