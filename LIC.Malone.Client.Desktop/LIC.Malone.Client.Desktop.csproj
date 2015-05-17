@@ -128,7 +128,6 @@
     <Compile Include="..\Solution Items\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="BubbleScrollEvent.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="Controls\HttpStatus.xaml.cs">
       <DependentUpon>HttpStatus.xaml</DependentUpon>

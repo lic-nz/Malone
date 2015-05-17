@@ -203,214 +203,198 @@
 
 		<GridSplitter Grid.Column="1" Width="3" HorizontalAlignment="Stretch" />
 
-		<TabControl Grid.Column="2">
+		<DockPanel Grid.Column="2" LastChildFill="True">
 
-			<TabControl.Resources>
-				<Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource TabHeaderH1}"/>
-			</TabControl.Resources>
+			<Grid DockPanel.Dock="Top">
+				<Label DockPanel.Dock="Top" Content="URL" Style="{StaticResource H1}"/>
+				<Path Visibility="{Binding DirtyVisibility}" HorizontalAlignment="Right" Margin="0 16 45 0" VerticalAlignment="Top" Fill="#FFD51C" Data="{StaticResource IconNew}" ToolTip="Request has been modified. Original response is still shown." />
+				<controls:IconLink x:Name="Reset" HorizontalAlignment="Right" IconData="{StaticResource IconErase}" IconMargin="{StaticResource IconEraseMargin}" ToolTip="Clear this request" />
+			</Grid>
 
-			<TabItem Header="Request">
-				<TabItem.Content>
+			<Grid DockPanel.Dock="Top" Margin="10">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="70"/>
+					<ColumnDefinition Width="10"/>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="10"/>
+					<ColumnDefinition Width="130"/>
+				</Grid.ColumnDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition />
+					<RowDefinition Height="10"/>
+					<RowDefinition />
+				</Grid.RowDefinitions>
 
-					<Grid>
-						<controls:IconLink x:Name="Reset" HorizontalAlignment="Right" IconData="{StaticResource IconErase}" IconMargin="{StaticResource IconEraseMargin}" ToolTip="Clear this request" VerticalAlignment="Top" Margin="0 -44 0 0" />
-						<!--TODO: Figure out a better place to show this, probably with a message. -->
-						<Path Visibility="{Binding DirtyVisibility}" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0 -38 50 0" Fill="#FFD51C" Data="{StaticResource IconNew}" ToolTip="Request has been modified. Original response is still shown." />
+				<ComboBox Grid.Row="0" Grid.Column="0" x:Name="Methods" Width="70" Style="{StaticResource DefaultComboBox}" />
+				<TextBox  Grid.Row="0" Grid.Column="2" x:Name="Url" metro:TextBoxHelper.Watermark="Enter URL or choose from history" Style="{StaticResource DefaultTextBox}"/>
+				<ComboBox Grid.Row="0" Grid.Column="4" x:Name="Accepts" Width="130" Style="{StaticResource DefaultComboBox}" />
 
-						<DockPanel LastChildFill="True">
+				<StackPanel Grid.Row="2" Grid.Column="2" Orientation="Horizontal">
+					<controls:IconButton x:Name="Send" Content="Send" IconData="{StaticResource IconPaperPlane}" IconMargin="{StaticResource IconPaperPlaneMargin}" />
+					<controls:IconButton x:Name="Cancel" Content="Cancel" Margin="10 0 0 0" />
+				</StackPanel>
+			</Grid>
 
-							<Grid DockPanel.Dock="Top" Margin="15 10 15 0">
-								<Grid.ColumnDefinitions>
-									<ColumnDefinition Width="70"/>
-									<ColumnDefinition Width="10"/>
-									<ColumnDefinition Width="*"/>
-									<ColumnDefinition Width="10"/>
-									<ColumnDefinition Width="130"/>
-								</Grid.ColumnDefinitions>
-								<Grid.RowDefinitions>
-									<RowDefinition />
-									<RowDefinition Height="10"/>
-									<RowDefinition />
-								</Grid.RowDefinitions>
+			<TabControl DockPanel.Dock="Top">
 
-								<ComboBox Grid.Row="0" Grid.Column="0" x:Name="Methods" Width="70" Style="{StaticResource DefaultComboBox}" />
-								<TextBox  Grid.Row="0" Grid.Column="2" x:Name="Url" metro:TextBoxHelper.Watermark="Enter URL or choose from history" Style="{StaticResource DefaultTextBox}"/>
-								<ComboBox Grid.Row="0" Grid.Column="4" x:Name="Accepts" Width="130" Style="{StaticResource DefaultComboBox}" />
+				<TabControl.Resources>
+					<Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource TabHeaderH1}"/>
+				</TabControl.Resources>
 
-								<StackPanel Grid.Row="2" Grid.Column="2" Orientation="Horizontal">
-									<controls:IconButton x:Name="Send" Content="Send" IconData="{StaticResource IconPaperPlane}" IconMargin="{StaticResource IconPaperPlaneMargin}" />
-									<controls:IconButton x:Name="Cancel" Content="Cancel" Margin="10 0 0 0" />
-								</StackPanel>
-							</Grid>
+				<TabItem Header="Request">
+					<TabItem.Content>
 
-							<TabControl DockPanel.Dock="Top" Margin="4 5 0 0">
+						<Grid>
 
-								<TabControl.Resources>
-									<Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource TabHeader}"></Style>
-								</TabControl.Resources>
 
-								<TabItem Header="Body">
+							<DockPanel LastChildFill="True">
 
-									<StackPanel>
+								<TabControl DockPanel.Dock="Top" Margin="4 -9 0 0">
 
-										<Canvas>
-											<ComboBox x:Name="ContentTypes" Canvas.Right="10" Canvas.Top="-42" HorizontalAlignment="Right" Width="130" Style="{StaticResource DefaultComboBox}" />
-										</Canvas>
+									<TabControl.Resources>
+										<Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource TabHeader}"></Style>
+									</TabControl.Resources>
 
-										<ae:TextEditor Document="{Binding RequestBody}" VerticalScrollBarVisibility="Disabled" SyntaxHighlighting="{Binding RequestBodyHighlighting}" IsReadOnly="False" MinHeight="95">
-											<i:Interaction.Behaviors>
-												<local:BubbleScrollEvent/>
-											</i:Interaction.Behaviors>
-										</ae:TextEditor>
-
-									</StackPanel>
-
-								</TabItem>
-
-								<TabItem Header="Headers">
-									<DockPanel Margin="8 -8 15 0" LastChildFill="False">
-
-										<ItemsControl DockPanel.Dock="Top" x:Name="Headers">
-											<ItemsControl.ItemTemplate>
-												<DataTemplate>
-													<DataTemplate.Resources>
-														<Style x:Key="ReservedHeaderAction" TargetType="controls:IconLink" BasedOn="{StaticResource HeaderAction}">
-															<Style.Triggers>
-																<DataTrigger Binding="{Binding Name}" Value="Accept">
-																	<Setter Property="Visibility" Value="Collapsed"/>
-																</DataTrigger>
-																<DataTrigger Binding="{Binding Name}" Value="Accept-Encoding">
-																	<Setter Property="Visibility" Value="Collapsed"/>
-																</DataTrigger>
-																<DataTrigger Binding="{Binding Name}" Value="Authorization">
-																	<Setter Property="Visibility" Value="Collapsed"/>
-																</DataTrigger>
-																<DataTrigger Binding="{Binding Name}" Value="Content-Type">
-																	<Setter Property="Visibility" Value="Collapsed"/>
-																</DataTrigger>
-															</Style.Triggers>
-														</Style>
-													</DataTemplate.Resources>
-													<Grid>
-														<Grid.ColumnDefinitions>
-															<ColumnDefinition Width="230"/>
-															<ColumnDefinition Width="*"/>
-															<ColumnDefinition Width="24"/>
-														</Grid.ColumnDefinitions>
-														<TextBox Grid.Column="0" Style="{StaticResource HeaderName}" Text="{Binding Name}" metro:TextBoxHelper.Watermark="Name" />
-														<TextBox Grid.Column="1" Style="{StaticResource HeaderValue}" Text="{Binding Value}" metro:TextBoxHelper.Watermark="Value" />
-														<controls:IconLink Grid.Column="2" Style="{StaticResource ReservedHeaderAction}" IconData="{StaticResource IconMinus}" cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action RemoveFromHeaders($this)]" />
-													</Grid>
-												</DataTemplate>
-											</ItemsControl.ItemTemplate>
-										</ItemsControl>
-
-										<Grid DockPanel.Dock="Top">
-											<Grid.ColumnDefinitions>
-												<ColumnDefinition Width="230"/>
-												<ColumnDefinition Width="*"/>
-												<ColumnDefinition Width="24"/>
-											</Grid.ColumnDefinitions>
-											<TextBox Grid.Column="0" x:Name="HeaderName" Style="{StaticResource HeaderName}" IsReadOnly="False" metro:TextBoxHelper.Watermark="Name" />
-											<TextBox Grid.Column="1" x:Name="HeaderValue" Style="{StaticResource HeaderValue}" IsReadOnly="False" metro:TextBoxHelper.Watermark="Value" />
-											<controls:IconLink Grid.Column="2" Style="{StaticResource HeaderAction}" IconData="{StaticResource IconPlus}" IconMargin="0 5 0 0" cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action AddHeader()]" />
+									<TabItem Header="Body">
+										<Grid>
+											<Canvas>
+												<ComboBox x:Name="ContentTypes" Canvas.Right="10" Canvas.Top="-42" HorizontalAlignment="Right" Width="130" Style="{StaticResource DefaultComboBox}" />
+											</Canvas>
+											<ae:TextEditor Document="{Binding RequestBody}" SyntaxHighlighting="{Binding RequestBodyHighlighting}" IsReadOnly="False" />
 										</Grid>
+									</TabItem>
 
-									</DockPanel>
-								</TabItem>
+									<TabItem Header="Headers">
+										<DockPanel Margin="8 -8 15 0" LastChildFill="False">
 
-								<TabItem Header="Authentication">
-
-									<StackPanel>
-
-										<Grid DockPanel.Dock="Top" Margin="0 0 0 10">
-											<ComboBox x:Name="Tokens" Style="{StaticResource DefaultComboBox}" VerticalAlignment="Bottom" Margin="5,0,96,0" Padding="3" Height="30" >
-												<ComboBox.ItemTemplate>
+											<ItemsControl DockPanel.Dock="Top" x:Name="Headers">
+												<ItemsControl.ItemTemplate>
 													<DataTemplate>
 														<DataTemplate.Resources>
-															<Style x:Key="Historical" TargetType="TextBlock" BasedOn="{StaticResource DefaultTextBlock}">
+															<Style x:Key="ReservedHeaderAction" TargetType="controls:IconLink" BasedOn="{StaticResource HeaderAction}">
 																<Style.Triggers>
-																	<DataTrigger Binding="{Binding IsHistorical}" Value="True">
-																		<Setter Property="Text" Value="History"/>
+																	<DataTrigger Binding="{Binding Name}" Value="Accept">
+																		<Setter Property="Visibility" Value="Collapsed"/>
 																	</DataTrigger>
-																	<DataTrigger Binding="{Binding IsHistorical}" Value="False">
-																		<Setter Property="Text" Value="Session"/>
+																	<DataTrigger Binding="{Binding Name}" Value="Accept-Encoding">
+																		<Setter Property="Visibility" Value="Collapsed"/>
+																	</DataTrigger>
+																	<DataTrigger Binding="{Binding Name}" Value="Authorization">
+																		<Setter Property="Visibility" Value="Collapsed"/>
+																	</DataTrigger>
+																	<DataTrigger Binding="{Binding Name}" Value="Content-Type">
+																		<Setter Property="Visibility" Value="Collapsed"/>
 																	</DataTrigger>
 																</Style.Triggers>
 															</Style>
 														</DataTemplate.Resources>
-														<DockPanel>
-															<TextBlock Style="{StaticResource Historical}" Width="50" Foreground="#666666"/>
-															<TextBlock Text="{Binding Name}" />
-														</DockPanel>
+														<Grid>
+															<Grid.ColumnDefinitions>
+																<ColumnDefinition Width="230"/>
+																<ColumnDefinition Width="*"/>
+																<ColumnDefinition Width="24"/>
+															</Grid.ColumnDefinitions>
+															<TextBox Grid.Column="0" Style="{StaticResource HeaderName}" Text="{Binding Name}" metro:TextBoxHelper.Watermark="Name" />
+															<TextBox Grid.Column="1" Style="{StaticResource HeaderValue}" Text="{Binding Value}" metro:TextBoxHelper.Watermark="Value" />
+															<controls:IconLink Grid.Column="2" Style="{StaticResource ReservedHeaderAction}" IconData="{StaticResource IconMinus}" cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action RemoveFromHeaders($this)]" />
+														</Grid>
 													</DataTemplate>
-												</ComboBox.ItemTemplate>
-											</ComboBox>
-											<controls:IconLink HorizontalAlignment="Right" VerticalAlignment="Bottom" Content="Add" IconData="{StaticResource IconPlus}" IconMargin="{StaticResource IconPlusMargin}" cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action AddToken()]" />
-										</Grid>
+												</ItemsControl.ItemTemplate>
+											</ItemsControl>
 
-										<ae:TextEditor DockPanel.Dock="Top" MinHeight="95" Document="{Binding SelectedTokenJson, Mode=OneWay}" SyntaxHighlighting="JavaScript" VerticalScrollBarVisibility="Disabled">
-											<i:Interaction.Behaviors>
-												<local:BubbleScrollEvent/>
-											</i:Interaction.Behaviors>
-										</ae:TextEditor>
+											<Grid DockPanel.Dock="Top">
+												<Grid.ColumnDefinitions>
+													<ColumnDefinition Width="230"/>
+													<ColumnDefinition Width="*"/>
+													<ColumnDefinition Width="24"/>
+												</Grid.ColumnDefinitions>
+												<TextBox Grid.Column="0" x:Name="HeaderName" Style="{StaticResource HeaderName}" IsReadOnly="False" metro:TextBoxHelper.Watermark="Name" />
+												<TextBox Grid.Column="1" x:Name="HeaderValue" Style="{StaticResource HeaderValue}" IsReadOnly="False" metro:TextBoxHelper.Watermark="Value" />
+												<controls:IconLink Grid.Column="2" Style="{StaticResource HeaderAction}" IconData="{StaticResource IconPlus}" IconMargin="0 5 0 0" cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action AddHeader()]" />
+											</Grid>
 
+										</DockPanel>
+									</TabItem>
+
+									<TabItem Header="Authentication">
+
+										<DockPanel LastChildFill="True">
+
+											<Grid DockPanel.Dock="Top" Margin="0 0 0 10">
+												<ComboBox x:Name="Tokens" Style="{StaticResource DefaultComboBox}" VerticalAlignment="Bottom" Margin="5,0,96,0" Padding="3" Height="30" >
+													<ComboBox.ItemTemplate>
+														<DataTemplate>
+															<DataTemplate.Resources>
+																<Style x:Key="Historical" TargetType="TextBlock" BasedOn="{StaticResource DefaultTextBlock}">
+																	<Style.Triggers>
+																		<DataTrigger Binding="{Binding IsHistorical}" Value="True">
+																			<Setter Property="Text" Value="History"/>
+																		</DataTrigger>
+																		<DataTrigger Binding="{Binding IsHistorical}" Value="False">
+																			<Setter Property="Text" Value="Session"/>
+																		</DataTrigger>
+																	</Style.Triggers>
+																</Style>
+															</DataTemplate.Resources>
+															<DockPanel>
+																<TextBlock Style="{StaticResource Historical}" Width="50" Foreground="#666666"/>
+																<TextBlock Text="{Binding Name}" />
+															</DockPanel>
+														</DataTemplate>
+													</ComboBox.ItemTemplate>
+												</ComboBox>
+												<controls:IconLink HorizontalAlignment="Right" VerticalAlignment="Bottom" Content="Add" IconData="{StaticResource IconPlus}" IconMargin="{StaticResource IconPlusMargin}" cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action AddToken()]" />
+											</Grid>
+
+											<ae:TextEditor DockPanel.Dock="Top" Document="{Binding SelectedTokenJson, Mode=OneWay}" SyntaxHighlighting="JavaScript" />
+
+										</DockPanel>
+
+									</TabItem>
+
+								</TabControl>
+
+							</DockPanel>
+						</Grid>
+
+					</TabItem.Content>
+				</TabItem>
+
+				<TabItem Header="Response">
+					<TabItem.Content>
+
+						<Grid>
+
+							<!--<ContentControl Content="{StaticResource IconCloudIrc}" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding RequestHasNoResponseVisibility}" />-->
+							<metro:ProgressRing IsActive="{Binding RequestInProgress, Mode=OneWay}" />
+
+							<controls:HttpStatus DockPanel.Dock="Right" HttpStatusCode="{Binding HttpStatusCode}" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0 -44 10 0"/>
+							<Label DockPanel.Dock="Right" x:Name="ResponseTime"  Margin="0 -51 60 0" Style="{StaticResource H2}" Foreground="{StaticResource RecededColorBrush}" VerticalAlignment="Top" HorizontalAlignment="Right" Content="Time">
+								<Label.ToolTip>
+									<StackPanel Orientation="Vertical">
+										<StackPanel Orientation="Horizontal">
+											<Label Width="41">Local:</Label>
+											<Label Content="{Binding Path=.SelectedHistory.Response.AtLocalString}"/>
+										</StackPanel>
+										<StackPanel Orientation="Horizontal">
+											<Label Width="41">UTC:</Label>
+											<Label Content="{Binding Path=.SelectedHistory.Response.AtUtcString}"/>
+										</StackPanel>
 									</StackPanel>
+								</Label.ToolTip>
+							</Label>
 
-								</TabItem>
-
-							</TabControl>
-
-						</DockPanel>
-					</Grid>
-
-				</TabItem.Content>
-			</TabItem>
-
-			<TabItem Header="Response">
-				<TabItem.Content>
-
-					<Grid>
-
-						<ContentControl Content="{StaticResource IconCloudIrc}" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding RequestHasNoResponseVisibility}" />
-						<metro:ProgressRing IsActive="{Binding RequestInProgress, Mode=OneWay}" />
-
-						<controls:HttpStatus DockPanel.Dock="Right" HttpStatusCode="{Binding HttpStatusCode}" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0 -44 10 0"/>
-						<Label DockPanel.Dock="Right" x:Name="ResponseTime"  Margin="0 -51 60 0" Style="{StaticResource H2}" Foreground="{StaticResource RecededColorBrush}" VerticalAlignment="Top" HorizontalAlignment="Right" Content="Time">
-							<Label.ToolTip>
-								<StackPanel Orientation="Vertical">
-									<StackPanel Orientation="Horizontal">
-										<Label Width="41">Local:</Label>
-										<Label Content="{Binding Path=.SelectedHistory.Response.AtLocalString}"/>
-									</StackPanel>
-									<StackPanel Orientation="Horizontal">
-										<Label Width="41">UTC:</Label>
-										<Label Content="{Binding Path=.SelectedHistory.Response.AtUtcString}"/>
-									</StackPanel>
-								</StackPanel>
-							</Label.ToolTip>
-						</Label>
-
-						<DockPanel LastChildFill="True" Visibility="{Binding RequestHasResponseVisibility}">
-
-							<TabControl DockPanel.Dock="Top" Margin="4 -9 0 0">
+							<TabControl Margin="4 -9 0 0" Visibility="{Binding RequestHasResponseVisibility}">
 
 								<TabControl.Resources>
 									<Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource TabHeader}"></Style>
 								</TabControl.Resources>
 
 								<TabItem Header="Body">
-									<DockPanel>
-										<!--TODO: Highlight based on accept header.-->
-										<StackPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 -45 0 0">
-											<Label x:Name="ResponseContentType" Style="{StaticResource DefaultLabel}" Margin="3 2 0 0">content/type</Label>
-										</StackPanel>
-										<ae:TextEditor Document="{Binding ResponseBody}" SyntaxHighlighting="{Binding ResponseBodyHighlighting}">
-											<i:Interaction.Behaviors>
-												<local:BubbleScrollEvent/>
-											</i:Interaction.Behaviors>
-										</ae:TextEditor>
-									</DockPanel>
+									<Grid>
+										<Label x:Name="ResponseContentType" Style="{StaticResource DefaultLabel}" HorizontalAlignment="Right" Margin="0 -45 0 0">content/type</Label>
+										<ae:TextEditor Document="{Binding ResponseBody}" SyntaxHighlighting="{Binding ResponseBodyHighlighting}" />
+									</Grid>
 								</TabItem>
 
 								<TabItem Header="Headers">
@@ -435,15 +419,16 @@
 
 							</TabControl>
 
-						</DockPanel>
 
-					</Grid>
+						</Grid>
 
-				</TabItem.Content>
+					</TabItem.Content>
 
-			</TabItem>
+				</TabItem>
 
-		</TabControl>
+			</TabControl>
+
+		</DockPanel>
 
 	</Grid>
 
