@@ -216,7 +216,7 @@
 						<controls:IconLink x:Name="Reset" HorizontalAlignment="Right" IconData="{StaticResource IconErase}" IconMargin="{StaticResource IconEraseMargin}" ToolTip="Clear this request" VerticalAlignment="Top" Margin="0 -44 0 0" />
 						<!--TODO: Figure out a better place to show this, probably with a message. -->
 						<Path Visibility="{Binding DirtyVisibility}" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0 -38 50 0" Fill="#FFD51C" Data="{StaticResource IconNew}" ToolTip="Request has been modified. Original response is still shown." />
-						
+
 						<DockPanel LastChildFill="True">
 
 							<Grid DockPanel.Dock="Top" Margin="15 10 15 0">
@@ -372,29 +372,26 @@
 
 					<Grid>
 
-						<!--<ContentControl Content="{StaticResource IconCloudIrc}" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding RequestHasNoResponseVisibility}" />-->
+						<ContentControl Content="{StaticResource IconCloudIrc}" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding RequestHasNoResponseVisibility}" />
 						<metro:ProgressRing IsActive="{Binding RequestInProgress, Mode=OneWay}" />
 
-						<DockPanel LastChildFill="True" Visibility="{Binding RequestHasResponseVisibility}">
+						<controls:HttpStatus DockPanel.Dock="Right" HttpStatusCode="{Binding HttpStatusCode}" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0 -44 10 0"/>
+						<Label DockPanel.Dock="Right" x:Name="ResponseTime"  Margin="0 -51 60 0" Style="{StaticResource H2}" Foreground="{StaticResource RecededColorBrush}" VerticalAlignment="Top" HorizontalAlignment="Right" Content="Time">
+							<Label.ToolTip>
+								<StackPanel Orientation="Vertical">
+									<StackPanel Orientation="Horizontal">
+										<Label Width="41">Local:</Label>
+										<Label Content="{Binding Path=.SelectedHistory.Response.AtLocalString}"/>
+									</StackPanel>
+									<StackPanel Orientation="Horizontal">
+										<Label Width="41">UTC:</Label>
+										<Label Content="{Binding Path=.SelectedHistory.Response.AtUtcString}"/>
+									</StackPanel>
+								</StackPanel>
+							</Label.ToolTip>
+						</Label>
 
-							<DockPanel DockPanel.Dock="Top" LastChildFill="True">
-								<!--TODO-->
-								<controls:HttpStatus DockPanel.Dock="Right" HttpStatusCode="{Binding HttpStatusCode}" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="0 0 10 10"/>
-								<Label DockPanel.Dock="Right" x:Name="ResponseTime" Margin="0 0 10 5" Style="{StaticResource H2}" Foreground="{StaticResource RecededColorBrush}" VerticalAlignment="Bottom" HorizontalAlignment="Right" Content="Time">
-									<Label.ToolTip>
-										<StackPanel Orientation="Vertical">
-											<StackPanel Orientation="Horizontal">
-												<Label Width="41">Local:</Label>
-												<Label Content="{Binding Path=.SelectedHistory.Response.AtLocalString}"/>
-											</StackPanel>
-											<StackPanel Orientation="Horizontal">
-												<Label Width="41">UTC:</Label>
-												<Label Content="{Binding Path=.SelectedHistory.Response.AtUtcString}"/>
-											</StackPanel>
-										</StackPanel>
-									</Label.ToolTip>
-								</Label>
-							</DockPanel>
+						<DockPanel LastChildFill="True" Visibility="{Binding RequestHasResponseVisibility}">
 
 							<TabControl DockPanel.Dock="Top" Margin="4 -9 0 0">
 
