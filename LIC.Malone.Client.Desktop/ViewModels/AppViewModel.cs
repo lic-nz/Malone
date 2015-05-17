@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 using System.Xml.Linq;
 using Caliburn.Micro;
 using ICSharpCode.AvalonEdit.Document;
@@ -554,6 +555,17 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 				return true;
 
 			return false;
+		}
+
+		public void ExecuteSend(KeyEventArgs args)
+		{
+			if (args.Key != Key.Enter)
+				return;
+
+			if (!CanSend)
+				return;
+
+			Send();
 		}
 
 		public async void Send()

@@ -226,7 +226,7 @@
 				</Grid.RowDefinitions>
 
 				<ComboBox Grid.Row="0" Grid.Column="0" x:Name="Methods" Width="70" Style="{StaticResource DefaultComboBox}" />
-				<TextBox  Grid.Row="0" Grid.Column="2" x:Name="Url" metro:TextBoxHelper.Watermark="Enter URL or choose from history" Style="{StaticResource DefaultTextBox}"/>
+				<TextBox  Grid.Row="0" Grid.Column="2" x:Name="Url" metro:TextBoxHelper.Watermark="Enter URL or choose from history" Style="{StaticResource DefaultTextBox}" cal:Message.Attach="[Event KeyDown] = [Action ExecuteSend($eventArgs)]"/>
 				<ComboBox Grid.Row="0" Grid.Column="4" x:Name="Accepts" Width="130" Style="{StaticResource DefaultComboBox}" />
 
 				<StackPanel Grid.Row="2" Grid.Column="2" Orientation="Horizontal">
