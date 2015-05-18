@@ -159,7 +159,6 @@
     <Compile Include="Controls\IconButton.xaml.cs">
       <DependentUpon>IconButton.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\MaloneListBox.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="Messages\ConfigurationLoaded.cs" />
     <Compile Include="Messages\TokenAdded.cs" />

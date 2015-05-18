@@ -68,28 +68,6 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			}
 		}
 
-		private double _historyHorizontalOffset;
-		public double HistoryHorizontalOffset
-		{
-			get { return _historyHorizontalOffset; }
-			set
-			{
-				_historyHorizontalOffset = value;
-				NotifyOfPropertyChange(() => HistoryHorizontalOffset);
-			}
-		}
-
-		private double _historyVerticalScrollBarOffset;
-		public double HistoryVerticalScrollBarOffset
-		{
-			get { return _historyVerticalScrollBarOffset; }
-			set
-			{
-				_historyVerticalScrollBarOffset = value;
-				NotifyOfPropertyChange(() => HistoryVerticalScrollBarOffset);
-			}
-		}
-
 		private Request _selectedHistory;
 		public Request SelectedHistory
 		{
@@ -722,16 +700,6 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			}
 
 			return sb.ToString();
-		}
-
-		public void HistoryLayoutUpdated(object e)
-		{
-			var listBox = (MaloneListBox)((ActionExecutionContext)e).Source;
-
-			HistoryHorizontalOffset = listBox.ScrollViewerHorizontalOffset;
-			HistoryVerticalScrollBarOffset = listBox.VerticalScrollBarVisibility == Visibility.Visible
-				? -14
-				: 0;
 		}
 
 		public void HistoryClicked(object e)

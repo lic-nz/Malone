@@ -75,14 +75,13 @@
 
 						<DockPanel Name="HistoryDockPanel" Grid.Column="0" LastChildFill="True" Visibility="{Binding History, Converter={StaticResource ShowOnHistoryConverter}}">
 
-							<Label Name="HistoryHorizontalOffset" Visibility="Collapsed" />
-							<Label Name="HistoryVerticalScrollBarOffset" Visibility="Collapsed" />
+							<ListBox x:Name="History" SelectionMode="Single"
+									 HorizontalContentAlignment="Stretch"
+									 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+									 BorderThickness="0" Padding="0" Margin="-2"
+									 cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action HistoryClicked($executionContext)]">
 
-							<controls:MaloneListBox x:Name="History" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" SelectionMode="Single"
-								BorderThickness="0" Padding="0" Margin="-2"
-								cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action HistoryClicked($executionContext)]; [Event LayoutUpdated] = [Action HistoryLayoutUpdated($executionContext)]">
-
-								<controls:MaloneListBox.Resources>
+								<ListBox.Resources>
 									<ResourceDictionary>
 										<Style x:Key="DeleteRequestBorder" TargetType="{x:Type Border}">
 											<Setter Property="Visibility" Value="Hidden" />
@@ -92,16 +91,8 @@
 												</DataTrigger>
 											</Style.Triggers>
 										</Style>
-										<Style x:Key="DeleteRequestButton" TargetType="{x:Type Button}">
-											<Setter Property="Visibility" Value="Hidden" />
-											<Style.Triggers>
-												<DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}},Path=IsMouseOver}" Value="True">
-													<Setter Property="Visibility" Value="Visible" />
-												</DataTrigger>
-											</Style.Triggers>
-										</Style>
 									</ResourceDictionary>
-								</controls:MaloneListBox.Resources>
+								</ListBox.Resources>
 
 								<ListBox.ItemTemplate>
 									<DataTemplate>
@@ -109,7 +100,6 @@
 											<Grid.Resources>
 												<converters:HttpStatusCodeToBrushConverter x:Key="HttpStatusCodeToBrushConverter" />
 												<converters:HttpStatusCodeToIntConverter x:Key="HttpStatusCodeToIntConverter" />
-												<converters:HistoryWidthConverter x:Key="HistoryWidthConverter" />
 											</Grid.Resources>
 											<Grid.ColumnDefinitions>
 												<ColumnDefinition Width="40" />
@@ -120,46 +110,28 @@
 												<RowDefinition />
 											</Grid.RowDefinitions>
 
-											<Canvas Name="HistoryButtonCanvas" ZIndex="300" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Grid.RowSpan="2">
-
-												<Border Width="42" Height="42" Background="#CBE8F6" Canvas.Top="-4" Style="{StaticResource DeleteRequestBorder}">
-													<Canvas.Left>
-														<MultiBinding Converter="{StaticResource HistoryWidthConverter}">
-															<Binding ElementName="History" Path="ActualWidth" />
-															<Binding ElementName="HistoryHorizontalOffset" Path="Content" />
-															<Binding ElementName="HistoryVerticalScrollBarOffset" Path="Content" />
-															<Binding Source="Border" />
-														</MultiBinding>
-													</Canvas.Left>
-												</Border>
-
-												<controls:IconLink
-													cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action RemoveFromHistory($this)]"
-													Canvas.Top="-3" Style="{StaticResource DeleteRequestButton}" HoverColor="{StaticResource LinkDangerHoverColorBrush}" Height="40" Width="40"
-													HorizontalAlignment="Left" IconData="{StaticResource IconCircleWithMinus}" IconMargin="0" BackgroundColor="White">
-													<Canvas.Left>
-														<MultiBinding Converter="{StaticResource HistoryWidthConverter}">
-															<Binding ElementName="History" Path="ActualWidth" />
-															<Binding ElementName="HistoryHorizontalOffset" Path="Content" />
-															<Binding ElementName="HistoryVerticalScrollBarOffset" Path="Content" />
-															<Binding Source="Button"></Binding>
-														</MultiBinding>
-													</Canvas.Left>
-												</controls:IconLink>
-											</Canvas>
-
 											<TextBlock Grid.Column="0" Grid.Row="0" Text="{Binding Method}" Style="{StaticResource History.BaseUrl}" />
 											<TextBlock Grid.Column="0" Grid.Row="1" Text="{Binding Response.HttpStatusCode, Converter={StaticResource HttpStatusCodeToIntConverter}}" Foreground="{Binding Response.HttpStatusCode, Converter={StaticResource HttpStatusCodeToBrushConverter}}" />
 
 											<TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding BaseUrl}" Style="{StaticResource History.BaseUrl}" />
 											<TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding ResourcePath}" Style="{StaticResource History.ResourcePath}" />
 
+											<Border Width="42" Height="42" Background="#CBE8F6"
+													Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Grid.RowSpan="2"
+													HorizontalAlignment="Right" VerticalAlignment="Center"
+													Style="{StaticResource DeleteRequestBorder}">
+												<controls:IconLink
+													cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action RemoveFromHistory($this)]"
+													HoverColor="{StaticResource LinkDangerHoverColorBrush}" Height="40" Width="40"
+													HorizontalAlignment="Left" IconData="{StaticResource IconCircleWithMinus}" IconMargin="0" BackgroundColor="White" />
+											</Border>
+
 										</Grid>
 
 									</DataTemplate>
 								</ListBox.ItemTemplate>
 
-							</controls:MaloneListBox>
+							</ListBox>
 
 						</DockPanel>
 					</Grid>
