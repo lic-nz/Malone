@@ -339,7 +339,7 @@
 
 						<Grid>
 
-							<!--<ContentControl Content="{StaticResource IconCloudIrc}" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding RequestHasNoResponseVisibility}" />-->
+							<!--<ContentControl Content="{StaticResource IconCloudIrc}" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding ResponseBody, Converter={StaticResource ReversedNullToVisibilityConverter}" />-->
 							<metro:ProgressRing IsActive="{Binding RequestInProgress, Mode=OneWay}" />
 
 							<controls:HttpStatus DockPanel.Dock="Right" HttpStatusCode="{Binding HttpStatusCode}" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0 -44 10 0"/>
@@ -358,7 +358,7 @@
 								</Label.ToolTip>
 							</Label>
 
-							<TabControl Margin="4 -9 0 0" Visibility="{Binding RequestHasResponseVisibility}">
+							<TabControl Margin="4 -9 0 0" Visibility="{Binding ResponseBody, Converter={StaticResource NullToVisibilityConverter}}">
 
 								<TabControl.Resources>
 									<Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource TabHeader}"></Style>
