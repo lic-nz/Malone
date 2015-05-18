@@ -24,6 +24,10 @@
 	cal:Bind.AtDesignTime="True">
 	<Window.Resources>
 		<converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+		<converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
+		<converters:NullToVisibilityConverter x:Key="ReversedNullToVisibilityConverter" IsReversed="True" />
+		<converters:DateTimeFormatConverter x:Key="LocalDateTimeFormatConverter" />
+		<converters:DateTimeFormatConverter x:Key="UtcDateTimeFormatConverter" InUtc="True" />
 	</Window.Resources>
 
 	<Grid Name="MainGrid">
@@ -205,7 +209,7 @@
 
 			<Grid DockPanel.Dock="Top">
 				<Label DockPanel.Dock="Top" Content="URL" Style="{StaticResource H1}"/>
-				<Path Visibility="{Binding DirtyVisibility}" HorizontalAlignment="Right" Margin="0 16 45 0" VerticalAlignment="Top" Fill="#FFD51C" Data="{StaticResource IconNew}" ToolTip="Request has been modified. Original response is still shown." />
+				<Path Visibility="{Binding IsRequestDirty, Converter={StaticResource BooleanToVisibilityConverter}}" HorizontalAlignment="Right" Margin="0 16 45 0" VerticalAlignment="Top" Fill="#FFD51C" Data="{StaticResource IconNew}" ToolTip="Request has been modified. Original response is still shown." />
 				<controls:IconLink x:Name="Reset" HorizontalAlignment="Right" IconData="{StaticResource IconErase}" IconMargin="{StaticResource IconEraseMargin}" ToolTip="Clear this request" />
 			</Grid>
 
@@ -372,11 +376,11 @@
 									<StackPanel Orientation="Vertical">
 										<StackPanel Orientation="Horizontal">
 											<Label Width="41">Local:</Label>
-											<Label Content="{Binding Path=.SelectedHistory.Response.AtLocalString}"/>
+											<Label Content="{Binding Path=.SelectedHistory.Response.At, Converter={StaticResource LocalDateTimeFormatConverter}}"/>
 										</StackPanel>
 										<StackPanel Orientation="Horizontal">
 											<Label Width="41">UTC:</Label>
-											<Label Content="{Binding Path=.SelectedHistory.Response.AtUtcString}"/>
+											<Label Content="{Binding Path=.SelectedHistory.Response.At, Converter={StaticResource UtcDateTimeFormatConverter}}"/>
 										</StackPanel>
 									</StackPanel>
 								</Label.ToolTip>

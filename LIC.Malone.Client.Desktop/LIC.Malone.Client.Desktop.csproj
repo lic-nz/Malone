@@ -146,7 +146,9 @@
       <DependentUpon>IconLink.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
+    <Compile Include="Converters\DateTimeFormatConverter.cs" />
     <Compile Include="Converters\IconLinkHeightConverter.cs" />
+    <Compile Include="Converters\NullToVisibilityConverter.cs" />
     <Compile Include="Converters\ShowOnHistoryConverter.cs" />
     <Compile Include="Converters\HideOnHistoryConverter.cs" />
     <Compile Include="Converters\HistoryWidthConverter.cs" />
