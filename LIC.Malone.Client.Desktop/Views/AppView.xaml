@@ -54,24 +54,24 @@
 							<TextBlock Style="{StaticResource EmptyListMessage}">Nothing to see here. Try sending a request!</TextBlock>
 						</StackPanel>
 
-						<Canvas>
-							<Button Canvas.Top="-45" Canvas.Right="-1" BorderThickness="0" Background="#efefef" Visibility="{Binding History, Converter={StaticResource ShowOnHistoryConverter}}"
-									cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action ClearHistory($executionContext)]" ToolTip="Clear history">
-								<Button.Template>
-									<ControlTemplate TargetType="{x:Type Button}">
-										<Border Name="Border" Background="{TemplateBinding Background}" Height="40" Width="40">
-											<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-										</Border>
-										<ControlTemplate.Triggers>
-											<Trigger Property="IsMouseOver" Value="True">
-												<Setter TargetName="Border" Property="Background" Value="Red"/>
-											</Trigger>
-										</ControlTemplate.Triggers>
-									</ControlTemplate>
-								</Button.Template>
-								<Path HorizontalAlignment="Center" VerticalAlignment="Center" Margin="-2 -2 0 0" Fill="White" Data="{StaticResource IconCircleWithCross}"/>
-							</Button>
-						</Canvas>
+						<Button HorizontalAlignment="Right" VerticalAlignment="Top"
+								Margin="0 -45 0 0"
+								BorderThickness="0" Background="#efefef" Visibility="{Binding History, Converter={StaticResource ShowOnHistoryConverter}}"
+								cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action ClearHistory($executionContext)]" ToolTip="Clear history">
+							<Button.Template>
+								<ControlTemplate TargetType="{x:Type Button}">
+									<Border Name="Border" Background="{TemplateBinding Background}" Height="40" Width="40">
+										<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+									</Border>
+									<ControlTemplate.Triggers>
+										<Trigger Property="IsMouseOver" Value="True">
+											<Setter TargetName="Border" Property="Background" Value="Red"/>
+										</Trigger>
+									</ControlTemplate.Triggers>
+								</ControlTemplate>
+							</Button.Template>
+							<Path HorizontalAlignment="Center" VerticalAlignment="Center" Margin="-2 -2 0 0" Fill="White" Data="{StaticResource IconCircleWithCross}"/>
+						</Button>
 
 						<DockPanel Name="HistoryDockPanel" Grid.Column="0" LastChildFill="True" Visibility="{Binding History, Converter={StaticResource ShowOnHistoryConverter}}">
 
@@ -146,24 +146,24 @@
 							<TextBlock Style="{StaticResource EmptyListMessage}">Collections are super-nifty. Why not create one?</TextBlock>
 						</StackPanel>
 
-						<Canvas DockPanel.Dock="Top">
-							<Button Canvas.Top="-45" Canvas.Right="-1" BorderThickness="0" Background="#efefef"
-									cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action AddCollection()]" ToolTip="Add collection">
-								<Button.Template>
-									<ControlTemplate TargetType="{x:Type Button}">
-										<Border Name="Border" Background="{TemplateBinding Background}" Height="40" Width="40">
-											<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-										</Border>
-										<ControlTemplate.Triggers>
-											<Trigger Property="IsMouseOver" Value="True">
-												<Setter TargetName="Border" Property="Background" Value="#449d44"></Setter>
-											</Trigger>
-										</ControlTemplate.Triggers>
-									</ControlTemplate>
-								</Button.Template>
-								<Path HorizontalAlignment="Center" VerticalAlignment="Center" Margin="-2 -2 0 0" Fill="White" Data="M10,1.6c-4.639,0-8.4,3.761-8.4,8.4s3.761,8.4,8.4,8.4s8.4-3.761,8.4-8.4S14.639,1.6,10,1.6z M15,11h-4v4H9 v-4H5V9h4V5h2v4h4V11z"/>
-							</Button>
-						</Canvas>
+						<Button HorizontalAlignment="Right" VerticalAlignment="Top"
+								Margin="0 -45 0 0"
+								BorderThickness="0" Background="#efefef"
+								cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action AddCollection()]" ToolTip="Add collection">
+							<Button.Template>
+								<ControlTemplate TargetType="{x:Type Button}">
+									<Border Name="Border" Background="{TemplateBinding Background}" Height="40" Width="40">
+										<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+									</Border>
+									<ControlTemplate.Triggers>
+										<Trigger Property="IsMouseOver" Value="True">
+											<Setter TargetName="Border" Property="Background" Value="#449d44"></Setter>
+										</Trigger>
+									</ControlTemplate.Triggers>
+								</ControlTemplate>
+							</Button.Template>
+							<Path HorizontalAlignment="Center" VerticalAlignment="Center" Margin="-2 -2 0 0" Fill="White" Data="M10,1.6c-4.639,0-8.4,3.761-8.4,8.4s3.761,8.4,8.4,8.4s8.4-3.761,8.4-8.4S14.639,1.6,10,1.6z M15,11h-4v4H9 v-4H5V9h4V5h2v4h4V11z"/>
+						</Button>
 
 						<DockPanel Name="CollectionsDockPanel" LastChildFill="True" Visibility="{Binding History, Converter={StaticResource ShowOnHistoryConverter}}">
 
