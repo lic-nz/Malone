@@ -68,28 +68,6 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			}
 		}
 
-		private double _historyHorizontalOffset;
-		public double HistoryHorizontalOffset
-		{
-			get { return _historyHorizontalOffset; }
-			set
-			{
-				_historyHorizontalOffset = value;
-				NotifyOfPropertyChange(() => HistoryHorizontalOffset);
-			}
-		}
-
-		private double _historyVerticalScrollBarOffset;
-		public double HistoryVerticalScrollBarOffset
-		{
-			get { return _historyVerticalScrollBarOffset; }
-			set
-			{
-				_historyVerticalScrollBarOffset = value;
-				NotifyOfPropertyChange(() => HistoryVerticalScrollBarOffset);
-			}
-		}
-
 		private Request _selectedHistory;
 		public Request SelectedHistory
 		{
@@ -101,9 +79,32 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			}
 		}
 
-		public Visibility DirtyVisibility
+		public bool IsRequestDirty
 		{
-			get { return IsRequestDirty() ? Visibility.Visible : Visibility.Hidden; }
+			get
+			{
+				var request = SelectedHistory;
+
+				if (request == null)
+					return false;
+
+				if (SelectedMethod != request.Method)
+					return true;
+
+				if (Url != request.Url)
+					return true;
+
+				if (SelectedContentType != request.Headers.GetValue(Header.ContentType))
+					return true;
+
+				if (RequestBody.Text != request.Body)
+					return true;
+
+				if (!Headers.SequenceEqual(request.Headers))
+					return true;
+
+				return false;
+			}
 		}
 
 		private string _url;
@@ -114,7 +115,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			{
 				_url = value;
 				NotifyOfPropertyChange(() => Url);
-				NotifyOfPropertyChange(() => DirtyVisibility);
+				NotifyOfPropertyChange(() => IsRequestDirty);
 				NotifyOfPropertyChange(() => CanSend);
 			}
 		}
@@ -144,7 +145,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			{
 				_selectedMethod = value;
 				NotifyOfPropertyChange(() => SelectedMethod);
-				NotifyOfPropertyChange(() => DirtyVisibility);
+				NotifyOfPropertyChange(() => IsRequestDirty);
 			}
 		}
 
@@ -169,7 +170,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 				_selectedAccept = value;
 				AddOrUpdateHeader(Header.Accept, value);
 				NotifyOfPropertyChange(() => SelectedAccept);
-				NotifyOfPropertyChange(() => DirtyVisibility);
+				NotifyOfPropertyChange(() => IsRequestDirty);
 			}
 		}
 
@@ -195,7 +196,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 				AddOrUpdateHeader(Header.ContentType, value);
 				NotifyOfPropertyChange(() => SelectedContentType);
 				NotifyOfPropertyChange(() => RequestBodyHighlighting);
-				NotifyOfPropertyChange(() => DirtyVisibility);
+				NotifyOfPropertyChange(() => IsRequestDirty);
 			}
 		}
 
@@ -242,7 +243,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 				NotifyOfPropertyChange(() => SelectedToken);
 				NotifyOfPropertyChange(() => SelectedTokenJson);
 				UpdateAuthorizationHeader(_selectedToken);
-				NotifyOfPropertyChange(() => DirtyVisibility);
+				NotifyOfPropertyChange(() => IsRequestDirty);
 			}
 		}
 
@@ -280,23 +281,6 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 				_requestBody = value;
 				NotifyOfPropertyChange(() => RequestBody);
 			}
-		}
-
-		private Visibility _requestHasResponseVisibility;
-		public Visibility RequestHasResponseVisibility
-		{
-			get { return _requestHasResponseVisibility; }
-			set
-			{
-				_requestHasResponseVisibility = value;
-				NotifyOfPropertyChange(() => RequestHasResponseVisibility);
-				NotifyOfPropertyChange(() => RequestHasNoResponseVisibility);
-			}
-		}
-
-		public Visibility RequestHasNoResponseVisibility
-		{
-			get { return RequestHasResponseVisibility == Visibility.Visible ? Visibility.Hidden : Visibility.Visible; }
 		}
 
 		private TextDocument _responseBody = new TextDocument();
@@ -502,7 +486,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 		private void RequestBody_TextChanged(object sender, EventArgs e)
 		{
-			NotifyOfPropertyChange(() => DirtyVisibility);
+			NotifyOfPropertyChange(() => IsRequestDirty);
 		}
 
 		private void AddOrUpdateHeader(string name, string value)
@@ -581,41 +565,17 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			var response = request.Response;
 			var hasResponse = response != null;
 
-			RequestHasResponseVisibility = hasResponse ? Visibility.Visible : Visibility.Collapsed;
-
 			if (!hasResponse)
+			{
+				ResponseBody = null;
 				return;
+			}
 
 			ResponseTime = request.ResponseTime;
 			ResponseBody = new TextDocument(await Prettify(response.Body, response.ContentType));
 			ResponseContentType = response.ContentType;
 			HttpStatusCode = response.HttpStatusCode;
 			ResponseHeaders = new BindableCollection<Header>(response.Headers.OrderBy(h => h.Name));
-		}
-
-		private bool IsRequestDirty()
-		{
-			var request = SelectedHistory;
-
-			if (request == null)
-				return false;
-
-			if (SelectedMethod != request.Method)
-				return true;
-
-			if (Url != request.Url)
-				return true;
-
-			if (SelectedContentType != request.Headers.GetValue(Header.ContentType))
-				return true;
-
-			if (RequestBody.Text != request.Body)
-				return true;
-
-			if (!Headers.SequenceEqual(request.Headers))
-				return true;
-
-			return false;
 		}
 
 		public void ExecuteSend(KeyEventArgs args)
@@ -636,7 +596,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 			SelectedHistory = null;
 
-			RequestHasResponseVisibility = Visibility.Collapsed;
+			ResponseBody = null;
 
 			// There was something strange going on with Headers being a BindableCollection or something - it would somehow overwrite the headers
 			// for previous requests in the History when just calling Headers.ToList(). This is begging for a unit test, but for now make a copy.
@@ -803,16 +763,6 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			return sb.ToString();
 		}
 
-		public void HistoryLayoutUpdated(object e)
-		{
-			var listBox = (MaloneListBox)((ActionExecutionContext)e).Source;
-
-			HistoryHorizontalOffset = listBox.ScrollViewerHorizontalOffset;
-			HistoryVerticalScrollBarOffset = listBox.VerticalScrollBarVisibility == Visibility.Visible
-				? -14
-				: 0;
-		}
-
 		public void HistoryClicked(object e)
 		{
 			if (SelectedHistory == null)
@@ -836,7 +786,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			if (header.Name == Header.Authorization)
 				SelectedToken = _anonymousToken;
 
-			NotifyOfPropertyChange(() => DirtyVisibility);
+			NotifyOfPropertyChange(() => IsRequestDirty);
 		}
 
 		public void AddHeader()
@@ -844,7 +794,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			Headers.Add(new Header(HeaderName, HeaderValue));
 			HeaderName = null;
 			HeaderValue = null;
-			NotifyOfPropertyChange(() => DirtyVisibility);
+			NotifyOfPropertyChange(() => IsRequestDirty);
 		}
 
 		public void ClearHistory(object e)

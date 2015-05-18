@@ -26,16 +26,6 @@ namespace LIC.Malone.Core
 		// TODO: Don't pollute core with Caliburn shiz.
 		#region Caliburn workarounds
 
-		public string AtLocalString
-		{
-			get { return At.ToLocalTime().ToString(DateFormatString); }
-		}
-
-		public string AtUtcString
-		{
-			get { return At.ToString(DateFormatString); }
-		}
-
 		public string ResponseTime
 		{
 			get

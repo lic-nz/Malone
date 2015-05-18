@@ -24,6 +24,10 @@
 	cal:Bind.AtDesignTime="True">
 	<Window.Resources>
 		<converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+		<converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
+		<converters:NullToVisibilityConverter x:Key="ReversedNullToVisibilityConverter" IsReversed="True" />
+		<converters:DateTimeFormatConverter x:Key="LocalDateTimeFormatConverter" />
+		<converters:DateTimeFormatConverter x:Key="UtcDateTimeFormatConverter" InUtc="True" />
 	</Window.Resources>
 
 	<Grid Name="MainGrid">
@@ -50,35 +54,34 @@
 							<TextBlock Style="{StaticResource EmptyListMessage}">Nothing to see here. Try sending a request!</TextBlock>
 						</StackPanel>
 
-						<Canvas>
-							<Button Canvas.Top="-45" Canvas.Right="-1" BorderThickness="0" Background="#efefef" Visibility="{Binding History, Converter={StaticResource ShowOnHistoryConverter}}"
-									cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action ClearHistory($executionContext)]" ToolTip="Clear history">
-								<Button.Template>
-									<ControlTemplate TargetType="{x:Type Button}">
-										<Border Name="Border" Background="{TemplateBinding Background}" Height="40" Width="40">
-											<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-										</Border>
-										<ControlTemplate.Triggers>
-											<Trigger Property="IsMouseOver" Value="True">
-												<Setter TargetName="Border" Property="Background" Value="Red"/>
-											</Trigger>
-										</ControlTemplate.Triggers>
-									</ControlTemplate>
-								</Button.Template>
-								<Path HorizontalAlignment="Center" VerticalAlignment="Center" Margin="-2 -2 0 0" Fill="White" Data="{StaticResource IconCircleWithCross}"/>
-							</Button>
-						</Canvas>
+						<Button HorizontalAlignment="Right" VerticalAlignment="Top"
+								Margin="0 -45 0 0"
+								BorderThickness="0" Background="#efefef" Visibility="{Binding History, Converter={StaticResource ShowOnHistoryConverter}}"
+								cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action ClearHistory($executionContext)]" ToolTip="Clear history">
+							<Button.Template>
+								<ControlTemplate TargetType="{x:Type Button}">
+									<Border Name="Border" Background="{TemplateBinding Background}" Height="40" Width="40">
+										<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+									</Border>
+									<ControlTemplate.Triggers>
+										<Trigger Property="IsMouseOver" Value="True">
+											<Setter TargetName="Border" Property="Background" Value="Red"/>
+										</Trigger>
+									</ControlTemplate.Triggers>
+								</ControlTemplate>
+							</Button.Template>
+							<Path HorizontalAlignment="Center" VerticalAlignment="Center" Margin="-2 -2 0 0" Fill="White" Data="{StaticResource IconCircleWithCross}"/>
+						</Button>
 
 						<DockPanel Name="HistoryDockPanel" Grid.Column="0" LastChildFill="True" Visibility="{Binding History, Converter={StaticResource ShowOnHistoryConverter}}">
 
-							<Label Name="HistoryHorizontalOffset" Visibility="Collapsed" />
-							<Label Name="HistoryVerticalScrollBarOffset" Visibility="Collapsed" />
+							<ListBox x:Name="History" SelectionMode="Single"
+									 HorizontalContentAlignment="Stretch"
+									 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+									 BorderThickness="0" Padding="0" Margin="-2"
+									 cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action HistoryClicked($executionContext)]">
 
-							<controls:MaloneListBox x:Name="History" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" SelectionMode="Single"
-								BorderThickness="0" Padding="0" Margin="-2"
-								cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action HistoryClicked($executionContext)]; [Event LayoutUpdated] = [Action HistoryLayoutUpdated($executionContext)]">
-
-								<controls:MaloneListBox.Resources>
+								<ListBox.Resources>
 									<ResourceDictionary>
 										<Style x:Key="DeleteRequestBorder" TargetType="{x:Type Border}">
 											<Setter Property="Visibility" Value="Hidden" />
@@ -88,16 +91,8 @@
 												</DataTrigger>
 											</Style.Triggers>
 										</Style>
-										<Style x:Key="DeleteRequestButton" TargetType="{x:Type Button}">
-											<Setter Property="Visibility" Value="Hidden" />
-											<Style.Triggers>
-												<DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}},Path=IsMouseOver}" Value="True">
-													<Setter Property="Visibility" Value="Visible" />
-												</DataTrigger>
-											</Style.Triggers>
-										</Style>
 									</ResourceDictionary>
-								</controls:MaloneListBox.Resources>
+								</ListBox.Resources>
 
 								<ListBox.ItemTemplate>
 									<DataTemplate>
@@ -105,7 +100,6 @@
 											<Grid.Resources>
 												<converters:HttpStatusCodeToBrushConverter x:Key="HttpStatusCodeToBrushConverter" />
 												<converters:HttpStatusCodeToIntConverter x:Key="HttpStatusCodeToIntConverter" />
-												<converters:HistoryWidthConverter x:Key="HistoryWidthConverter" />
 											</Grid.Resources>
 											<Grid.ColumnDefinitions>
 												<ColumnDefinition Width="40" />
@@ -116,46 +110,28 @@
 												<RowDefinition />
 											</Grid.RowDefinitions>
 
-											<Canvas Name="HistoryButtonCanvas" ZIndex="300" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Grid.RowSpan="2">
-
-												<Border Width="42" Height="42" Background="#CBE8F6" Canvas.Top="-4" Style="{StaticResource DeleteRequestBorder}">
-													<Canvas.Left>
-														<MultiBinding Converter="{StaticResource HistoryWidthConverter}">
-															<Binding ElementName="History" Path="ActualWidth" />
-															<Binding ElementName="HistoryHorizontalOffset" Path="Content" />
-															<Binding ElementName="HistoryVerticalScrollBarOffset" Path="Content" />
-															<Binding Source="Border" />
-														</MultiBinding>
-													</Canvas.Left>
-												</Border>
-
-												<controls:IconLink
-													cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action RemoveFromHistory($this)]"
-													Canvas.Top="-3" Style="{StaticResource DeleteRequestButton}" HoverColor="{StaticResource LinkDangerHoverColorBrush}" Height="40" Width="40"
-													HorizontalAlignment="Left" IconData="{StaticResource IconCircleWithMinus}" IconMargin="0" BackgroundColor="White">
-													<Canvas.Left>
-														<MultiBinding Converter="{StaticResource HistoryWidthConverter}">
-															<Binding ElementName="History" Path="ActualWidth" />
-															<Binding ElementName="HistoryHorizontalOffset" Path="Content" />
-															<Binding ElementName="HistoryVerticalScrollBarOffset" Path="Content" />
-															<Binding Source="Button"></Binding>
-														</MultiBinding>
-													</Canvas.Left>
-												</controls:IconLink>
-											</Canvas>
-
 											<TextBlock Grid.Column="0" Grid.Row="0" Text="{Binding Method}" Style="{StaticResource History.BaseUrl}" />
 											<TextBlock Grid.Column="0" Grid.Row="1" Text="{Binding Response.HttpStatusCode, Converter={StaticResource HttpStatusCodeToIntConverter}}" Foreground="{Binding Response.HttpStatusCode, Converter={StaticResource HttpStatusCodeToBrushConverter}}" />
 
 											<TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding BaseUrl}" Style="{StaticResource History.BaseUrl}" />
 											<TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding ResourcePath}" Style="{StaticResource History.ResourcePath}" />
 
+											<Border Width="42" Height="42" Background="#CBE8F6"
+													Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Grid.RowSpan="2"
+													HorizontalAlignment="Right" VerticalAlignment="Center"
+													Style="{StaticResource DeleteRequestBorder}">
+												<controls:IconLink
+													cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action RemoveFromHistory($this)]"
+													HoverColor="{StaticResource LinkDangerHoverColorBrush}" Height="40" Width="40"
+													HorizontalAlignment="Left" IconData="{StaticResource IconCircleWithMinus}" IconMargin="0" BackgroundColor="White" />
+											</Border>
+
 										</Grid>
 
 									</DataTemplate>
 								</ListBox.ItemTemplate>
 
-							</controls:MaloneListBox>
+							</ListBox>
 
 						</DockPanel>
 					</Grid>
@@ -170,24 +146,24 @@
 							<TextBlock Style="{StaticResource EmptyListMessage}">Collections are super-nifty. Why not create one?</TextBlock>
 						</StackPanel>
 
-						<Canvas DockPanel.Dock="Top">
-							<Button Canvas.Top="-45" Canvas.Right="-1" BorderThickness="0" Background="#efefef"
-									cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action AddCollection()]" ToolTip="Add collection">
-								<Button.Template>
-									<ControlTemplate TargetType="{x:Type Button}">
-										<Border Name="Border" Background="{TemplateBinding Background}" Height="40" Width="40">
-											<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-										</Border>
-										<ControlTemplate.Triggers>
-											<Trigger Property="IsMouseOver" Value="True">
-												<Setter TargetName="Border" Property="Background" Value="#449d44"></Setter>
-											</Trigger>
-										</ControlTemplate.Triggers>
-									</ControlTemplate>
-								</Button.Template>
-								<Path HorizontalAlignment="Center" VerticalAlignment="Center" Margin="-2 -2 0 0" Fill="White" Data="M10,1.6c-4.639,0-8.4,3.761-8.4,8.4s3.761,8.4,8.4,8.4s8.4-3.761,8.4-8.4S14.639,1.6,10,1.6z M15,11h-4v4H9 v-4H5V9h4V5h2v4h4V11z"/>
-							</Button>
-						</Canvas>
+						<Button HorizontalAlignment="Right" VerticalAlignment="Top"
+								Margin="0 -45 0 0"
+								BorderThickness="0" Background="#efefef"
+								cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action AddCollection()]" ToolTip="Add collection">
+							<Button.Template>
+								<ControlTemplate TargetType="{x:Type Button}">
+									<Border Name="Border" Background="{TemplateBinding Background}" Height="40" Width="40">
+										<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+									</Border>
+									<ControlTemplate.Triggers>
+										<Trigger Property="IsMouseOver" Value="True">
+											<Setter TargetName="Border" Property="Background" Value="#449d44"></Setter>
+										</Trigger>
+									</ControlTemplate.Triggers>
+								</ControlTemplate>
+							</Button.Template>
+							<Path HorizontalAlignment="Center" VerticalAlignment="Center" Margin="-2 -2 0 0" Fill="White" Data="M10,1.6c-4.639,0-8.4,3.761-8.4,8.4s3.761,8.4,8.4,8.4s8.4-3.761,8.4-8.4S14.639,1.6,10,1.6z M15,11h-4v4H9 v-4H5V9h4V5h2v4h4V11z"/>
+						</Button>
 
 						<DockPanel Name="CollectionsDockPanel" LastChildFill="True" Visibility="{Binding History, Converter={StaticResource ShowOnHistoryConverter}}">
 
@@ -205,7 +181,7 @@
 
 			<Grid DockPanel.Dock="Top">
 				<Label DockPanel.Dock="Top" Content="URL" Style="{StaticResource H1}"/>
-				<Path Visibility="{Binding DirtyVisibility}" HorizontalAlignment="Right" Margin="0 16 45 0" VerticalAlignment="Top" Fill="#FFD51C" Data="{StaticResource IconNew}" ToolTip="Request has been modified. Original response is still shown." />
+				<Path Visibility="{Binding IsRequestDirty, Converter={StaticResource BooleanToVisibilityConverter}}" HorizontalAlignment="Right" Margin="0 16 45 0" VerticalAlignment="Top" Fill="#FFD51C" Data="{StaticResource IconNew}" ToolTip="Request has been modified. Original response is still shown." />
 				<controls:IconLink x:Name="Reset" HorizontalAlignment="Right" IconData="{StaticResource IconErase}" IconMargin="{StaticResource IconEraseMargin}" ToolTip="Clear this request" />
 			</Grid>
 
@@ -255,9 +231,7 @@
 
 									<TabItem Header="Body">
 										<Grid>
-											<Canvas>
-												<ComboBox x:Name="ContentTypes" Canvas.Right="10" Canvas.Top="-42" HorizontalAlignment="Right" Width="130" Style="{StaticResource DefaultComboBox}" />
-											</Canvas>
+											<ComboBox x:Name="ContentTypes" Margin="0 -42 10 0" HorizontalAlignment="Right" VerticalAlignment="Top" Width="130" Style="{StaticResource DefaultComboBox}" />
 											<ae:TextEditor Document="{Binding RequestBody}" SyntaxHighlighting="{Binding RequestBodyHighlighting}" IsReadOnly="False" />
 										</Grid>
 									</TabItem>
@@ -363,7 +337,7 @@
 
 						<Grid>
 
-							<!--<ContentControl Content="{StaticResource IconCloudIrc}" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding RequestHasNoResponseVisibility}" />-->
+							<!--<ContentControl Content="{StaticResource IconCloudIrc}" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding ResponseBody, Converter={StaticResource ReversedNullToVisibilityConverter}" />-->
 							<metro:ProgressRing IsActive="{Binding RequestInProgress, Mode=OneWay}" />
 
 							<controls:HttpStatus DockPanel.Dock="Right" HttpStatusCode="{Binding HttpStatusCode}" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0 -44 10 0"/>
@@ -372,17 +346,17 @@
 									<StackPanel Orientation="Vertical">
 										<StackPanel Orientation="Horizontal">
 											<Label Width="41">Local:</Label>
-											<Label Content="{Binding Path=.SelectedHistory.Response.AtLocalString}"/>
+											<Label Content="{Binding Path=.SelectedHistory.Response.At, Converter={StaticResource LocalDateTimeFormatConverter}}"/>
 										</StackPanel>
 										<StackPanel Orientation="Horizontal">
 											<Label Width="41">UTC:</Label>
-											<Label Content="{Binding Path=.SelectedHistory.Response.AtUtcString}"/>
+											<Label Content="{Binding Path=.SelectedHistory.Response.At, Converter={StaticResource UtcDateTimeFormatConverter}}"/>
 										</StackPanel>
 									</StackPanel>
 								</Label.ToolTip>
 							</Label>
 
-							<TabControl Margin="4 -9 0 0" Visibility="{Binding RequestHasResponseVisibility}">
+							<TabControl Margin="4 -9 0 0" Visibility="{Binding ResponseBody, Converter={StaticResource NullToVisibilityConverter}}">
 
 								<TabControl.Resources>
 									<Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource TabHeader}"></Style>

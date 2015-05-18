@@ -146,7 +146,9 @@
       <DependentUpon>IconLink.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
+    <Compile Include="Converters\DateTimeFormatConverter.cs" />
     <Compile Include="Converters\IconLinkHeightConverter.cs" />
+    <Compile Include="Converters\NullToVisibilityConverter.cs" />
     <Compile Include="Converters\ShowOnHistoryConverter.cs" />
     <Compile Include="Converters\HideOnHistoryConverter.cs" />
     <Compile Include="Converters\HistoryWidthConverter.cs" />
@@ -157,7 +159,6 @@
     <Compile Include="Controls\IconButton.xaml.cs">
       <DependentUpon>IconButton.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\MaloneListBox.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="Messages\ConfigurationLoaded.cs" />
     <Compile Include="Messages\TokenAdded.cs" />
