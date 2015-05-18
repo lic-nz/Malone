@@ -40,11 +40,13 @@
     <ApplicationIcon>Malone.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Caliburn.Micro">
-      <HintPath>..\packages\Caliburn.Micro.Core.2.0.1\lib\net45\Caliburn.Micro.dll</HintPath>
+    <Reference Include="Caliburn.Micro, Version=2.0.2.0, Culture=neutral, PublicKeyToken=8e5891231f2ed21f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Caliburn.Micro.Core.2.0.2\lib\net45\Caliburn.Micro.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Caliburn.Micro.Platform">
-      <HintPath>..\packages\Caliburn.Micro.2.0.1\lib\net45\Caliburn.Micro.Platform.dll</HintPath>
+    <Reference Include="Caliburn.Micro.Platform, Version=2.0.2.0, Culture=neutral, PublicKeyToken=8e5891231f2ed21f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Caliburn.Micro.2.0.2\lib\net45\Caliburn.Micro.Platform.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="DeltaCompressionDotNet">
       <HintPath>..\packages\DeltaCompressionDotNet.1.0.0\lib\net45\DeltaCompressionDotNet.dll</HintPath>
@@ -62,8 +64,9 @@
     <Reference Include="ICSharpCode.AvalonEdit">
       <HintPath>..\packages\AvalonEdit.5.0.2\lib\Net40\ICSharpCode.AvalonEdit.dll</HintPath>
     </Reference>
-    <Reference Include="ICSharpCode.SharpZipLib">
-      <HintPath>..\packages\squirrel.windows.0.9.2.1\lib\Net45\ICSharpCode.SharpZipLib.dll</HintPath>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\squirrel.windows.0.99.0\lib\Net45\ICSharpCode.SharpZipLib.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="MahApps.Metro, Version=1.1.2.0, Culture=neutral, PublicKeyToken=f4fb5a3c4d1e5b4f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -72,17 +75,21 @@
     <Reference Include="Microsoft.Web.XmlTransform">
       <HintPath>..\packages\Microsoft.Web.Xdt.2.1.1\lib\net40\Microsoft.Web.XmlTransform.dll</HintPath>
     </Reference>
-    <Reference Include="Mono.Cecil">
-      <HintPath>..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.dll</HintPath>
+    <Reference Include="Mono.Cecil, Version=0.9.6.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <HintPath>..\packages\Mono.Cecil.0.9.6.1\lib\net45\Mono.Cecil.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Mono.Cecil.Mdb">
-      <HintPath>..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.Mdb.dll</HintPath>
+    <Reference Include="Mono.Cecil.Mdb, Version=0.9.6.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <HintPath>..\packages\Mono.Cecil.0.9.6.1\lib\net45\Mono.Cecil.Mdb.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Mono.Cecil.Pdb">
-      <HintPath>..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.Pdb.dll</HintPath>
+    <Reference Include="Mono.Cecil.Pdb, Version=0.9.6.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <HintPath>..\packages\Mono.Cecil.0.9.6.1\lib\net45\Mono.Cecil.Pdb.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Mono.Cecil.Rocks">
-      <HintPath>..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.Rocks.dll</HintPath>
+    <Reference Include="Mono.Cecil.Rocks, Version=0.9.6.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <HintPath>..\packages\Mono.Cecil.0.9.6.1\lib\net45\Mono.Cecil.Rocks.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -92,14 +99,17 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\NuGet.Core.2.8.3\lib\net40-Client\NuGet.Core.dll</HintPath>
     </Reference>
-    <Reference Include="RestSharp">
-      <HintPath>..\packages\RestSharp.105.0.1\lib\net4\RestSharp.dll</HintPath>
+    <Reference Include="RestSharp, Version=105.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\RestSharp.105.1.0\lib\net45\RestSharp.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Splat">
-      <HintPath>..\packages\Splat.1.5.1\lib\Net45\Splat.dll</HintPath>
+    <Reference Include="Splat, Version=1.6.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Splat.1.6.2\lib\Net45\Splat.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Squirrel">
-      <HintPath>..\packages\squirrel.windows.0.9.2.1\lib\Net45\Squirrel.dll</HintPath>
+    <Reference Include="Squirrel, Version=0.99.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\squirrel.windows.0.99.0\lib\Net45\Squirrel.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
