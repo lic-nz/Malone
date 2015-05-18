@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -21,6 +22,7 @@ using LIC.Malone.Core.Authentication.OAuth;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RestSharp;
+using Squirrel;
 
 namespace LIC.Malone.Client.Desktop.ViewModels
 {
@@ -40,9 +42,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 		private AddTokenViewModel _addTokenViewModel;
 		private readonly NamedAuthorizationState _anonymousToken = new NamedAuthorizationState("<Anonymous>", null);
 
-		private string _historyJsonPath;
 		private CancellationTokenSource _cancellationTokenSource;
-
 		public CancellationTokenSource CancellationTokenSource
 		{
 			get { return _cancellationTokenSource; }
@@ -349,6 +349,8 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 		}
 
 		private string _headerValue;
+		private string _maloneVersion;
+
 		public string HeaderValue
 		{
 			get { return _headerValue; }
@@ -356,6 +358,17 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			{
 				_headerValue = value;
 				NotifyOfPropertyChange(() => HeaderValue);
+			}
+		}
+
+		public string MaloneVersion
+		{
+			get { return _maloneVersion; }
+			set
+			{
+				if (value == _maloneVersion) return;
+				_maloneVersion = value;
+				NotifyOfPropertyChange(() => MaloneVersion);
 			}
 		}
 
@@ -426,6 +439,54 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			DisplayRequest(new Request());
 
 			LoadConfig();
+
+			CheckForUpdates();
+		}
+
+		private async void CheckForUpdates()
+		{
+			var updateUrl = ConfigurationManager.AppSettings["UpdateUrl"];
+
+			using (var updateManager = new UpdateManager(updateUrl, "Malone"))
+			{
+				if (!updateManager.IsInstalledApp)
+				{
+					MaloneVersion = "Update disabled";
+					return;
+				}
+				
+				MaloneVersion = "Checking for update...";
+
+				try
+				{
+					var updateInfo = await updateManager.CheckForUpdate();
+
+					if (updateInfo == null)
+					{
+						MaloneVersion = "No updates found, staying on v" + updateManager.CurrentlyInstalledVersion();
+					}
+					else if (!updateInfo.ReleasesToApply.Any())
+					{
+						MaloneVersion = "You're up to date! v" + updateManager.CurrentlyInstalledVersion();
+					}
+					else
+					{
+						var latest = updateInfo.ReleasesToApply.OrderByDescending(u => u.Version).First();
+						
+						MaloneVersion = string.Format("Updating to v{0}", latest.Version);
+
+						var releases = updateInfo.ReleasesToApply;
+						await updateManager.DownloadReleases(releases);
+						await updateManager.ApplyReleases(updateInfo);
+						MaloneVersion = "Restart to finish update";
+					}
+				}
+				catch (Exception e)
+				{
+					// TODO: Have better error handling.
+					MaloneVersion = e.Message;
+				}
+			}
 		}
 
 		private void LoadConfig()

@@ -431,10 +431,11 @@
 	</Grid>
 
 	<!-- TODO: Have some settings. -->
-	<!--<metro:MetroWindow.RightWindowCommands>
+	<metro:MetroWindow.RightWindowCommands>
 		<metro:WindowCommands>
-			<Button Content="Settings" cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action ManageTokens()]" />
+			<!--<Button Content="Settings" cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action ManageTokens()]" />-->
+			<Button Content="{Binding MaloneVersion}"/>
 		</metro:WindowCommands>
-	</metro:MetroWindow.RightWindowCommands>-->
+	</metro:MetroWindow.RightWindowCommands>
 
 </metro:MetroWindow>
