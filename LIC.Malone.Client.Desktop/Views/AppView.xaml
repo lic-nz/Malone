@@ -24,6 +24,8 @@
 	cal:Bind.AtDesignTime="True">
 	<Window.Resources>
 		<converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+		<converters:ResponseTabIndexConverter x:Key="ResponseTabIndexConverter" />
+		<converters:ResponseBodyTabIndexConverter x:Key="ResponseBodyTabIndexConverter" />
 		<converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
 		<converters:NullToVisibilityConverter x:Key="ReversedNullToVisibilityConverter" IsReversed="True" />
 		<converters:DateTimeFormatConverter x:Key="LocalDateTimeFormatConverter" />
@@ -209,7 +211,7 @@
 				</StackPanel>
 			</Grid>
 
-			<TabControl DockPanel.Dock="Top">
+			<TabControl DockPanel.Dock="Top" SelectedIndex="{Binding IsSending, Mode=OneWay, Converter={StaticResource ResponseTabIndexConverter}}">
 
 				<TabControl.Resources>
 					<Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource TabHeaderH1}"/>
@@ -337,8 +339,8 @@
 
 						<Grid>
 
-							<!--<ContentControl Content="{StaticResource IconCloudIrc}" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding ResponseBody, Converter={StaticResource ReversedNullToVisibilityConverter}" />-->
-							<metro:ProgressRing IsActive="{Binding RequestInProgress, Mode=OneWay}" />
+							<ContentControl Content="{StaticResource IconCloudIrc}" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding ResponseBody, Converter={StaticResource ReversedNullToVisibilityConverter}}" />
+							<metro:ProgressRing IsActive="{Binding IsSending, Mode=OneWay}" />
 
 							<controls:HttpStatus DockPanel.Dock="Right" HttpStatusCode="{Binding HttpStatusCode}" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0 -44 10 0"/>
 							<Label DockPanel.Dock="Right" x:Name="ResponseTime"  Margin="0 -51 60 0" Style="{StaticResource H2}" Foreground="{StaticResource RecededColorBrush}" VerticalAlignment="Top" HorizontalAlignment="Right" Content="Time">
@@ -355,8 +357,8 @@
 									</StackPanel>
 								</Label.ToolTip>
 							</Label>
-
-							<TabControl Margin="4 -9 0 0" Visibility="{Binding ResponseBody, Converter={StaticResource NullToVisibilityConverter}}">
+							
+							<TabControl Margin="4 -9 0 0" Visibility="{Binding ResponseBody, Converter={StaticResource NullToVisibilityConverter}}" SelectedIndex="{Binding IsSending, Mode=OneWay, Converter={StaticResource ResponseBodyTabIndexConverter}}">
 
 								<TabControl.Resources>
 									<Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource TabHeader}"></Style>

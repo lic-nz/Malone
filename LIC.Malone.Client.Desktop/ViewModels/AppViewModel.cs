@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -13,11 +12,9 @@ using System.Xml.Linq;
 using Caliburn.Micro;
 using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Highlighting;
-using LIC.Malone.Client.Desktop.Controls;
 using LIC.Malone.Client.Desktop.Extensions;
 using LIC.Malone.Client.Desktop.Messages;
 using LIC.Malone.Core;
-using LIC.Malone.Core.Authentication;
 using LIC.Malone.Core.Authentication.OAuth;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -51,7 +48,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 				_cancellationTokenSource = value;
 				NotifyOfPropertyChange(() => CanSend);
 				NotifyOfPropertyChange(() => CanCancel);
-				NotifyOfPropertyChange(() => RequestInProgress);
+				NotifyOfPropertyChange(() => IsSending);
 			}
 		}
 
@@ -377,16 +374,16 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			get
 			{
 				Uri url;
-				return Uri.TryCreate(Url, UriKind.Absolute, out url) && _allowedSchemes.Contains(url.Scheme) && !RequestInProgress;
+				return Uri.TryCreate(Url, UriKind.Absolute, out url) && _allowedSchemes.Contains(url.Scheme) && !IsSending;
 			}
 		}
 
 		public bool CanCancel
 		{
-			get { return RequestInProgress; }
+			get { return IsSending; }
 		}
 
-		public bool RequestInProgress
+		public bool IsSending
 		{
 			get { return _cancellationTokenSource != null; }
 		}
@@ -583,19 +580,15 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			if (args.Key != Key.Enter)
 				return;
 
-			if (!CanSend)
-				return;
-
 			Send();
 		}
 
 		public async void Send()
 		{
-			if (string.IsNullOrWhiteSpace(Url))
+			if (!CanSend)
 				return;
 
 			SelectedHistory = null;
-
 			ResponseBody = null;
 
 			// There was something strange going on with Headers being a BindableCollection or something - it would somehow overwrite the headers
@@ -614,6 +607,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 				request.NamedAuthorizationState = SelectedToken;
 
 			CancellationTokenSource = new CancellationTokenSource();
+
 			try
 			{
 				var client = new ApiClient();
