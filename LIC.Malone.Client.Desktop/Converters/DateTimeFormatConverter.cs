@@ -15,7 +15,8 @@ namespace LIC.Malone.Client.Desktop.Converters
 		{
 			if (value is DateTime)
 				return (InUtc ? ((DateTime)value).ToUniversalTime() : ((DateTime)value).ToLocalTime()).ToString(Format ?? DefaultDateTimeFormatString);
-			else if (value is DateTimeOffset)
+			
+			if (value is DateTimeOffset)
 				return (InUtc ? ((DateTimeOffset)value).UtcDateTime : ((DateTimeOffset)value).LocalDateTime).ToString(Format ?? DefaultDateTimeFormatString);
 
 			return DependencyProperty.UnsetValue;

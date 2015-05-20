@@ -331,6 +331,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 		private string _headerValue;
 		private string _maloneVersion;
+		private bool _isMaloneUpdateAvailable;
 
 		public string HeaderValue
 		{
@@ -350,6 +351,17 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 				if (value == _maloneVersion) return;
 				_maloneVersion = value;
 				NotifyOfPropertyChange(() => MaloneVersion);
+			}
+		}
+
+		public bool IsMaloneUpdateAvailable
+		{
+			get { return _isMaloneUpdateAvailable; }
+			set
+			{
+				if (value == _isMaloneUpdateAvailable) return;
+				_isMaloneUpdateAvailable = value;
+				NotifyOfPropertyChange(() => IsMaloneUpdateAvailable);
 			}
 		}
 
@@ -426,6 +438,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 		private async void CheckForUpdates()
 		{
+			IsMaloneUpdateAvailable = true;
 			var updateUrl = ConfigurationManager.AppSettings["UpdateUrl"];
 
 			using (var updateManager = new UpdateManager(updateUrl, "Malone"))
@@ -435,6 +448,8 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 					MaloneVersion = "Update disabled";
 					return;
 				}
+
+				var currentVersion = updateManager.CurrentlyInstalledVersion();
 				
 				MaloneVersion = "Checking for update...";
 
@@ -444,22 +459,28 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 					if (updateInfo == null)
 					{
-						MaloneVersion = "No updates found, staying on v" + updateManager.CurrentlyInstalledVersion();
+						MaloneVersion = string.Format("No updates found, staying on v{0}", currentVersion);
 					}
 					else if (!updateInfo.ReleasesToApply.Any())
 					{
-						MaloneVersion = "You're up to date! v" + updateManager.CurrentlyInstalledVersion();
+						MaloneVersion = string.Format("You're up to date! v{0}", currentVersion);
 					}
 					else
 					{
-						var latest = updateInfo.ReleasesToApply.OrderByDescending(u => u.Version).First();
-						
-						MaloneVersion = string.Format("Updating to v{0}", latest.Version);
+						var latestVersion = updateInfo
+							.ReleasesToApply
+							.OrderByDescending(u => u.Version)
+							.First()
+							.Version;
+
+						MaloneVersion = string.Format("Updating to v{0}", latestVersion);
 
 						var releases = updateInfo.ReleasesToApply;
 						await updateManager.DownloadReleases(releases);
 						await updateManager.ApplyReleases(updateInfo);
-						MaloneVersion = "Restart to finish update";
+
+						IsMaloneUpdateAvailable = true;
+						MaloneVersion = string.Format("Restart to finish update from v{0} to v{1}", currentVersion, latestVersion);
 					}
 				}
 				catch (Exception e)
@@ -468,6 +489,11 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 					MaloneVersion = e.Message;
 				}
 			}
+		}
+
+		public void RestartMalone()
+		{
+			UpdateManager.RestartApp("Malone");
 		}
 
 		private void LoadConfig()

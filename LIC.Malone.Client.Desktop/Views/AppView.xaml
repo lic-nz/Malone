@@ -23,14 +23,24 @@
 	d:DataContext="{d:DesignInstance Type=designData:AppViewModelDesignData, IsDesignTimeCreatable=True}"
 	cal:Bind.AtDesignTime="True">
 	<Window.Resources>
-		<converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-		<converters:ResponseTabIndexConverter x:Key="ResponseTabIndexConverter" />
-		<converters:ResponseBodyTabIndexConverter x:Key="ResponseBodyTabIndexConverter" />
-		<converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
-		<converters:NullToVisibilityConverter x:Key="ReversedNullToVisibilityConverter" IsReversed="True" />
+		<converters:BooleanToVisibilityConverter x:Key="ShowWhenTrueConverter" />
+		<converters:BooleanToVisibilityConverter x:Key="HideWhenTrueConverter" IsReversed="True" />
+		<converters:NullToVisibilityConverter x:Key="ShowWhenNullConverter" />
+		<converters:NullToVisibilityConverter x:Key="HideWhenNullConverter" IsReversed="True" />
 		<converters:DateTimeFormatConverter x:Key="LocalDateTimeFormatConverter" />
 		<converters:DateTimeFormatConverter x:Key="UtcDateTimeFormatConverter" InUtc="True" />
+		<!-- TODO: Remove these hacks when tabs are broken to their own view models and you can ActivateItem(). -->
+		<converters:ResponseTabIndexConverter x:Key="ResponseTabIndexConverter" />
+		<converters:ResponseBodyTabIndexConverter x:Key="ResponseBodyTabIndexConverter" />
 	</Window.Resources>
+
+	<metro:MetroWindow.RightWindowCommands>
+		<metro:WindowCommands>
+			<Button Content="{Binding MaloneVersion}" IsEnabled="{Binding IsMaloneUpdateAvailable}" cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action RestartMalone()]" />
+			<!-- TODO: Have some settings. -->
+			<!--<Button Content="Settings" cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action ManageTokens()]" />-->
+		</metro:WindowCommands>
+	</metro:MetroWindow.RightWindowCommands>
 
 	<Grid Name="MainGrid">
 		<Grid.ColumnDefinitions>
@@ -183,7 +193,7 @@
 
 			<Grid DockPanel.Dock="Top">
 				<Label DockPanel.Dock="Top" Content="URL" Style="{StaticResource H1}"/>
-				<Path Visibility="{Binding IsRequestDirty, Converter={StaticResource BooleanToVisibilityConverter}}" HorizontalAlignment="Right" Margin="0 16 45 0" VerticalAlignment="Top" Fill="#FFD51C" Data="{StaticResource IconNew}" ToolTip="Request has been modified. Original response is still shown." />
+				<Path Visibility="{Binding IsRequestDirty, Converter={StaticResource ShowWhenTrueConverter}}" HorizontalAlignment="Right" Margin="0 16 45 0" VerticalAlignment="Top" Fill="#FFD51C" Data="{StaticResource IconNew}" ToolTip="Request has been modified. Original response is still shown." />
 				<controls:IconLink x:Name="Reset" HorizontalAlignment="Right" IconData="{StaticResource IconErase}" IconMargin="{StaticResource IconEraseMargin}" ToolTip="Clear this request" />
 			</Grid>
 
@@ -339,7 +349,7 @@
 
 						<Grid>
 
-							<ContentControl Content="{StaticResource IconCloudIrc}" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding ResponseBody, Converter={StaticResource ReversedNullToVisibilityConverter}}" />
+							<ContentControl Content="{StaticResource IconCloudIrc}" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding ResponseBody, Converter={StaticResource HideWhenNullConverter}}" />
 							<metro:ProgressRing IsActive="{Binding IsSending, Mode=OneWay}" />
 
 							<controls:HttpStatus DockPanel.Dock="Right" HttpStatusCode="{Binding HttpStatusCode}" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0 -44 10 0"/>
@@ -358,7 +368,7 @@
 								</Label.ToolTip>
 							</Label>
 							
-							<TabControl Margin="4 -9 0 0" Visibility="{Binding ResponseBody, Converter={StaticResource NullToVisibilityConverter}}" SelectedIndex="{Binding IsSending, Mode=OneWay, Converter={StaticResource ResponseBodyTabIndexConverter}}">
+							<TabControl Margin="4 -9 0 0" Visibility="{Binding ResponseBody, Converter={StaticResource ShowWhenNullConverter}}" SelectedIndex="{Binding IsSending, Mode=OneWay, Converter={StaticResource ResponseBodyTabIndexConverter}}">
 
 								<TabControl.Resources>
 									<Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource TabHeader}"></Style>
@@ -405,13 +415,5 @@
 		</DockPanel>
 
 	</Grid>
-
-	<!-- TODO: Have some settings. -->
-	<metro:MetroWindow.RightWindowCommands>
-		<metro:WindowCommands>
-			<!--<Button Content="Settings" cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action ManageTokens()]" />-->
-			<Button Content="{Binding MaloneVersion}"/>
-		</metro:WindowCommands>
-	</metro:MetroWindow.RightWindowCommands>
 
 </metro:MetroWindow>

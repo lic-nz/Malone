@@ -9,26 +9,22 @@ namespace LIC.Malone.Client.Desktop.Converters
 		public bool IsReversed { get; set; }
 		public bool UseHidden { get; set; }
 
-		#region IValueConverter Members
-
-		public object Convert(object value, Type targetType, object parameter,
-			System.Globalization.CultureInfo culture)
+		public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
 		{
-			bool notNull = (value != null);
-			if (IsReversed) notNull = !notNull;
+			var notNull = (value != null);
+
+			if (IsReversed)
+				notNull = !notNull;
 
 			if (notNull)
 				return Visibility.Visible;
-			else
-				return this.UseHidden ? Visibility.Hidden : Visibility.Collapsed;
+			
+			return UseHidden ? Visibility.Hidden : Visibility.Collapsed;
 		}
 
-		public object ConvertBack(object value, Type targetType, object parameter,
-			System.Globalization.CultureInfo culture)
+		public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
 		{
 			throw new NotImplementedException();
 		}
-
-		#endregion
 	}
 }
