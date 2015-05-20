@@ -493,7 +493,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 		public void RestartMalone()
 		{
-			UpdateManager.RestartApp("Malone");
+			UpdateManager.RestartApp();
 		}
 
 		private void LoadConfig()
