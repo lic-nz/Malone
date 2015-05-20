@@ -438,7 +438,6 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 		private async void CheckForUpdates()
 		{
-			IsMaloneUpdateAvailable = true;
 			var updateUrl = ConfigurationManager.AppSettings["UpdateUrl"];
 
 			using (var updateManager = new UpdateManager(updateUrl, "Malone"))
