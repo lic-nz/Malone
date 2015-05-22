@@ -18,6 +18,7 @@ namespace LIC.Malone.Client.Desktop.Packager
 			var clientDirectory = Path.GetFullPath(Path.Combine(packagerDirectory, "..", "LIC.Malone.Client.Desktop"));
 			var clientBinDirectory = Path.GetFullPath(Path.Combine(clientDirectory, "bin", "Release"));
 
+			Console.WriteLine("Relevant paths:");
 			Console.WriteLine(packagerDirectory);
 			Console.WriteLine(buildDirectory);
 			Console.WriteLine(clientDirectory);
@@ -25,21 +26,21 @@ namespace LIC.Malone.Client.Desktop.Packager
 			Console.WriteLine();
 
 			var buildDirectoryInfo = Directory.CreateDirectory(buildDirectory);
+			var nugget = CreateNugget(clientDirectory, buildDirectoryInfo);
+			Releasify(nugget);
 
-			// Clean out build directory.
-			buildDirectoryInfo.GetFiles("*.nupkg").ToList().ForEach(p => p.Delete());
+			Console.WriteLine("\n\nPress any key to exit.");
+			Console.ReadLine();
+		}
 
-			Directory.SetCurrentDirectory(buildDirectory);
-
-			// Rely on standard nuget process to build the project and create a starting package to copy metadata from.
-			// Make sure nuget.exe is in your PATH.
-
+		private static void StartProcess(string fileName, string args)
+		{
 			var process = new Process
 			{
 				StartInfo =
 				{
-					FileName = "nuget.exe",
-					Arguments = string.Format("pack {0}\\LIC.Malone.Client.Desktop.csproj -Build -Prop Configuration=Release", clientDirectory),
+					FileName = fileName,
+					Arguments = args,
 					UseShellExecute = false,
 					RedirectStandardOutput = true
 				}
@@ -51,9 +52,9 @@ namespace LIC.Malone.Client.Desktop.Packager
 			}
 			catch (Exception innerException)
 			{
-				throw new Exception("Is nuget.exe in your PATH?", innerException);
+				throw new Exception(string.Format("Is {0} in your PATH?", fileName), innerException);
 			}
-			
+
 			var reader = process.StandardOutput;
 			var output = reader.ReadToEnd();
 
@@ -61,6 +62,21 @@ namespace LIC.Malone.Client.Desktop.Packager
 
 			process.WaitForExit();
 			process.Close();
+			
+		}
+
+		private static string CreateNugget(string clientDirectory, DirectoryInfo buildDirectoryInfo)
+		{
+			var csproj = Path.GetFullPath(Path.Combine(clientDirectory, "LIC.Malone.Client.Desktop.csproj"));
+			var bin = Path.GetFullPath(Path.Combine(clientDirectory, "bin", "Release"));
+
+			Directory.SetCurrentDirectory(buildDirectoryInfo.FullName);
+
+			// Clean out build directory.
+			buildDirectoryInfo.GetFiles("*.nupkg").ToList().ForEach(p => p.Delete());
+
+			// Rely on standard nuget process to build the project and create a starting package to copy metadata from.
+			StartProcess("nuget.exe", string.Format("pack {0} -Build -Prop Configuration=Release", csproj));
 
 			var nupkg = buildDirectoryInfo.GetFiles("*.nupkg").Single();
 			var package = new ZipPackage(nupkg.FullName);
@@ -94,17 +110,21 @@ namespace LIC.Malone.Client.Desktop.Packager
 
 			var builder = new PackageBuilder();
 			builder.Populate(manifest);
-			builder.PopulateFiles(clientBinDirectory, files);
+			builder.PopulateFiles(bin, files);
 
-			using (var stream = File.Open(Path.Combine(buildDirectory, nupkg.Name), FileMode.OpenOrCreate))
+			var nugget = Path.Combine(buildDirectoryInfo.FullName, nupkg.Name);
+
+			using (var stream = File.Open(nugget, FileMode.OpenOrCreate))
 			{
 				builder.Save(stream);
 			}
 
-			// TODO: Releasify.
+			return nugget;
+		}
 
-			Console.WriteLine("\n\nPress any key to exit.");
-			Console.ReadLine();
+		private static void Releasify(string nugget)
+		{
+			// TODO.
 		}
 	}
 }
