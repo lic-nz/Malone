@@ -96,8 +96,7 @@ namespace LIC.Malone.Client.Desktop.Packager
 			builder.Populate(manifest);
 			builder.PopulateFiles(clientBinDirectory, files);
 
-			// TODO: Save with the right name once comparisons with manual method are complete.
-			using (var stream = File.Open(Path.Combine(buildDirectory, "what.nupkg"), FileMode.OpenOrCreate))
+			using (var stream = File.Open(Path.Combine(buildDirectory, nupkg.Name), FileMode.OpenOrCreate))
 			{
 				builder.Save(stream);
 			}
