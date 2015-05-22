@@ -32,6 +32,7 @@ namespace LIC.Malone.Client.Desktop.Packager
 			Directory.SetCurrentDirectory(buildDirectory);
 
 			// Rely on standard nuget process to build the project and create a starting package to copy metadata from.
+			// Make sure nuget.exe is in your PATH.
 
 			var process = new Process
 			{
@@ -44,8 +45,15 @@ namespace LIC.Malone.Client.Desktop.Packager
 				}
 			};
 
-			process.Start();
-
+			try
+			{
+				process.Start();
+			}
+			catch (Exception innerException)
+			{
+				throw new Exception("Is nuget.exe in your PATH?", innerException);
+			}
+			
 			var reader = process.StandardOutput;
 			var output = reader.ReadToEnd();
 
