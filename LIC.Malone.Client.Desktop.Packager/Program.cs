@@ -11,26 +11,48 @@ namespace LIC.Malone.Client.Desktop.Packager
 {
 	class Program
 	{
+		public string PackagerDirectory { get; private set; }
+		public string BuildDirectory { get; private set; }
+		public string ClientDirectory { get; private set; }
+		public string ClientBinDirectory { get; private set; }
+		public string Squirrel { get; private set; }
+		public string MaloneIco { get; private set; }
+
+		public Program(string packagerDirectory)
+		{
+			PackagerDirectory = packagerDirectory;
+			BuildDirectory = Path.GetFullPath(Path.Combine(packagerDirectory, "build"));
+			ClientDirectory = Path.GetFullPath(Path.Combine(packagerDirectory, "..", "LIC.Malone.Client.Desktop"));
+			ClientBinDirectory = Path.GetFullPath(Path.Combine(ClientDirectory, "bin", "Release"));
+			// TODO: Don't hardcode.
+			Squirrel = @"C:\GitHub\LIC\Malone\packages\squirrel.windows.0.99.0\tools\Squirrel.exe";
+			MaloneIco = Path.GetFullPath(Path.Combine(ClientDirectory, "Malone.ico"));
+		}
+
 		static void Main(string[] args)
 		{
 			var packagerDirectory = Path.GetFullPath(Path.Combine(Assembly.GetExecutingAssembly().Location, "..", "..", ".."));
-			var buildDirectory = Path.GetFullPath(Path.Combine(packagerDirectory, "build"));
-			var clientDirectory = Path.GetFullPath(Path.Combine(packagerDirectory, "..", "LIC.Malone.Client.Desktop"));
-			var clientBinDirectory = Path.GetFullPath(Path.Combine(clientDirectory, "bin", "Release"));
+
+			var packager = new Program(packagerDirectory);
 
 			Console.WriteLine("Relevant paths:");
-			Console.WriteLine(packagerDirectory);
-			Console.WriteLine(buildDirectory);
-			Console.WriteLine(clientDirectory);
-			Console.WriteLine(clientBinDirectory);
+
+			Console.WriteLine(packager.PackagerDirectory);
+			Console.WriteLine(packager.BuildDirectory);
+			Console.WriteLine(packager.ClientDirectory);
+			Console.WriteLine(packager.ClientBinDirectory);
 			Console.WriteLine();
 
-			var buildDirectoryInfo = Directory.CreateDirectory(buildDirectory);
-			var nugget = CreateNugget(clientDirectory, buildDirectoryInfo);
-			Releasify(nugget);
+			packager.Package();
 
 			Console.WriteLine("\n\nPress any key to exit.");
 			Console.ReadLine();
+		}
+
+		private void Package()
+		{
+			var nugget = CreateNugget();
+			Releasify(nugget);
 		}
 
 		private static void StartProcess(string fileName, string args)
@@ -62,13 +84,13 @@ namespace LIC.Malone.Client.Desktop.Packager
 
 			process.WaitForExit();
 			process.Close();
-			
 		}
 
-		private static string CreateNugget(string clientDirectory, DirectoryInfo buildDirectoryInfo)
+		private string CreateNugget()
 		{
-			var csproj = Path.GetFullPath(Path.Combine(clientDirectory, "LIC.Malone.Client.Desktop.csproj"));
-			var bin = Path.GetFullPath(Path.Combine(clientDirectory, "bin", "Release"));
+			var csproj = Path.GetFullPath(Path.Combine(ClientDirectory, "LIC.Malone.Client.Desktop.csproj"));
+			var bin = Path.GetFullPath(Path.Combine(ClientDirectory, "bin", "Release"));
+			var buildDirectoryInfo = Directory.CreateDirectory(BuildDirectory);
 
 			Directory.SetCurrentDirectory(buildDirectoryInfo.FullName);
 
@@ -97,6 +119,7 @@ namespace LIC.Malone.Client.Desktop.Packager
 			};
 
 			// TODO: Check if the SVG file is required.
+			// I think it is required for a nice icon in Package Explorer, so add it in.
 
 			const string target = @"lib\net45";
 
@@ -122,9 +145,9 @@ namespace LIC.Malone.Client.Desktop.Packager
 			return nugget;
 		}
 
-		private static void Releasify(string nugget)
+		private void Releasify(string nugget)
 		{
-			// TODO.
+			StartProcess(Squirrel, string.Format("--releasify={0} --setupIcon={1}", nugget, MaloneIco));
 		}
 	}
 }
