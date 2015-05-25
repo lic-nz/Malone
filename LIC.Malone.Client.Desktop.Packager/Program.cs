@@ -148,6 +148,8 @@ namespace LIC.Malone.Client.Desktop.Packager
 		private void Releasify(string nugget)
 		{
 			StartProcess(Squirrel, string.Format("--releasify={0} --setupIcon={1}", nugget, MaloneIco));
+
+			// TODO: Stamp version in file name.
 		}
 	}
 }
