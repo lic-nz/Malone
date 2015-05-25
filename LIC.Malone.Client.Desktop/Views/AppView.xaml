@@ -249,55 +249,57 @@
 									</TabItem>
 
 									<TabItem Header="Headers">
-										<DockPanel Margin="8 -8 15 0" LastChildFill="False">
+										<ScrollViewer Margin="8 -8 0 0">
+											<DockPanel Margin="0 0 10 0" LastChildFill="False">
+												
+												<ItemsControl DockPanel.Dock="Top" x:Name="Headers">
+													<ItemsControl.ItemTemplate>
+														<DataTemplate>
+															<DataTemplate.Resources>
+																<Style x:Key="ReservedHeaderAction" TargetType="controls:IconLink" BasedOn="{StaticResource HeaderAction}">
+																	<Style.Triggers>
+																		<DataTrigger Binding="{Binding Name}" Value="Accept">
+																			<Setter Property="Visibility" Value="Collapsed"/>
+																		</DataTrigger>
+																		<DataTrigger Binding="{Binding Name}" Value="Accept-Encoding">
+																			<Setter Property="Visibility" Value="Collapsed"/>
+																		</DataTrigger>
+																		<DataTrigger Binding="{Binding Name}" Value="Authorization">
+																			<Setter Property="Visibility" Value="Collapsed"/>
+																		</DataTrigger>
+																		<DataTrigger Binding="{Binding Name}" Value="Content-Type">
+																			<Setter Property="Visibility" Value="Collapsed"/>
+																		</DataTrigger>
+																	</Style.Triggers>
+																</Style>
+															</DataTemplate.Resources>
+															<Grid>
+																<Grid.ColumnDefinitions>
+																	<ColumnDefinition Width="230"/>
+																	<ColumnDefinition Width="*"/>
+																	<ColumnDefinition Width="24"/>
+																</Grid.ColumnDefinitions>
+																<TextBox Grid.Column="0" Style="{StaticResource HeaderName}" Text="{Binding Name}" metro:TextBoxHelper.Watermark="Name" />
+																<TextBox Grid.Column="1" Style="{StaticResource HeaderValue}" Text="{Binding Value}" metro:TextBoxHelper.Watermark="Value" />
+																<controls:IconLink Grid.Column="2" Style="{StaticResource ReservedHeaderAction}" IconData="{StaticResource IconMinus}" cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action RemoveFromHeaders($this)]" />
+															</Grid>
+														</DataTemplate>
+													</ItemsControl.ItemTemplate>
+												</ItemsControl>
+												
+												<Grid DockPanel.Dock="Top">
+													<Grid.ColumnDefinitions>
+														<ColumnDefinition Width="230"/>
+														<ColumnDefinition Width="*"/>
+														<ColumnDefinition Width="24"/>
+													</Grid.ColumnDefinitions>
+													<TextBox Grid.Column="0" x:Name="HeaderName" Style="{StaticResource HeaderName}" IsReadOnly="False" metro:TextBoxHelper.Watermark="Name" />
+													<TextBox Grid.Column="1" x:Name="HeaderValue" Style="{StaticResource HeaderValue}" IsReadOnly="False" metro:TextBoxHelper.Watermark="Value" />
+													<controls:IconLink Grid.Column="2" Style="{StaticResource HeaderAction}" IconData="{StaticResource IconPlus}" IconMargin="0 5 0 0" cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action AddHeader()]" />
+												</Grid>
 
-											<ItemsControl DockPanel.Dock="Top" x:Name="Headers">
-												<ItemsControl.ItemTemplate>
-													<DataTemplate>
-														<DataTemplate.Resources>
-															<Style x:Key="ReservedHeaderAction" TargetType="controls:IconLink" BasedOn="{StaticResource HeaderAction}">
-																<Style.Triggers>
-																	<DataTrigger Binding="{Binding Name}" Value="Accept">
-																		<Setter Property="Visibility" Value="Collapsed"/>
-																	</DataTrigger>
-																	<DataTrigger Binding="{Binding Name}" Value="Accept-Encoding">
-																		<Setter Property="Visibility" Value="Collapsed"/>
-																	</DataTrigger>
-																	<DataTrigger Binding="{Binding Name}" Value="Authorization">
-																		<Setter Property="Visibility" Value="Collapsed"/>
-																	</DataTrigger>
-																	<DataTrigger Binding="{Binding Name}" Value="Content-Type">
-																		<Setter Property="Visibility" Value="Collapsed"/>
-																	</DataTrigger>
-																</Style.Triggers>
-															</Style>
-														</DataTemplate.Resources>
-														<Grid>
-															<Grid.ColumnDefinitions>
-																<ColumnDefinition Width="230"/>
-																<ColumnDefinition Width="*"/>
-																<ColumnDefinition Width="24"/>
-															</Grid.ColumnDefinitions>
-															<TextBox Grid.Column="0" Style="{StaticResource HeaderName}" Text="{Binding Name}" metro:TextBoxHelper.Watermark="Name" />
-															<TextBox Grid.Column="1" Style="{StaticResource HeaderValue}" Text="{Binding Value}" metro:TextBoxHelper.Watermark="Value" />
-															<controls:IconLink Grid.Column="2" Style="{StaticResource ReservedHeaderAction}" IconData="{StaticResource IconMinus}" cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action RemoveFromHeaders($this)]" />
-														</Grid>
-													</DataTemplate>
-												</ItemsControl.ItemTemplate>
-											</ItemsControl>
-
-											<Grid DockPanel.Dock="Top">
-												<Grid.ColumnDefinitions>
-													<ColumnDefinition Width="230"/>
-													<ColumnDefinition Width="*"/>
-													<ColumnDefinition Width="24"/>
-												</Grid.ColumnDefinitions>
-												<TextBox Grid.Column="0" x:Name="HeaderName" Style="{StaticResource HeaderName}" IsReadOnly="False" metro:TextBoxHelper.Watermark="Name" />
-												<TextBox Grid.Column="1" x:Name="HeaderValue" Style="{StaticResource HeaderValue}" IsReadOnly="False" metro:TextBoxHelper.Watermark="Value" />
-												<controls:IconLink Grid.Column="2" Style="{StaticResource HeaderAction}" IconData="{StaticResource IconPlus}" IconMargin="0 5 0 0" cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action AddHeader()]" />
-											</Grid>
-
-										</DockPanel>
+											</DockPanel>
+										</ScrollViewer>
 									</TabItem>
 
 									<TabItem Header="Authentication">
@@ -367,7 +369,7 @@
 									</StackPanel>
 								</Label.ToolTip>
 							</Label>
-							
+
 							<TabControl Margin="4 -9 0 0" Visibility="{Binding ResponseBody, Converter={StaticResource ShowWhenNullConverter}}" SelectedIndex="{Binding IsSending, Mode=OneWay, Converter={StaticResource ResponseBodyTabIndexConverter}}">
 
 								<TabControl.Resources>
@@ -382,8 +384,8 @@
 								</TabItem>
 
 								<TabItem Header="Headers">
-									<DockPanel Margin="3 -8 15 0" LastChildFill="False">
-										<ItemsControl DockPanel.Dock="Top" x:Name="ResponseHeaders">
+									<ScrollViewer Margin="8 -8 0 0">
+										<ItemsControl x:Name="ResponseHeaders">
 											<ItemsControl.ItemTemplate>
 												<DataTemplate>
 													<Grid>
@@ -398,11 +400,10 @@
 												</DataTemplate>
 											</ItemsControl.ItemTemplate>
 										</ItemsControl>
-									</DockPanel>
+									</ScrollViewer>
 								</TabItem>
 
 							</TabControl>
-
 
 						</Grid>
 
