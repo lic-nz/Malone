@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -889,15 +890,12 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 				{
 					try
 					{
-						if (content.StartsWith("["))
+						using (var reader = new JsonTextReader(new StringReader(content))
 						{
-							var json = JArray.Parse(content);
-							return json.ToString(Formatting.Indented);
-
-						}
-						else
+							DateParseHandling = DateParseHandling.None
+						})
 						{
-							var json = JObject.Parse(content);
+							var json = JToken.Load(reader);
 							return json.ToString(Formatting.Indented);
 						}
 					}
