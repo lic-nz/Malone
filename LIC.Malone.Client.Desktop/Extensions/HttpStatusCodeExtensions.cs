@@ -16,7 +16,7 @@ namespace LIC.Malone.Client.Desktop.Extensions
 					return Colors.Ok;
 
 				case HttpStatusCode.NoContent:
-					return Colors.Maybe;
+					return Colors.Ok;
 
 				case HttpStatusCode.Created:
 					return Colors.Maybe;
