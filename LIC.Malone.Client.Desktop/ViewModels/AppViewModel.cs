@@ -121,8 +121,11 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 		private IEnumerable<Method> _methods = new List<Method>
 		{
 			Method.GET,
+			Method.HEAD,
 			Method.POST,
-			Method.PUT
+			Method.PUT,
+			Method.PATCH,
+			Method.DELETE
 		};
 
 		public IEnumerable<Method> Methods
