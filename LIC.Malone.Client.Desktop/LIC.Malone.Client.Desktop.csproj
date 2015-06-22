@@ -142,6 +142,9 @@
     <Compile Include="Controls\HttpStatus.xaml.cs">
       <DependentUpon>HttpStatus.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\HistoryButton.xaml.cs">
+      <DependentUpon>HistoryButton.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\IconLink.xaml.cs">
       <DependentUpon>IconLink.xaml</DependentUpon>
     </Compile>
@@ -175,6 +178,10 @@
     <Compile Include="DialogManager.cs" />
     <Compile Include="Converters\HttpStatusCodeConverters.cs" />
     <Page Include="Controls\HttpStatus.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\HistoryButton.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

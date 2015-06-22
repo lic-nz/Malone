@@ -66,32 +66,21 @@
 							<TextBlock Style="{StaticResource EmptyListMessage}">Nothing to see here. Try sending a request!</TextBlock>
 						</StackPanel>
 
-						<Button HorizontalAlignment="Right" VerticalAlignment="Top"
-								Margin="0 -45 0 0"
-								BorderThickness="0" Background="#efefef" Visibility="{Binding History, Converter={StaticResource ShowOnHistoryConverter}}"
-								cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action ClearHistory($executionContext)]" ToolTip="Clear history">
-							<Button.Template>
-								<ControlTemplate TargetType="{x:Type Button}">
-									<Border Name="Border" Background="{TemplateBinding Background}" Height="40" Width="40">
-										<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-									</Border>
-									<ControlTemplate.Triggers>
-										<Trigger Property="IsMouseOver" Value="True">
-											<Setter TargetName="Border" Property="Background" Value="Red"/>
-										</Trigger>
-									</ControlTemplate.Triggers>
-								</ControlTemplate>
-							</Button.Template>
-							<Path HorizontalAlignment="Center" VerticalAlignment="Center" Margin="-2 -2 0 0" Fill="White" Data="{StaticResource IconCircleWithCross}"/>
-						</Button>
+						<controls:HistoryButton
+							HorizontalAlignment="Right" VerticalAlignment="Top"
+							Margin="0 -46 2 0"
+							Visibility="{Binding History, Converter={StaticResource ShowOnHistoryConverter}}"
+							cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action ClearHistory($executionContext)]" ToolTip="Clear history"
+							IconData="{StaticResource IconTrash}" Content="Clear History"
+							Height="40" Width="40" Top="10" Left="10" />
 
 						<DockPanel Name="HistoryDockPanel" Grid.Column="0" LastChildFill="True" Visibility="{Binding History, Converter={StaticResource ShowOnHistoryConverter}}">
 
 							<ListBox x:Name="History" SelectionMode="Single"
-									 HorizontalContentAlignment="Stretch"
-									 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-									 BorderThickness="0" Padding="0" Margin="-2"
-									 cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action HistoryClicked($executionContext)]">
+								HorizontalContentAlignment="Stretch"
+								ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+								BorderThickness="0" Padding="0" Margin="-2"
+								cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action HistoryClicked($executionContext)]">
 
 								<ListBox.Resources>
 									<ResourceDictionary>
@@ -108,12 +97,13 @@
 
 								<ListBox.ItemTemplate>
 									<DataTemplate>
-										<Grid Margin="7,3" Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBox}}, Path=Width}">
+										<Grid Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBox}}, Path=Width}">
 											<Grid.Resources>
 												<converters:HttpStatusCodeToBrushConverter x:Key="HttpStatusCodeToBrushConverter" />
 												<converters:HttpStatusCodeToIntConverter x:Key="HttpStatusCodeToIntConverter" />
 											</Grid.Resources>
 											<Grid.ColumnDefinitions>
+												<ColumnDefinition Width="7" />
 												<ColumnDefinition Width="50" />
 												<ColumnDefinition Width="*" />
 											</Grid.ColumnDefinitions>
@@ -122,20 +112,20 @@
 												<RowDefinition />
 											</Grid.RowDefinitions>
 
-											<TextBlock Grid.Column="0" Grid.Row="0" Text="{Binding Method}" Style="{StaticResource History.BaseUrl}" />
-											<TextBlock Grid.Column="0" Grid.Row="1" Text="{Binding Response.HttpStatusCode, Converter={StaticResource HttpStatusCodeToIntConverter}}" Foreground="{Binding Response.HttpStatusCode, Converter={StaticResource HttpStatusCodeToBrushConverter}}" />
+											<TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding Method}" Style="{StaticResource History.BaseUrl}" VerticalAlignment="Bottom" />
+											<TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding Response.HttpStatusCode, Converter={StaticResource HttpStatusCodeToIntConverter}}" Foreground="{Binding Response.HttpStatusCode, Converter={StaticResource HttpStatusCodeToBrushConverter}}" />
 
-											<TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding BaseUrl}" Style="{StaticResource History.BaseUrl}" />
-											<TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding ResourcePath}" Style="{StaticResource History.ResourcePath}" />
+											<TextBlock Grid.Column="2" Grid.Row="0" Text="{Binding BaseUrl}" Style="{StaticResource History.BaseUrl}" VerticalAlignment="Bottom" />
+											<TextBlock Grid.Column="2" Grid.Row="1" Text="{Binding ResourcePath}" Style="{StaticResource History.ResourcePath}" />
 
-											<Border Width="42" Height="42" Background="#CBE8F6"
-													Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Grid.RowSpan="2"
-													HorizontalAlignment="Right" VerticalAlignment="Center"
-													Style="{StaticResource DeleteRequestBorder}">
-												<controls:IconLink
+											<Border
+												Style="{StaticResource DeleteRequestBorder}"
+												Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" Grid.RowSpan="2"
+												HorizontalAlignment="Right" VerticalAlignment="Center">
+												<controls:HistoryButton
 													cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action RemoveFromHistory($this)]"
-													HoverColor="{StaticResource LinkDangerHoverColorBrush}" Height="40" Width="40"
-													HorizontalAlignment="Left" IconData="{StaticResource IconCircleWithMinus}" IconMargin="0" BackgroundColor="White" />
+													IconData="{StaticResource IconSquaredCross}"
+													Height="40" Width="40" Top="10" Left="10" />
 											</Border>
 
 										</Grid>
@@ -251,7 +241,7 @@
 									<TabItem Header="Headers">
 										<ScrollViewer Margin="8 -8 0 0">
 											<DockPanel Margin="0 0 10 0" LastChildFill="False">
-												
+
 												<ItemsControl DockPanel.Dock="Top" x:Name="Headers">
 													<ItemsControl.ItemTemplate>
 														<DataTemplate>
@@ -286,7 +276,7 @@
 														</DataTemplate>
 													</ItemsControl.ItemTemplate>
 												</ItemsControl>
-												
+
 												<Grid DockPanel.Dock="Top">
 													<Grid.ColumnDefinitions>
 														<ColumnDefinition Width="230"/>
