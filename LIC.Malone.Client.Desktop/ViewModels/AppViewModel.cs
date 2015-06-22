@@ -17,6 +17,7 @@ using LIC.Malone.Client.Desktop.Extensions;
 using LIC.Malone.Client.Desktop.Messages;
 using LIC.Malone.Core;
 using LIC.Malone.Core.Authentication.OAuth;
+using MahApps.Metro.Controls.Dialogs;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RestSharp;
@@ -820,8 +821,13 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			NotifyOfPropertyChange(() => IsRequestDirty);
 		}
 
-		public void ClearHistory(object e)
+		public async void ClearHistory(object e)
 		{
+			var dialogResult = await _dialogManager.Show("Clear history", "Are you sure?", MessageDialogStyle.AffirmativeAndNegative);
+
+			if (dialogResult == MessageDialogResult.Negative)
+				return;
+
 			History = new BindableCollection<Request>();
 			SaveHistory();
 		}
