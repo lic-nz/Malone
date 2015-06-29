@@ -645,7 +645,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 			if (SelectedToken != null && SelectedToken.AuthorizationState != null && SelectedToken.AuthorizationState.AccessTokenExpirationUtc != null)
 			{
-				if (SelectedToken.AuthorizationState.AccessTokenExpirationUtc.Value.AddMinutes(5) < DateTime.UtcNow)
+				if (SelectedToken.ShouldRefresh && SelectedToken.AuthorizationState.AccessTokenExpirationUtc.Value.AddMinutes(5) < DateTime.UtcNow)
 				{
 					var app = GetOAuthApplication(SelectedToken.AuthorizationState);
 
