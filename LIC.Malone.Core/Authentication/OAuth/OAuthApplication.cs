@@ -16,7 +16,7 @@ namespace LIC.Malone.Core.Authentication.OAuth
 			ClientSecret = clientSecret;
 		}
 
-		public AuthorizeResult Authorize(Uri url, string username, string password)
+		private UserAgentClient GetClient(Uri url)
 		{
 			var authServer = new AuthorizationServerDescription
 			{
@@ -24,7 +24,12 @@ namespace LIC.Malone.Core.Authentication.OAuth
 				TokenEndpoint = url
 			};
 
-			var client = new UserAgentClient(authServer, ClientIdentifier, ClientCredentialApplicator.PostParameter(ClientSecret));
+			return new UserAgentClient(authServer, ClientIdentifier, ClientCredentialApplicator.PostParameter(ClientSecret));
+		}
+
+		public AuthorizeResult Authorize(Uri url, string username, string password)
+		{
+			var client = GetClient(url);
 
 			IAuthorizationState state;
 
@@ -37,7 +42,7 @@ namespace LIC.Malone.Core.Authentication.OAuth
 				var error = e.Message;
 
 				if (e.InnerException != null)
-					error = string.Format("{0} Inner exception: {1}", error, e.InnerException.Message);
+					error = string.Format("{0}\nInner exception: {1}", error, e.InnerException.Message);
 
 				return new AuthorizeResult
 				{
@@ -48,6 +53,39 @@ namespace LIC.Malone.Core.Authentication.OAuth
 			return new AuthorizeResult
 			{
 				AuthorizationState = state
+			};
+		}
+
+		public RefreshResult Refresh(Uri url, IAuthorizationState authorizationState)
+		{
+			var client = GetClient(url);
+
+			try
+			{
+				var refreshed = client.RefreshAuthorization(authorizationState);
+
+				if (!refreshed)
+					return new RefreshResult
+					{
+						Error = "Uhm, not entirely sure what happened."
+					};
+			}
+			catch (Exception e)
+			{
+				var error = e.Message;
+
+				if (e.InnerException != null)
+					error = string.Format("{0}\nInner exception: {1}", error, e.InnerException.Message);
+
+				return new RefreshResult
+				{
+					Error = error
+				};
+			}
+
+			return new RefreshResult
+			{
+				AuthorizationState = authorizationState
 			};
 		}
 	}

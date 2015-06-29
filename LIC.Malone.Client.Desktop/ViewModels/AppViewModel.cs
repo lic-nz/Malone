@@ -11,6 +11,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Xml.Linq;
 using Caliburn.Micro;
+using DotNetOpenAuth.OAuth2;
 using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Highlighting;
 using LIC.Malone.Client.Desktop.Extensions;
@@ -39,7 +40,8 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 		private AddCollectionViewModel _addCollectionViewModel = new AddCollectionViewModel();
 		private AddTokenViewModel _addTokenViewModel;
-		private readonly NamedAuthorizationState _anonymousToken = new NamedAuthorizationState("<Anonymous>", null, false);
+		private readonly NamedAuthorizationState _anonymousToken = new NamedAuthorizationState("<Anonymous>", null, false, null);
+		private List<OAuthApplication> _applications;
 
 		private CancellationTokenSource _cancellationTokenSource;
 		public CancellationTokenSource CancellationTokenSource
@@ -505,10 +507,10 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			var history = _config.GetHistory();
 			History.AddRange(history);
 
-			var applications = _config.GetOAuthApplications();
+			_applications = _config.GetOAuthApplications();
 			var authenticationUrls = _config.GetOAuthAuthenticationUrls();
 			var userCredentials = _config.GetUserCredentials();
-			_bus.PublishOnUIThread(new ConfigurationLoaded(applications, authenticationUrls, userCredentials));
+			_bus.PublishOnUIThread(new ConfigurationLoaded(_applications, authenticationUrls, userCredentials));
 		}
 
 		private void RequestBody_TextChanged(object sender, EventArgs e)
@@ -613,6 +615,23 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			Send();
 		}
 
+		private OAuthApplication GetOAuthApplication(IAuthorizationState authorizationState)
+		{
+			var source = authorizationState.Scope.FirstOrDefault(s => s.StartsWith("Source:"));
+
+			if (source == null || !source.Any())
+				return null;
+
+			var parts = source.Split(new [] {":"}, StringSplitOptions.RemoveEmptyEntries);
+
+			if (parts.Length != 2)
+				return null;
+
+			var clientIdentifier = parts.Last();
+
+			return _applications.FirstOrDefault(a => a.ClientIdentifier == clientIdentifier);
+		}
+
 		public async void Send()
 		{
 			if (!CanSend)
@@ -620,6 +639,28 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 			SelectedHistory = null;
 			ResponseBody = null;
+
+			if (SelectedToken != null && SelectedToken.AuthorizationState != null && SelectedToken.AuthorizationState.AccessTokenExpirationUtc != null)
+			{
+				if (SelectedToken.AuthorizationState.AccessTokenExpirationUtc.Value.AddMinutes(5) < DateTime.UtcNow)
+				{
+					var app = GetOAuthApplication(SelectedToken.AuthorizationState);
+
+					if (app == null)
+					{
+						var dialogResult = await _dialogManager.Show("Failed to get OAuth application", "");
+						return;
+					}
+
+					var result = app.Refresh(new Uri(""), SelectedToken.AuthorizationState);
+
+					if (result.HasError)
+					{
+						var dialogResult = await _dialogManager.Show("Failed to refresh token", result.Error);
+						return;
+					}
+				}
+			}
 
 			// There was something strange going on with Headers being a BindableCollection or something - it would somehow overwrite the headers
 			// for previous requests in the History when just calling Headers.ToList(). This is begging for a unit test, but for now make a copy.

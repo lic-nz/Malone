@@ -185,7 +185,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 		public void SaveToken()
 		{
-			var token = new NamedAuthorizationState(TokenName, _authorizationState, ShouldRefresh);
+			var token = new NamedAuthorizationState(TokenName, _authorizationState, ShouldRefresh, null);
 
 			var message = new TokenAdded
 			{

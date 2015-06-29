@@ -2,7 +2,7 @@
 
 namespace LIC.Malone.Core.Authentication.OAuth
 {
-	public class AuthorizeResult
+	public class RefreshResult
 	{
 		public IAuthorizationState AuthorizationState { get; set; }
 		public string Error { get; set; }
