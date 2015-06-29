@@ -259,7 +259,10 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 				if (SelectedToken == null || SelectedToken.AuthorizationState == null)
 					_selectedTokenJson.Text = string.Empty;
 				else
-					_selectedTokenJson.Text = string.Format("Should refresh: {0}\n{1}", _selectedToken.ShouldRefresh, JsonConvert.SerializeObject(SelectedToken.AuthorizationState, Formatting.Indented));
+					_selectedTokenJson.Text = string.Format("ShouldRefresh: {0}\nURL: {1}\n{2}",
+						SelectedToken.ShouldRefresh.ToString().ToLower(),
+						SelectedToken.Url,
+						JsonConvert.SerializeObject(SelectedToken.AuthorizationState, Formatting.Indented));
 
 				return _selectedTokenJson;
 			}
@@ -652,7 +655,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 						return;
 					}
 
-					var result = app.Refresh(new Uri(""), SelectedToken.AuthorizationState);
+					var result = app.Refresh(SelectedToken.Url, SelectedToken.AuthorizationState);
 
 					if (result.HasError)
 					{
