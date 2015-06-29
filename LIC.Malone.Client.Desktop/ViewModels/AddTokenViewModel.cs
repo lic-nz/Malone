@@ -104,6 +104,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 		}
 
 		private TextDocument _response = new TextDocument();
+
 		public TextDocument Response
 		{
 			get { return _response; }
@@ -119,6 +120,18 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 		{
 			var source = (TextEditor) context.Source;
 			Response = source.Document;
+		}
+
+		private bool _shouldRefresh;
+		public bool ShouldRefresh
+		{
+			get { return _shouldRefresh; }
+			set
+			{
+				if (value == _shouldRefresh) return;
+				_shouldRefresh = value;
+				NotifyOfPropertyChange(() => ShouldRefresh);
+			}
 		}
 
 		public bool CanSaveToken
@@ -138,6 +151,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			_bus = bus;
 			_windowManager = windowManager;
 			_bus.Subscribe(this);
+			ShouldRefresh = true;
 		}
 
 		public void Handle(ConfigurationLoaded message)
@@ -171,7 +185,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 		public void SaveToken()
 		{
-			var token = new NamedAuthorizationState(TokenName, _authorizationState);
+			var token = new NamedAuthorizationState(TokenName, _authorizationState, ShouldRefresh);
 
 			var message = new TokenAdded
 			{
@@ -183,6 +197,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			_authorizationState = null;
 			Response.Text = string.Empty;
 			TokenName = null;
+			ShouldRefresh = true;
 
 			TryClose();
 		}

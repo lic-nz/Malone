@@ -39,7 +39,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 		private AddCollectionViewModel _addCollectionViewModel = new AddCollectionViewModel();
 		private AddTokenViewModel _addTokenViewModel;
-		private readonly NamedAuthorizationState _anonymousToken = new NamedAuthorizationState("<Anonymous>", null);
+		private readonly NamedAuthorizationState _anonymousToken = new NamedAuthorizationState("<Anonymous>", null, false);
 
 		private CancellationTokenSource _cancellationTokenSource;
 		public CancellationTokenSource CancellationTokenSource
@@ -257,7 +257,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 				if (SelectedToken == null || SelectedToken.AuthorizationState == null)
 					_selectedTokenJson.Text = string.Empty;
 				else
-					_selectedTokenJson.Text = JsonConvert.SerializeObject(SelectedToken.AuthorizationState, Formatting.Indented);
+					_selectedTokenJson.Text = string.Format("Should refresh: {0}\n{1}", _selectedToken.ShouldRefresh, JsonConvert.SerializeObject(SelectedToken.AuthorizationState, Formatting.Indented));
 
 				return _selectedTokenJson;
 			}

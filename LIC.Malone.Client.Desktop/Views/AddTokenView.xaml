@@ -84,7 +84,7 @@
 		
 		<StackPanel Orientation="Horizontal">
 			<Label Content="Auto-refresh" Style="{StaticResource FormLabel}"/>
-			<CheckBox IsChecked="True"></CheckBox>
+			<CheckBox x:Name="ShouldRefresh"/>
 		</StackPanel>
 
 		<controls:IconButton x:Name="SaveToken" Style="{StaticResource FormButton}" Content="Save token" IconData="{StaticResource IconSave}" IconMargin="{StaticResource IconSaveMargin}" />
