@@ -24,6 +24,6 @@ using System.Runtime.InteropServices;
 // http://blog.ploeh.dk/2013/12/10/semantic-versioning-with-continuous-deployment/
 // http://docs.nuget.org/create/nuspec-reference#Replacement_Tokens
 
-[assembly: AssemblyVersion("0.6.0")]
-[assembly: AssemblyFileVersion("0.6.0")]
-[assembly: AssemblyInformationalVersion("0.6.0")]
+[assembly: AssemblyVersion("0.7.0")]
+[assembly: AssemblyFileVersion("0.7.0")]
+[assembly: AssemblyInformationalVersion("0.7.0")]
