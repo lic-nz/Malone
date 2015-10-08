@@ -23,6 +23,13 @@
 	d:DataContext="{d:DesignInstance Type=designData:AppViewModelDesignData, IsDesignTimeCreatable=True}"
 	cal:Bind.AtDesignTime="True">
 	<Window.Resources>
+		<Style x:Key="FormLabel" TargetType="Label">
+			<Setter Property="FontFamily" Value="Segoe UI" />
+			<Setter Property="FontSize" Value="14" />
+			<Setter Property="Foreground" Value="#FF9395A2" />
+			<Setter Property="VerticalAlignment" Value="Bottom" />
+		</Style>
+		
 		<converters:BooleanToVisibilityConverter x:Key="ShowWhenTrueConverter" />
 		<converters:BooleanToVisibilityConverter x:Key="HideWhenTrueConverter" IsReversed="True" />
 		<converters:NullToVisibilityConverter x:Key="ShowWhenNullConverter" />
@@ -66,7 +73,7 @@
 							<TextBlock Style="{StaticResource EmptyListMessage}">Nothing to see here. Try sending a request!</TextBlock>
 						</StackPanel>
 
-						<controls:HistoryButton
+						<controls:ClearButton
 							HorizontalAlignment="Right" VerticalAlignment="Top"
 							Margin="0 -46 2 0"
 							Visibility="{Binding History, Converter={StaticResource ShowOnHistoryConverter}}"
@@ -122,7 +129,7 @@
 												Style="{StaticResource DeleteRequestBorder}"
 												Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" Grid.RowSpan="2"
 												HorizontalAlignment="Right" VerticalAlignment="Center">
-												<controls:HistoryButton
+												<controls:ClearButton
 													cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action RemoveFromHistory($this)]"
 													IconData="{StaticResource IconSquaredCross}"
 													Height="40" Width="40" Top="10" Left="10" />
@@ -207,6 +214,7 @@
 				<TextBox  Grid.Row="0" Grid.Column="2" x:Name="Url" metro:TextBoxHelper.Watermark="Enter URL or choose from history" Style="{StaticResource DefaultTextBox}" cal:Message.Attach="[Event KeyDown] = [Action ExecuteSend($eventArgs)]"/>
 				<ComboBox Grid.Row="0" Grid.Column="4" x:Name="Accepts" Width="130" Style="{StaticResource DefaultComboBox}" />
 
+				<!--<Label Grid.Row="2" Grid.Column="0" Content="Authentication" Style="{StaticResource FormLabel}" />-->
 				<ComboBox Grid.Row="2" Grid.Column="2" x:Name="Tokens" Style="{StaticResource DefaultComboBox}" VerticalAlignment="Bottom" Padding="3" >
 					<ComboBox.ItemTemplate>
 						<DataTemplate>
@@ -322,7 +330,14 @@
 									<TabItem Header="Authentication">
 
 										<DockPanel LastChildFill="True">
-
+											<Grid DockPanel.Dock="Top" Margin="0 0 0 10">
+												<controls:ClearButton
+							HorizontalAlignment="Right" VerticalAlignment="Top"
+							Margin="0"
+							cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action ClearAuth()]" ToolTip="Clear authentication"
+							IconData="{StaticResource IconTrash}" Content="Clear Authentication"
+							Height="40" Width="40" Top="10" Left="10" />
+											</Grid>
 											<ae:TextEditor DockPanel.Dock="Top" Document="{Binding SelectedTokenJson, Mode=OneWay}" SyntaxHighlighting="JavaScript" />
 
 										</DockPanel>
