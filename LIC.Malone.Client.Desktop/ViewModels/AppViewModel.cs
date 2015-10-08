@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -58,6 +59,19 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 		#region Databound properties
 
+		private ICommand _refreshGuidsCommand;
+		public ICommand RefreshGuidsCommand
+		{
+			get
+			{
+				if (_refreshGuidsCommand == null)
+				{
+					_refreshGuidsCommand = new RelayCommand(param => RefreshGuids());
+				}
+				return _refreshGuidsCommand;
+			}
+		}
+		
 		private IObservableCollection<Request> _history = new BindableCollection<Request>();
 		public IObservableCollection<Request> History
 		{
@@ -983,5 +997,30 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			//if (ratio > 3)
 			//	historyColumn.Width = width;
 		}
+
+		private void RefreshGuids()
+		{
+			assignedGuids = new Dictionary<string, string>();
+			
+			const string pattern = @"(\$GUID[0-9]*)|([A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-F0-9]{12})";
+			var rgx = new Regex(pattern, RegexOptions.IgnoreCase);
+			RequestBody.Text = rgx.Replace(RequestBody.Text, ReplaceGuid);
+		}
+
+		private static Dictionary<string, string> assignedGuids;
+		
+		public static string ReplaceGuid(Match m)
+		{
+			if (m.Value.ToUpper() == "$GUID")
+			{
+				return Guid.NewGuid().ToString();
+			}
+			
+			if (!assignedGuids.Keys.Contains(m.Value))
+			{
+				assignedGuids[m.Value] = Guid.NewGuid().ToString();
+			}
+			return assignedGuids[m.Value];
+		}   
 	}
 }
