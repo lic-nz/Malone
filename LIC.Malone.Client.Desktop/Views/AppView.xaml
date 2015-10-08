@@ -199,13 +199,40 @@
 					<RowDefinition />
 					<RowDefinition Height="10"/>
 					<RowDefinition />
+					<RowDefinition Height="10"/>
+					<RowDefinition />
 				</Grid.RowDefinitions>
 
 				<ComboBox Grid.Row="0" Grid.Column="0" x:Name="Methods" Width="80" Style="{StaticResource DefaultComboBox}" />
 				<TextBox  Grid.Row="0" Grid.Column="2" x:Name="Url" metro:TextBoxHelper.Watermark="Enter URL or choose from history" Style="{StaticResource DefaultTextBox}" cal:Message.Attach="[Event KeyDown] = [Action ExecuteSend($eventArgs)]"/>
 				<ComboBox Grid.Row="0" Grid.Column="4" x:Name="Accepts" Width="130" Style="{StaticResource DefaultComboBox}" />
 
-				<StackPanel Grid.Row="2" Grid.Column="2" Orientation="Horizontal">
+				<ComboBox Grid.Row="2" Grid.Column="2" x:Name="Tokens" Style="{StaticResource DefaultComboBox}" VerticalAlignment="Bottom" Padding="3" >
+					<ComboBox.ItemTemplate>
+						<DataTemplate>
+							<DataTemplate.Resources>
+								<Style x:Key="Historical" TargetType="TextBlock" BasedOn="{StaticResource DefaultTextBlock}">
+									<Style.Triggers>
+										<DataTrigger Binding="{Binding IsHistorical}" Value="True">
+											<Setter Property="Text" Value="History"/>
+										</DataTrigger>
+										<DataTrigger Binding="{Binding IsHistorical}" Value="False">
+											<Setter Property="Text" Value="Session"/>
+										</DataTrigger>
+									</Style.Triggers>
+								</Style>
+							</DataTemplate.Resources>
+							<DockPanel>
+								<TextBlock Style="{StaticResource Historical}" Width="50" Foreground="#666666"/>
+								<TextBlock Text="{Binding Name}" />
+							</DockPanel>
+						</DataTemplate>
+					</ComboBox.ItemTemplate>
+				</ComboBox>
+
+				<controls:IconLink Grid.Row="2" Grid.Column="4" HorizontalAlignment="Left" VerticalAlignment="Bottom" Content="Add" IconData="{StaticResource IconPlus}" IconMargin="{StaticResource IconPlusMargin}" cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action AddToken()]" />
+
+				<StackPanel Grid.Row="4" Grid.Column="2" Orientation="Horizontal">
 					<controls:IconButton x:Name="Send" Content="Send" IconData="{StaticResource IconPaperPlane}" IconMargin="{StaticResource IconPaperPlaneMargin}" />
 					<controls:IconButton x:Name="Cancel" Content="Cancel" Margin="10 0 0 0" />
 				</StackPanel>
@@ -295,32 +322,6 @@
 									<TabItem Header="Authentication">
 
 										<DockPanel LastChildFill="True">
-
-											<Grid DockPanel.Dock="Top" Margin="0 0 0 10">
-												<ComboBox x:Name="Tokens" Style="{StaticResource DefaultComboBox}" VerticalAlignment="Bottom" Margin="5,0,96,0" Padding="3" Height="30" >
-													<ComboBox.ItemTemplate>
-														<DataTemplate>
-															<DataTemplate.Resources>
-																<Style x:Key="Historical" TargetType="TextBlock" BasedOn="{StaticResource DefaultTextBlock}">
-																	<Style.Triggers>
-																		<DataTrigger Binding="{Binding IsHistorical}" Value="True">
-																			<Setter Property="Text" Value="History"/>
-																		</DataTrigger>
-																		<DataTrigger Binding="{Binding IsHistorical}" Value="False">
-																			<Setter Property="Text" Value="Session"/>
-																		</DataTrigger>
-																	</Style.Triggers>
-																</Style>
-															</DataTemplate.Resources>
-															<DockPanel>
-																<TextBlock Style="{StaticResource Historical}" Width="50" Foreground="#666666"/>
-																<TextBlock Text="{Binding Name}" />
-															</DockPanel>
-														</DataTemplate>
-													</ComboBox.ItemTemplate>
-												</ComboBox>
-												<controls:IconLink HorizontalAlignment="Right" VerticalAlignment="Bottom" Content="Add" IconData="{StaticResource IconPlus}" IconMargin="{StaticResource IconPlusMargin}" cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action AddToken()]" />
-											</Grid>
 
 											<ae:TextEditor DockPanel.Dock="Top" Document="{Binding SelectedTokenJson, Mode=OneWay}" SyntaxHighlighting="JavaScript" />
 
