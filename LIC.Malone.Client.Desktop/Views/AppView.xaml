@@ -155,7 +155,7 @@
 								Margin="0 -45 0 0"
 								BorderThickness="0" Background="#efefef"
 								cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action AddCollection()]" ToolTip="Add collection">
-                            <Button.Template>
+                           <Button.Template>
                                 <ControlTemplate TargetType="{x:Type Button}">
                                     <Border Name="Border" Background="{TemplateBinding Background}" Height="40" Width="40">
                                         <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
@@ -422,5 +422,4 @@
         </DockPanel>
 
     </Grid>
-
 </metro:MetroWindow>
