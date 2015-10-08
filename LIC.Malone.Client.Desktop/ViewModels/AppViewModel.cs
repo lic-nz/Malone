@@ -91,8 +91,8 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			}
 		}
 
-		private Request _selectedCollection;
-		public Request SelectedCollection
+		private RequestCollection _selectedCollection;
+		public RequestCollection SelectedCollection
 		{
 			get { return _selectedCollection; }
 			set
@@ -906,12 +906,17 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			_config.SaveHistory(History);
 		}
 
-		public void CollectionsClicked(object e)
+		public void CollectionRequestClicked(object e)
 		{
-			if (SelectedCollection == null)
+			if (SelectedHistory == null)
 				return;
 
 			DisplayRequest(SelectedHistory);
+		}
+
+		public void CollectionsClicked(object e)
+		{
+			// TODO: expand/collapse collection
 		}
 
 		public void RemoveCollection(object e)
@@ -921,12 +926,14 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			SaveCollections();
 		}
 
-		public void RemoveRequestFromCollection(object r, object c)
+		public void RemoveRequestFromCollection(object e)
 		{
-			var request = (Request)r;
-			var collection = (RequestCollection)c;
-			collection.Requests.Remove(request);
-			SaveCollections();
+			var request = (Request)e;
+			if (request != null && SelectedCollection != null)
+			{
+				SelectedCollection.Requests.Remove(request);
+				SaveCollections();
+			}
 		}
 
 		public void AddCollection()
