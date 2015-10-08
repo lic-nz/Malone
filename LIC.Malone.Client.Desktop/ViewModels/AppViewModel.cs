@@ -864,6 +864,11 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			DisplayRequest(SelectedHistory);
 		}
 
+        public void CollectionClicked(Request e)
+        {
+            DisplayRequest(e);
+        }
+
 		public void RemoveFromHistory(object e)
 		{
 			var request = (Request)e;
