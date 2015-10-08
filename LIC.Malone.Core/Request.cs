@@ -14,12 +14,15 @@ namespace LIC.Malone.Core
 		public const string DateFormatString = "dddd dd MMMM yyyy HH:mm:ss.FFF";
 
 		public Guid Guid { get; set; }
+		
 		public DateTimeOffset At { get; set; }
 		public string Url { get; set; }
 		public Method Method { get; set; }
 		public string Body { get; set; }
 		public List<Header> Headers { get; set; }
 		public Response Response { get; set; }
+
+		public const string HistoryGroupKey = "At";
 
 		public NamedAuthorizationState NamedAuthorizationState { get; set; }
 

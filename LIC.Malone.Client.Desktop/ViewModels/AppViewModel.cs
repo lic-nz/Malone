@@ -8,12 +8,14 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Xml.Linq;
 using Caliburn.Micro;
 using DotNetOpenAuth.OAuth2;
 using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Highlighting;
+using LIC.Malone.Client.Desktop.Converters;
 using LIC.Malone.Client.Desktop.Extensions;
 using LIC.Malone.Client.Desktop.Messages;
 using LIC.Malone.Core;
@@ -58,6 +60,24 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 		#region Databound properties
 
+<<<<<<< Updated upstream
+=======
+		
+
+		private ICommand _refreshGuidsCommand;
+		public ICommand RefreshGuidsCommand
+		{
+			get
+			{
+				if (_refreshGuidsCommand == null)
+				{
+					_refreshGuidsCommand = new RelayCommand(param => RefreshGuids());
+				}
+				return _refreshGuidsCommand;
+			}
+		}
+		
+>>>>>>> Stashed changes
 		private IObservableCollection<Request> _history = new BindableCollection<Request>();
 		public IObservableCollection<Request> History
 		{
@@ -66,6 +86,17 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			{
 				_history = value;
 				NotifyOfPropertyChange(() => History);
+			}
+		}
+
+		private CollectionView _historyView;
+		public CollectionView HistoryView
+		{
+			get { return _historyView; }
+			set
+			{
+				_historyView = value;
+				NotifyOfPropertyChange(() => HistoryView);
 			}
 		}
 
@@ -510,6 +541,12 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			var history = _config.GetHistory();
 			History.AddRange(history);
 
+			HistoryView = (CollectionView)CollectionViewSource.GetDefaultView(history);
+			if (HistoryView.GroupDescriptions != null)
+			{
+				HistoryView.GroupDescriptions.Add(new PropertyGroupDescription(Request.HistoryGroupKey, new HistoryGroupConverter()));
+			}
+
 			_applications = _config.GetOAuthApplications();
 			var authenticationUrls = _config.GetOAuthAuthenticationUrls();
 			var userCredentials = _config.GetUserCredentials();
@@ -785,7 +822,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 		private void AddToHistory(Request request)
 		{
 			History.Insert(0, request);
-			NotifyOfPropertyChange(() => History);
+			NotifyOfPropertyChange(() => HistoryView);
 			SelectedHistory = History.First();
 			SaveHistory();
 		}

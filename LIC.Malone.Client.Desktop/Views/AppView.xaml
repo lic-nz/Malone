@@ -32,6 +32,10 @@
 		<!-- TODO: Remove these hacks when tabs are broken to their own view models and you can ActivateItem(). -->
 		<converters:ResponseTabIndexConverter x:Key="ResponseTabIndexConverter" />
 		<converters:ResponseBodyTabIndexConverter x:Key="ResponseBodyTabIndexConverter" />
+
+		<Color x:Key="MaloneBlue" A="255" R="65" G="177" B="225"/>
+		<Color x:Key="Grey" A="255" R="185" G="185" B="185"/>
+		<SolidColorBrush x:Key="HistoryGroupHeader" Color="{StaticResource Grey}"/>
 	</Window.Resources>
 
 	<metro:MetroWindow.RightWindowCommands>
@@ -77,6 +81,8 @@
 						<DockPanel Name="HistoryDockPanel" Grid.Column="0" LastChildFill="True" Visibility="{Binding History, Converter={StaticResource ShowOnHistoryConverter}}">
 
 							<ListBox x:Name="History" SelectionMode="Single"
+								ItemsSource="{Binding HistoryView}"
+								SelectedItem="{Binding SelectedHistory}"
 								HorizontalContentAlignment="Stretch"
 								ScrollViewer.HorizontalScrollBarVisibility="Disabled"
 								BorderThickness="0" Padding="0" Margin="-2"
@@ -94,7 +100,17 @@
 										</Style>
 									</ResourceDictionary>
 								</ListBox.Resources>
-
+								<ListBox.GroupStyle>
+									<GroupStyle>
+									<GroupStyle.HeaderTemplate>
+										<DataTemplate>
+												<Border BorderBrush="{x:Null}" Height="25" Background="{StaticResource HistoryGroupHeader}">
+													<TextBlock Text="{Binding Name}" Margin="0" Padding="10,0,0,0" VerticalAlignment="Center" Foreground="White" />
+												</Border>
+											</DataTemplate>
+									</GroupStyle.HeaderTemplate>
+									</GroupStyle>
+								</ListBox.GroupStyle>
 								<ListBox.ItemTemplate>
 									<DataTemplate>
 										<Grid Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBox}}, Path=Width}">
