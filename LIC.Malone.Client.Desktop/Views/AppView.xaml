@@ -54,6 +54,8 @@
 			<TabControl.Resources>
 				<converters:HideOnHistoryConverter x:Key="HideOnHistoryConverter" />
 				<converters:ShowOnHistoryConverter x:Key="ShowOnHistoryConverter" />
+				<converters:HideOnCollectionsConverter x:Key="HideOnCollectionsConverter" />
+				<converters:ShowOnCollectionsConverter x:Key="ShowOnCollectionsConverter" />
 				<Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource TabHeader}"></Style>
 			</TabControl.Resources>
 
@@ -167,8 +169,8 @@
 							<Path HorizontalAlignment="Center" VerticalAlignment="Center" Margin="-2 -2 0 0" Fill="White" Data="M10,1.6c-4.639,0-8.4,3.761-8.4,8.4s3.761,8.4,8.4,8.4s8.4-3.761,8.4-8.4S14.639,1.6,10,1.6z M15,11h-4v4H9 v-4H5V9h4V5h2v4h4V11z"/>
 						</Button>
 
-						<DockPanel Name="CollectionsDockPanel" LastChildFill="True" Visibility="{Binding History, Converter={StaticResource ShowOnHistoryConverter}}">
-								<ListBox x:Name="Collections" SelectionMode="Single"
+						<DockPanel Name="CollectionsDockPanel" LastChildFill="True" Visibility="{Binding Collections, Converter={StaticResource ShowOnCollectionsConverter}}">
+							<ListBox x:Name="Collections" SelectionMode="Single"
 								HorizontalContentAlignment="Stretch"
 								ScrollViewer.HorizontalScrollBarVisibility="Disabled"
 								BorderThickness="0" Padding="0" Margin="-2"
@@ -176,7 +178,7 @@
 
 									<ListBox.Resources>
 										<ResourceDictionary>
-											<Style x:Key="DeleteRequestBorder" TargetType="{x:Type Border}">
+											<Style x:Key="DeleteCollectionBorder" TargetType="{x:Type Border}">
 												<Setter Property="Visibility" Value="Hidden" />
 												<Style.Triggers>
 													<DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}},Path=IsMouseOver}" Value="True">
@@ -195,8 +197,6 @@
 													<converters:HttpStatusCodeToIntConverter x:Key="HttpStatusCodeToIntConverter" />
 												</Grid.Resources>
 												<Grid.ColumnDefinitions>
-													<ColumnDefinition Width="7" />
-													<ColumnDefinition Width="50" />
 													<ColumnDefinition Width="*" />
 												</Grid.ColumnDefinitions>
 												<Grid.RowDefinitions>
@@ -204,18 +204,14 @@
 													<RowDefinition />
 												</Grid.RowDefinitions>
 
-												<TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding Method}" Style="{StaticResource History.BaseUrl}" VerticalAlignment="Bottom" />
-												<TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding Response.HttpStatusCode, Converter={StaticResource HttpStatusCodeToIntConverter}}" Foreground="{Binding Response.HttpStatusCode, Converter={StaticResource HttpStatusCodeToBrushConverter}}" />
-
-												<TextBlock Grid.Column="2" Grid.Row="0" Text="{Binding BaseUrl}" Style="{StaticResource History.BaseUrl}" VerticalAlignment="Bottom" />
-												<TextBlock Grid.Column="2" Grid.Row="1" Text="{Binding ResourcePath}" Style="{StaticResource History.ResourcePath}" />
-
+												<TextBlock Grid.Column="0" Grid.Row="1" Text="{Binding Name}" Style="{StaticResource History.BaseUrl}" VerticalAlignment="Bottom" />
+												
 												<Border
-												Style="{StaticResource DeleteRequestBorder}"
+												Style="{StaticResource DeleteCollectionBorder}"
 												Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" Grid.RowSpan="2"
 												HorizontalAlignment="Right" VerticalAlignment="Center">
 													<controls:HistoryButton
-													cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action RemoveFromCollections($this)]"
+													cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action RemoveCollection($this)]"
 													IconData="{StaticResource IconSquaredCross}"
 													Height="40" Width="40" Top="10" Left="10" />
 												</Border>

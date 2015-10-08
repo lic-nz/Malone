@@ -914,10 +914,18 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			DisplayRequest(SelectedHistory);
 		}
 
-		public void RemoveFromCollections(object e)
+		public void RemoveCollection(object e)
 		{
 			var collection = (RequestCollection)e;
 			Collections.Remove(collection);
+			SaveCollections();
+		}
+
+		public void RemoveRequestFromCollection(object r, object c)
+		{
+			var request = (Request)r;
+			var collection = (RequestCollection)c;
+			collection.Requests.Remove(request);
 			SaveCollections();
 		}
 
