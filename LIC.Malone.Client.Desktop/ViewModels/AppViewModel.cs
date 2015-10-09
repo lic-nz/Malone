@@ -883,6 +883,19 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			SaveHistory();
 		}
 
+		public void RemoveFromCollection(Request r)
+		{
+			if (r != null && r.Collection != null)
+			{
+				int index = Collections.IndexOf(r.Collection);
+				List<Request> updatedRequests = Collections[index].Requests;
+				updatedRequests.Remove(r);
+				Collections[index] = new RequestCollection(Collections[index].Name, updatedRequests);
+				NotifyOfPropertyChange(() => Collections);
+				SaveCollections();
+			}
+		}
+
 		public void RemoveFromHeaders(object e)
 		{
 			var header = (Header)e;

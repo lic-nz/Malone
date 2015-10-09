@@ -173,6 +173,7 @@
                         <DockPanel Name="CollectionsDockPanel" LastChildFill="True" Visibility="{Binding Collections, Converter={StaticResource ShowOnCollectionsConverter}}">
                             <TreeView ItemsSource="{Binding Collections}" Name="treeView1"
 									  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+									  HorizontalContentAlignment="Stretch"
                                       cal:Message.Attach="[Event SelectedItemChanged] = [Action CollectionClicked($this.SelectedItem)]">
                                 <TreeView.Resources>
 									<Style x:Key="DeleteRequestBorder" TargetType="{x:Type Border}">
@@ -189,7 +190,8 @@
                                     </HierarchicalDataTemplate>
 
 									<DataTemplate DataType="{x:Type local:Request}">
-										<Grid Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeView}}, Path=Width}">
+										<Grid
+											Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeView}}, Path=Width}">
 											<Grid.Resources>
 												<converters:HttpStatusCodeToBrushConverter x:Key="HttpStatusCodeToBrushConverter" />
 												<converters:HttpStatusCodeToIntConverter x:Key="HttpStatusCodeToIntConverter" />
@@ -210,11 +212,11 @@
 											<TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding ResourcePath}" Style="{StaticResource History.ResourcePath}" />
 
 											<Border
-												Style="{StaticResource DeleteRequestBorder}"
+												
 												Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Grid.RowSpan="2"
 												HorizontalAlignment="Right" VerticalAlignment="Center">
 												<controls:HistoryButton
-													cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action RemoveFromHistory($this)]"
+													cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action RemoveFromCollection($this)]"
 													IconData="{StaticResource IconSquaredCross}"
 													Height="40" Width="40" Top="10" Left="10" />
 											</Border>
