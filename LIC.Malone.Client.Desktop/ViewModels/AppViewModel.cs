@@ -944,7 +944,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 		public void AddToSelectedCollection()
 		{
 			int index = Collections.IndexOf(SelectedCollection);
-			if (index >= 0)
+			if (index >= 0 && SelectedHistory != null)
 			{
 				List<Request> updatedRequests = Collections[index].Requests;
 				updatedRequests.Add(SelectedHistory);
@@ -954,26 +954,11 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			}
 		}
 
-		public void CollectionsClicked(object e)
-		{
-			// TODO: expand/collapse collection
-		}
-
 		public void RemoveCollection(object e)
 		{
 			var collection = (RequestCollection)e;
 			Collections.Remove(collection);
 			SaveCollections();
-		}
-
-		public void RemoveRequestFromCollection(object e)
-		{
-			var request = (Request)e;
-			if (request != null && SelectedCollection != null)
-			{
-				SelectedCollection.Requests.Remove(request);
-				SaveCollections();
-			}
 		}
 
 		public void AddCollection()
