@@ -523,7 +523,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			var history = _config.GetHistory();
 			History.AddRange(history);
 
-			HistoryView = (CollectionView)CollectionViewSource.GetDefaultView(history);
+			HistoryView = (CollectionView)CollectionViewSource.GetDefaultView(History);
 			if (HistoryView.GroupDescriptions != null)
 			{
 				HistoryView.GroupDescriptions.Add(new PropertyGroupDescription(Request.HistoryGroupKey, new HistoryGroupConverter()));
@@ -862,6 +862,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 		{
 			var request = (Request)e;
 			History.Remove(request);
+			
 			SaveHistory();
 		}
 
