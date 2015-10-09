@@ -60,24 +60,6 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 		#region Databound properties
 
-<<<<<<< Updated upstream
-=======
-		
-
-		private ICommand _refreshGuidsCommand;
-		public ICommand RefreshGuidsCommand
-		{
-			get
-			{
-				if (_refreshGuidsCommand == null)
-				{
-					_refreshGuidsCommand = new RelayCommand(param => RefreshGuids());
-				}
-				return _refreshGuidsCommand;
-			}
-		}
-		
->>>>>>> Stashed changes
 		private IObservableCollection<Request> _history = new BindableCollection<Request>();
 		public IObservableCollection<Request> History
 		{
