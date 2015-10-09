@@ -38,6 +38,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 		private static IEnumerable<string> _defaultAccepts = new List<string> { "text/xml", "application/json" };
 		private static IEnumerable<string> _defaultContentTypes = new List<string> { "text/xml", "application/json" };
 		private IEnumerable<Header> _defaultHeaders;
+		private static Dictionary<string, string> _assignedGuids;
 
 		private AddCollectionViewModel _addCollectionViewModel = new AddCollectionViewModel();
 		private AddTokenViewModel _addTokenViewModel;
@@ -679,6 +680,8 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 				}
 			}
 
+			_assignedGuids = new Dictionary<string, string>();
+
 			// There was something strange going on with Headers being a BindableCollection or something - it would somehow overwrite the headers
 			// for previous requests in the History when just calling Headers.ToList(). This is begging for a unit test, but for now make a copy.
 			var headers = Headers.Select(h => new Header(h.Name, h.Value)).ToList();
@@ -687,6 +690,8 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 			RequestBody = new TextDocument(await Prettify(RequestBody.Text, SelectedContentType));
 
+			Url = ReplaceGuidVariables(Url);
+			
 			var request = new Request(Url, SelectedMethod)
 			{
 				Headers = headers,
@@ -1002,8 +1007,6 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 		private void RefreshGuids()
 		{
-			assignedGuids = new Dictionary<string, string>();
-			
 			const string pattern = @"(\$GUID[0-9]*)|([A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-F0-9]{12})";
 			var rgx = new Regex(pattern, RegexOptions.IgnoreCase);
 			RequestBody.Text = rgx.Replace(RequestBody.Text, ReplaceGuid);
@@ -1011,15 +1014,11 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 		private string ReplaceGuidVariables(string content)
 		{
-			assignedGuids = new Dictionary<string, string>();
-			
 			const string pattern = @"\$GUID[0-9]*";
 			var rgx = new Regex(pattern, RegexOptions.IgnoreCase);
 			return rgx.Replace(content, ReplaceGuid);
 		}
 
-		private static Dictionary<string, string> assignedGuids;
-		
 		public static string ReplaceGuid(Match m)
 		{
 			if (m.Value.ToUpper() == "$GUID")
@@ -1027,11 +1026,11 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 				return Guid.NewGuid().ToString();
 			}
 			
-			if (!assignedGuids.Keys.Contains(m.Value))
+			if (!_assignedGuids.Keys.Contains(m.Value))
 			{
-				assignedGuids[m.Value] = Guid.NewGuid().ToString();
+				_assignedGuids[m.Value] = Guid.NewGuid().ToString();
 			}
-			return assignedGuids[m.Value];
+			return _assignedGuids[m.Value];
 		}   
 	}
 }
