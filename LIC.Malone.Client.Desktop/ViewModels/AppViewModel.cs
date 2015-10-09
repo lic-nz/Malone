@@ -683,6 +683,8 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			// for previous requests in the History when just calling Headers.ToList(). This is begging for a unit test, but for now make a copy.
 			var headers = Headers.Select(h => new Header(h.Name, h.Value)).ToList();
 
+			RequestBody.Text = ReplaceGuidVariables(RequestBody.Text);
+
 			RequestBody = new TextDocument(await Prettify(RequestBody.Text, SelectedContentType));
 
 			var request = new Request(Url, SelectedMethod)
@@ -1005,6 +1007,15 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			const string pattern = @"(\$GUID[0-9]*)|([A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-F0-9]{12})";
 			var rgx = new Regex(pattern, RegexOptions.IgnoreCase);
 			RequestBody.Text = rgx.Replace(RequestBody.Text, ReplaceGuid);
+		}
+
+		private string ReplaceGuidVariables(string content)
+		{
+			assignedGuids = new Dictionary<string, string>();
+			
+			const string pattern = @"\$GUID[0-9]*";
+			var rgx = new Regex(pattern, RegexOptions.IgnoreCase);
+			return rgx.Replace(content, ReplaceGuid);
 		}
 
 		private static Dictionary<string, string> assignedGuids;
