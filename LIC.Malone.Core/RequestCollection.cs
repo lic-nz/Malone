@@ -14,11 +14,21 @@ namespace LIC.Malone.Core
 	public class RequestCollection
 	{
 		public string Name { get; set; }
-        public List<Request> Requests { get; set; }
-        public IObservableCollection<Request> _Requests { 
-            get { 
-            return new BindableCollection<Request>(Requests);
-        } }
+		public List<Request> Requests { get; set; }
+		public IObservableCollection<Request> _Requests
+		{
+			get
+			{
+				if (Requests != null)
+				{
+					foreach (var r in Requests)
+					{
+						r.Collection = this;
+					}
+				}
+				return new BindableCollection<Request>(Requests);
+			}
+		}
 
 		[JsonConstructor]
 		public RequestCollection() : this(string.Empty, null)
@@ -28,8 +38,7 @@ namespace LIC.Malone.Core
 		public RequestCollection(string name, List<Request> requests)
 		{
 			Name = name;
-            Requests = requests;
-            //if (requests != null) { Requests = new BindableCollection<Request>(requests); }
+			Requests = requests;
 		}
 	}
 }
