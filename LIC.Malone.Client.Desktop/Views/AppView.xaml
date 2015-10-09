@@ -263,7 +263,8 @@
                 <StackPanel Grid.Row="2" Grid.Column="2" Orientation="Horizontal">
                     <controls:IconButton x:Name="Send" Content="Send" IconData="{StaticResource IconPaperPlane}" IconMargin="{StaticResource IconPaperPlaneMargin}" />
                     <controls:IconButton x:Name="Cancel" Content="Cancel" Margin="10 0 0 0" />
-                </StackPanel>
+					<controls:IconButton x:Name="AddToSelectedCollection" Content="Add To Selected Collection" Margin="10 0 0 0" Grid.Column="2" />
+				</StackPanel>
             </Grid>
 
             <TabControl DockPanel.Dock="Top" SelectedIndex="{Binding IsSending, Mode=OneWay, Converter={StaticResource ResponseTabIndexConverter}}">
@@ -460,5 +461,6 @@
 
         </DockPanel>
 
-    </Grid>
+
+	</Grid>
 </metro:MetroWindow>

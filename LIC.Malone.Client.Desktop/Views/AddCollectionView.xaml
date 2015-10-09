@@ -14,12 +14,20 @@
 	GlowBrush="{StaticResource WindowColorBrush}"
 	MinWidth="400" MinHeight="300"
 	Width="400" Height="300">
-
-	<Grid Name="MainGrid" Margin="15">
-		<StackPanel Orientation="Vertical">
-			<Label Style="{StaticResource H1}">Oh Em Gee</Label>
-			<Label>Sorry, but I haven't got around to building this yet.</Label>
-		</StackPanel>
+	<Grid Margin="10,0,2,3">
+		<Grid HorizontalAlignment="Left" Height="219" Margin="32,29,0,0" VerticalAlignment="Top" Width="308">
+			<TextBox HorizontalAlignment="Left" Height="23" Margin="0,92,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="226" RenderTransformOrigin="0.5,0.5" x:Name="CollectionName" Text="CollectionName" >
+				<TextBox.RenderTransform>
+					<TransformGroup>
+						<ScaleTransform/>
+						<SkewTransform/>
+						<RotateTransform Angle="0.074"/>
+						<TranslateTransform/>
+					</TransformGroup>
+				</TextBox.RenderTransform>
+			</TextBox>
+			<Label Content="Collection name" HorizontalAlignment="Left" Margin="0,61,0,0" VerticalAlignment="Top" Width="232"/>
+			<Button Content="Create" x:Name="Create" HorizontalAlignment="Left" Margin="233,93,0,0" VerticalAlignment="Top" Width="75"/>
+		</Grid>
 	</Grid>
-
 </metro:MetroWindow>
