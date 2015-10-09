@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Configuration;
 using System.IO;
 using System.Linq;
@@ -71,8 +72,8 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			}
 		}
 
-		private CollectionView _historyView;
-		public CollectionView HistoryView
+		private ICollectionView _historyView;
+		public ICollectionView HistoryView
 		{
 			get { return _historyView; }
 			set

@@ -82,7 +82,8 @@
 
 							<ListBox x:Name="History" SelectionMode="Single"
 								ItemsSource="{Binding HistoryView}"
-								SelectedItem="{Binding SelectedHistory}"
+								SelectedItem="{Binding SelectedHistory, Mode=TwoWay}"
+								IsSynchronizedWithCurrentItem="True"
 								HorizontalContentAlignment="Stretch"
 								ScrollViewer.HorizontalScrollBarVisibility="Disabled"
 								BorderThickness="0" Padding="0" Margin="-2"
