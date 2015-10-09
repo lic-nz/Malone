@@ -944,11 +944,14 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 		public void AddToSelectedCollection()
 		{
 			int index = Collections.IndexOf(SelectedCollection);
-			List<Request> updatedRequests = Collections[index].Requests;
-			updatedRequests.Add(SelectedHistory);
-			Collections[index] = new RequestCollection(Collections[index].Name, updatedRequests);
-			NotifyOfPropertyChange(() => Collections);
-			SaveCollections();
+			if (index >= 0)
+			{
+				List<Request> updatedRequests = Collections[index].Requests;
+				updatedRequests.Add(SelectedHistory);
+				Collections[index] = new RequestCollection(Collections[index].Name, updatedRequests);
+				NotifyOfPropertyChange(() => Collections);
+				SaveCollections();
+			}
 		}
 
 		public void CollectionsClicked(object e)
