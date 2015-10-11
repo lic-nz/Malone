@@ -805,6 +805,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 		private void AddToHistory(Request request)
 		{
 			History.Insert(0, request);
+			NotifyOfPropertyChange(() => History);
 			NotifyOfPropertyChange(() => HistoryView);
 			SelectedHistory = History.First();
 			SaveHistory();
