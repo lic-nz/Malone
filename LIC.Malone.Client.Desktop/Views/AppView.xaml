@@ -86,6 +86,7 @@
 								IsSynchronizedWithCurrentItem="True"
 								HorizontalContentAlignment="Stretch"
 								ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+								ScrollViewer.CanContentScroll="False"
 								BorderThickness="0" Padding="0" Margin="-2"
 								cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action HistoryClicked($executionContext)]">
 
