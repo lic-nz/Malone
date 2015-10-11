@@ -1011,6 +1011,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			
 			const string pattern = @"(\$GUID[0-9]*)|([A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-F0-9]{12})";
 			var rgx = new Regex(pattern, RegexOptions.IgnoreCase);
+			Url = rgx.Replace(Url, ReplaceGuid);
 			RequestBody.Text = rgx.Replace(RequestBody.Text, ReplaceGuid);
 		}
 
