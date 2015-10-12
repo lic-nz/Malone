@@ -488,7 +488,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 								.First()
 								.Version;
 
-							if (currentVersion > latestVersion)
+							if (currentVersion != null && currentVersion > latestVersion)
 							{
 								MaloneVersion = string.Format("Only found earlier version v{0}, staying on v{1}", latestVersion, currentVersion);
 								return;
@@ -511,7 +511,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 						hasFailed = true;
 						failTitle = e.Message;
-						failMessage = e.StackTrace;
+						failMessage = string.Format("currentVersion: {0}\n\n{1}", currentVersion, e.StackTrace);
 					}
 
 					if (hasFailed && isCanary)
@@ -519,7 +519,6 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 						// Can't await in a catch block. Move back when on C# 6.
 						await _dialogManager.Show(failTitle, failMessage);
 					}
-
 				}
 			}
 			catch (Exception e)
