@@ -488,6 +488,12 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 								.First()
 								.Version;
 
+							if (currentVersion > latestVersion)
+							{
+								MaloneVersion = string.Format("Only found earlier version v{0}, staying on v{1}", latestVersion, currentVersion);
+								return;
+							}
+
 							MaloneVersion = string.Format("Updating to v{0}", latestVersion);
 
 							var releases = updateInfo.ReleasesToApply;
