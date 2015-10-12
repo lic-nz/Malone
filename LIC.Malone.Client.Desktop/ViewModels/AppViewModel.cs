@@ -7,6 +7,7 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 using System.Windows;
 using System.Windows.Input;
 using System.Xml.Linq;
@@ -448,55 +449,82 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 		private async void CheckForUpdates()
 		{
-			var updateUrl = ConfigurationManager.AppSettings["UpdateUrl"];
+			// Waiting on https://github.com/Squirrel/Squirrel.Windows/pull/464.
+			//var token = ConfigurationManager.AppSettings["GitHubPersonalAccessToken"];
 
-			using (var updateManager = new UpdateManager(updateUrl, "Malone"))
+			bool isCanary;
+			if (!bool.TryParse(ConfigurationManager.AppSettings["IsCanary"], out isCanary))
+				isCanary = false;
+
+			try
 			{
-				if (!updateManager.IsInstalledApp)
+				using (var updateManager = await UpdateManager.GitHubUpdateManager("https://github.com/lic-nz/malone", prerelease: isCanary))
+				{
+					var currentVersion = updateManager.CurrentlyInstalledVersion();
+
+					MaloneVersion = "Checking for update...";
+
+					var hasFailed = false;
+					var failTitle = "";
+					var failMessage = "";
+
+					try
+					{
+						var updateInfo = await updateManager.CheckForUpdate();
+
+						if (updateInfo == null)
+						{
+							MaloneVersion = string.Format("No updates found, staying on v{0}", currentVersion);
+						}
+						else if (!updateInfo.ReleasesToApply.Any())
+						{
+							MaloneVersion = string.Format("You're up to date! v{0}", currentVersion);
+						}
+						else
+						{
+							var latestVersion = updateInfo
+								.ReleasesToApply
+								.OrderByDescending(u => u.Version)
+								.First()
+								.Version;
+
+							MaloneVersion = string.Format("Updating to v{0}", latestVersion);
+
+							var releases = updateInfo.ReleasesToApply;
+							await updateManager.DownloadReleases(releases);
+							await updateManager.ApplyReleases(updateInfo);
+
+							IsMaloneUpdateAvailable = true;
+							MaloneVersion = string.Format("Restart to finish update from v{0} to v{1}", currentVersion, latestVersion);
+						}
+					}
+					catch (Exception e)
+					{
+						// TODO: Have better error handling.
+						MaloneVersion = "See https://github.com/lic-nz/Malone/wiki/Help-with-updating-Malone";
+
+						hasFailed = true;
+						failTitle = e.Message;
+						failMessage = e.StackTrace;
+					}
+
+					if (hasFailed && isCanary)
+					{
+						// Can't await in a catch block. Move back when on C# 6.
+						await _dialogManager.Show(failTitle, failMessage);
+					}
+
+				}
+			}
+			catch (Exception e)
+			{
+				if (e.Message.Contains("Update.exe not found"))
 				{
 					MaloneVersion = "Update disabled";
 					return;
 				}
 
-				var currentVersion = updateManager.CurrentlyInstalledVersion();
-				
-				MaloneVersion = "Checking for update...";
-
-				try
-				{
-					var updateInfo = await updateManager.CheckForUpdate();
-
-					if (updateInfo == null)
-					{
-						MaloneVersion = string.Format("No updates found, staying on v{0}", currentVersion);
-					}
-					else if (!updateInfo.ReleasesToApply.Any())
-					{
-						MaloneVersion = string.Format("You're up to date! v{0}", currentVersion);
-					}
-					else
-					{
-						var latestVersion = updateInfo
-							.ReleasesToApply
-							.OrderByDescending(u => u.Version)
-							.First()
-							.Version;
-
-						MaloneVersion = string.Format("Updating to v{0}", latestVersion);
-
-						var releases = updateInfo.ReleasesToApply;
-						await updateManager.DownloadReleases(releases);
-						await updateManager.ApplyReleases(updateInfo);
-
-						IsMaloneUpdateAvailable = true;
-						MaloneVersion = string.Format("Restart to finish update from v{0} to v{1}", currentVersion, latestVersion);
-					}
-				}
-				catch (Exception e)
-				{
-					// TODO: Have better error handling.
-					MaloneVersion = e.Message;
-				}
+				throw;
 			}
 		}
 
@@ -625,7 +653,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			if (source == null || !source.Any())
 				return null;
 
-			var parts = source.Split(new [] {":"}, StringSplitOptions.RemoveEmptyEntries);
+			var parts = source.Split(new[] { ":" }, StringSplitOptions.RemoveEmptyEntries);
 
 			if (parts.Length != 2)
 				return null;
