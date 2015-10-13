@@ -937,6 +937,11 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			ActivateItem(_addTokenViewModel);
 		}
 
+		public void ClearAuth()
+		{
+			SelectedToken = null;
+		}
+
 		public void Reset()
 		{
 			SelectedHistory = null;

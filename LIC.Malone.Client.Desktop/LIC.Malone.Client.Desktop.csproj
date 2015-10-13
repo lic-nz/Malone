@@ -146,8 +146,8 @@
     <Compile Include="Controls\HttpStatus.xaml.cs">
       <DependentUpon>HttpStatus.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\HistoryButton.xaml.cs">
-      <DependentUpon>HistoryButton.xaml</DependentUpon>
+    <Compile Include="Controls\ClearButton.xaml.cs">
+      <DependentUpon>ClearButton.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\IconLink.xaml.cs">
       <DependentUpon>IconLink.xaml</DependentUpon>
@@ -185,7 +185,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Controls\HistoryButton.xaml">
+    <Page Include="Controls\ClearButton.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
