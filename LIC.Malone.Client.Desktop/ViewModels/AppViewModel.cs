@@ -507,7 +507,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 					catch (Exception e)
 					{
 						// TODO: Have better error handling.
-						MaloneVersion = "See https://github.com/lic-nz/Malone/wiki/Help-with-updating-Malone";
+						MaloneVersion = "Couldn't update, see https://github.com/lic-nz/Malone/wiki/Help-with-updating-Malone";
 
 						hasFailed = true;
 						failTitle = e.Message;
