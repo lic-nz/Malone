@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Xml.Linq;
 using Caliburn.Micro;
 using DotNetOpenAuth.OAuth2;
@@ -33,6 +34,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 		private readonly IWindowManager _windowManager;
 		private readonly IEventAggregator _bus;
 		private readonly Config _config;
+		private EnvMarkerConfig _envMarkerConfig;
 		private readonly DialogManager _dialogManager = new DialogManager();
 		private readonly List<string> _allowedSchemes = new List<string> { Uri.UriSchemeHttp, Uri.UriSchemeHttps };
 		private static IEnumerable<string> _defaultAccepts = new List<string> { "text/xml", "application/json" };
@@ -116,6 +118,9 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			set
 			{
 				_url = value;
+
+				RefreshEnvMarker();
+
 				NotifyOfPropertyChange(() => Url);
 				NotifyOfPropertyChange(() => IsRequestDirty);
 				NotifyOfPropertyChange(() => CanSend);
@@ -416,6 +421,30 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			get { return !string.IsNullOrWhiteSpace(HeaderName) && Headers.All(h => !h.Name.Equals(HeaderName, StringComparison.OrdinalIgnoreCase)); }
 		}
 
+		private SolidColorBrush _envColor;
+		public SolidColorBrush EnvColor
+		{
+			get { return _envColor; }
+			set
+			{
+				if (value == _envColor) return;
+				_envColor = value;
+				NotifyOfPropertyChange(() => EnvColor);
+			}
+		}
+
+		private string _envName;
+		public string EnvName
+		{
+			get { return _envName; }
+			set
+			{
+				if (value == _envName) return;
+				_envName = value;
+				NotifyOfPropertyChange(() => EnvName);
+			}
+		}
+
 		#endregion
 
 		public AppViewModel()
@@ -547,6 +576,8 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			var authenticationUrls = _config.GetOAuthAuthenticationUrls();
 			var userCredentials = _config.GetUserCredentials();
 			_bus.PublishOnUIThread(new ConfigurationLoaded(_applications, authenticationUrls, userCredentials));
+
+			_envMarkerConfig = _config.GetEnvMarker();
 		}
 
 		private void RequestBody_TextChanged(object sender, EventArgs e)
@@ -1021,5 +1052,26 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			//if (ratio > 3)
 			//	historyColumn.Width = width;
 		}
+
+		private void RefreshEnvMarker()
+		{
+			var env = EnvMarkerConfig.DefaultMarker;
+
+			if (!string.IsNullOrEmpty(Url))
+			{
+				try
+				{
+					var domain = new System.Uri(Url).Host.ToLower();
+					env = _envMarkerConfig.GetEnvByDomain(domain);
+				}
+				catch
+				{
+				}
+			}
+
+			EnvName = env.Name;
+			EnvColor = new SolidColorBrush(env.MarkerColer);
+		}
+
 	}
 }
