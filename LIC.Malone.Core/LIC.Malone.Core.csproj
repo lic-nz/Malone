@@ -104,6 +104,8 @@
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="ApiClient.cs" />
+    <Compile Include="Authentication\OAuth\AuthRefreshEventArgs.cs" />
+    <Compile Include="Authentication\OAuth\Extensions.cs" />
     <Compile Include="Authentication\OAuth\RefreshResult.cs" />
     <Compile Include="Authentication\OAuth\AuthorizeResult.cs" />
     <Compile Include="Authentication\OAuth\NamedAuthorizationState.cs" />
@@ -114,7 +116,13 @@
     <Compile Include="Request.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Response.cs" />
+    <Compile Include="Scheduling\RepeatingTimerTask.cs" />
+    <Compile Include="Scheduling\TimerTask.cs" />
     <Compile Include="SendResult.cs" />
+    <Compile Include="Services\AutoRefreshAuthService.cs" />
+    <Compile Include="Services\IAutoRefreshAuthService.cs" />
+    <Compile Include="Services\ITaskSchedulerService.cs" />
+    <Compile Include="Services\TaskSchedulerService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
