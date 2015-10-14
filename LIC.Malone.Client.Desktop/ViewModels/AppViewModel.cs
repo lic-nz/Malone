@@ -20,6 +20,7 @@ using LIC.Malone.Client.Desktop.Extensions;
 using LIC.Malone.Client.Desktop.Messages;
 using LIC.Malone.Core;
 using LIC.Malone.Core.Authentication.OAuth;
+using LIC.Malone.Core.Services;
 using MahApps.Metro.Controls.Dialogs;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -45,6 +46,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 		private AddTokenViewModel _addTokenViewModel;
 		private readonly NamedAuthorizationState _anonymousToken = new NamedAuthorizationState("<Anonymous>", null, false, null);
 		private List<OAuthApplication> _applications;
+		private IAutoRefreshAuthService _autoRefreshAuthService;
 
 		private CancellationTokenSource _cancellationTokenSource;
 		public CancellationTokenSource CancellationTokenSource
@@ -473,7 +475,34 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 			LoadConfig();
 
+			RunAuthAutoRefreshServices();
+
 			CheckForUpdates();
+		}
+
+		private void RunAuthAutoRefreshServices()
+		{
+			var taskScheduleService = IoC.Get<TaskSchedulerService>();
+			taskScheduleService.Start();
+
+			_autoRefreshAuthService = new AutoRefreshAuthService(taskScheduleService, _applications);
+			_autoRefreshAuthService.Start();
+
+			_autoRefreshAuthService.TokenChanged += (sender, args) =>
+			{
+				NotifyOfPropertyChange(() => Tokens);
+			};
+
+			Tokens.CollectionChanged += (sender, args) =>
+			{
+				if (_autoRefreshAuthService != null)
+					_autoRefreshAuthService.UpdateTokens(Tokens.ToArray());
+			};
+			Tokens.PropertyChanged += (sender, args) =>
+			{
+				if (_autoRefreshAuthService != null)
+					_autoRefreshAuthService.UpdateTokens(Tokens.ToArray());
+			};
 		}
 
 		private async void CheckForUpdates()
