@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Windows.Media;
 using LIC.Malone.Core;
 using LIC.Malone.Core.Authentication;
 using LIC.Malone.Core.Authentication.OAuth;
@@ -16,8 +15,6 @@ namespace LIC.Malone.Client.Desktop
 		private readonly string _oAuthApplicationsFile;
 		private readonly string _oAuthAuthenticationUrlsFile;
 		private readonly string _oAuthUserCredentialsFile;
-		private readonly string _envMarkerFile;
-
 
 		public Config()
 		{
@@ -39,7 +36,6 @@ namespace LIC.Malone.Client.Desktop
 			_oAuthApplicationsFile = Path.Combine(configFolder, "oauth-applications.json");
 			_oAuthAuthenticationUrlsFile = Path.Combine(configFolder, "oauth-authentication-urls.json");
 			_oAuthUserCredentialsFile = Path.Combine(configFolder, "oauth-user-credentials.json");
-			_envMarkerFile = Path.Combine(configFolder, "env-marker.json");
 		}
 
 		public List<Request> GetHistory()
@@ -157,117 +153,6 @@ namespace LIC.Malone.Client.Desktop
 			}
 
 			return userCredentials;
-		}
-
-		public EnvMarkerConfig GetEnvMarker()
-		{
-			var envMarker = new EnvMarkerConfig();
-
-			if (!File.Exists(_envMarkerFile))
-			{
-				using (var writer = File.CreateText(_envMarkerFile))
-				{
-					var text = JsonConvert.SerializeObject(envMarker);
-					writer.Write(text);
-				}
-
-				return envMarker;
-			}
-			var json = File.ReadAllText(_envMarkerFile);
-
-			if (!json.Any())
-				return envMarker;
-
-			try
-			{
-				envMarker = JsonConvert.DeserializeObject<EnvMarkerConfig>(json);
-			}
-			catch (Exception e)
-			{
-				throw new Exception("Could not deserialize env marker: " + _oAuthUserCredentialsFile, e);
-			}
-
-			return envMarker;
-		}
-	}
-
-	public class EnvMarkerItem
-	{
-		public string Name { get; set; }
-		public string[] RootUrls { get; set; }
-		public Color MarkerColer { get; set; }
-	}
-
-	public class EnvMarkerConfig
-	{
-		public EnvMarkerItem[] Env { get; set; }
-		public bool StrictMatchMode { get; set; }
-
-		public static EnvMarkerItem DefaultMarker = new EnvMarkerItem
-		{
-			Name = string.Empty,
-			RootUrls = new string[] { },
-			MarkerColer = Color.FromRgb(255, 255, 255)
-		};
-
-		public EnvMarkerConfig()
-		{
-			StrictMatchMode = false;
-
-			Env = new[]
-			{
-				new EnvMarkerItem
-				{
-					Name = "PROD",
-					MarkerColer = Color.FromRgb(58, 135, 173),
-					RootUrls = new string[] {}
-				},
-
-				new EnvMarkerItem
-				{
-					Name = "ACCP",
-					MarkerColer = Color.FromRgb(248, 148, 6),
-					RootUrls = new string[] {}
-				},
-
-				new EnvMarkerItem
-				{
-					Name = "TEST",
-					MarkerColer = Color.FromRgb(70, 136, 71),
-					RootUrls = new string[] {}
-				},
-
-				new EnvMarkerItem
-				{
-					Name = "DEV",
-					MarkerColer = Color.FromRgb(51, 51, 51),
-					RootUrls = new[] {"localhost"}
-				}
-			};
-		}
-
-		public EnvMarkerConfig(EnvMarkerItem prod, EnvMarkerItem accp, EnvMarkerItem test, EnvMarkerItem dev)
-		{
-			Env = new[]
-			{
-				prod,
-				accp,
-				test,
-				dev
-			};
-		}
-
-		public EnvMarkerConfig(params EnvMarkerItem[] items)
-		{
-			Env = items;
-		}
-
-		public EnvMarkerItem GetEnvByDomain(string domain)
-		{
-			var env = StrictMatchMode ? Env.FirstOrDefault(e => e.RootUrls.Contains(domain)) :
-				(Env.FirstOrDefault(e => e.RootUrls.Contains(domain) || domain.Contains(e.Name.ToLower())));
-
-			return env ?? DefaultMarker;
 		}
 	}
 }
