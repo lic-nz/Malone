@@ -189,17 +189,8 @@
 		<DockPanel Grid.Column="2" LastChildFill="True">
 
 			<Grid DockPanel.Dock="Top">
-                <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
-                    <Label DockPanel.Dock="Top" Content="URL" Style="{StaticResource H1}"/>
-                    <Border Background="{Binding EnvColor}" CornerRadius="8" Padding="5" Margin="10,12">
-                        <TextBlock x:Name="EnvName" 
-                                   Foreground="White" 
-                                   FontWeight="Bold" 
-                                   FontSize="12"
-                                   VerticalAlignment="Center">12356</TextBlock>
-                    </Border>
-                </StackPanel>
-                <Path Visibility="{Binding IsRequestDirty, Converter={StaticResource ShowWhenTrueConverter}}" HorizontalAlignment="Right" Margin="0 16 45 0" VerticalAlignment="Top" Fill="#FFD51C" Data="{StaticResource IconNew}" ToolTip="Request has been modified. Original response is still shown." />
+				<Label DockPanel.Dock="Top" Content="URL" Style="{StaticResource H1}"/>
+				<Path Visibility="{Binding IsRequestDirty, Converter={StaticResource ShowWhenTrueConverter}}" HorizontalAlignment="Right" Margin="0 16 45 0" VerticalAlignment="Top" Fill="#FFD51C" Data="{StaticResource IconNew}" ToolTip="Request has been modified. Original response is still shown." />
 				<controls:IconLink x:Name="Reset" HorizontalAlignment="Right" IconData="{StaticResource IconErase}" IconMargin="{StaticResource IconEraseMargin}" ToolTip="Clear this request" />
 			</Grid>
 
