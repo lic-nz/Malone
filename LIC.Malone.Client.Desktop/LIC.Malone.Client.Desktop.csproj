@@ -116,6 +116,9 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.Composition.Registration" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Web" />
@@ -152,17 +155,20 @@
     <Compile Include="Controls\IconLink.xaml.cs">
       <DependentUpon>IconLink.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\HideOnCollectionsConverter.cs" />
     <Compile Include="Converters\ResponseBodyTabIndexConverter.cs" />
     <Compile Include="Converters\ResponseTabIndexConverter.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\DateTimeFormatConverter.cs" />
     <Compile Include="Converters\IconLinkHeightConverter.cs" />
     <Compile Include="Converters\NullToVisibilityConverter.cs" />
+    <Compile Include="Converters\ShowOnCollectionsConverter.cs" />
     <Compile Include="Converters\ShowOnHistoryConverter.cs" />
     <Compile Include="Converters\HideOnHistoryConverter.cs" />
     <Compile Include="Converters\HistoryWidthConverter.cs" />
     <Compile Include="Colors.cs" />
     <Compile Include="DesignData\AppViewModelDesignData.cs" />
+    <Compile Include="DesignData\CollectionsDesignData.cs" />
     <Compile Include="DesignData\HistoryDesignData.cs" />
     <Compile Include="Extensions\HttpStatusCodeExtensions.cs" />
     <Compile Include="Controls\IconButton.xaml.cs">

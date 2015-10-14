@@ -70,6 +70,17 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			}
 		}
 
+		private IObservableCollection<RequestCollection> _collections = new BindableCollection<RequestCollection>();
+		public IObservableCollection<RequestCollection> Collections
+		{
+			get { return _collections; }
+			set
+			{
+				_collections = value;
+				NotifyOfPropertyChange(() => Collections);
+			}
+		}
+
 		private Request _selectedHistory;
 		public Request SelectedHistory
 		{
@@ -78,6 +89,17 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			{
 				_selectedHistory = value;
 				NotifyOfPropertyChange(() => SelectedHistory);
+			}
+		}
+
+		private RequestCollection _selectedCollection;
+		public RequestCollection SelectedCollection
+		{
+			get { return _selectedCollection; }
+			set
+			{
+				_selectedCollection = value;
+				NotifyOfPropertyChange(() => SelectedCollection);
 			}
 		}
 
@@ -418,6 +440,8 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 		#endregion
 
+		public static AppViewModel Instance;
+
 		public AppViewModel()
 		{
 			_windowManager = IoC.Get<WindowManager>();
@@ -445,6 +469,8 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			LoadConfig();
 
 			CheckForUpdates();
+
+			Instance = this;
 		}
 
 		private async void CheckForUpdates()
@@ -542,6 +568,9 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 		{
 			var history = _config.GetHistory();
 			History.AddRange(history);
+
+			var collections = _config.GetCollections();
+			Collections.AddRange(collections);
 
 			_applications = _config.GetOAuthApplications();
 			var authenticationUrls = _config.GetOAuthAuthenticationUrls();
@@ -872,11 +901,34 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			DisplayRequest(SelectedHistory);
 		}
 
+		public void CollectionClicked(object e)
+		{
+			//if (e != null)
+			//	DisplayRequest(e);
+			if (e is RequestCollection)
+				this.SelectedCollection = (RequestCollection)e;
+			else if (e is Request)
+				DisplayRequest((Request)e);
+		}
+
 		public void RemoveFromHistory(object e)
 		{
 			var request = (Request)e;
 			History.Remove(request);
 			SaveHistory();
+		}
+
+		public void RemoveFromCollection(Request r)
+		{
+			if (r != null && r.Collection != null)
+			{
+				int index = Collections.IndexOf(r.Collection);
+				List<Request> updatedRequests = Collections[index].Requests;
+				updatedRequests.Remove(r);
+				Collections[index] = new RequestCollection(Collections[index].Name, updatedRequests);
+				NotifyOfPropertyChange(() => Collections);
+				SaveCollections();
+			}
 		}
 
 		public void RemoveFromHeaders(object e)
@@ -914,6 +966,34 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			_config.SaveHistory(History);
 		}
 
+		public void CollectionRequestClicked(object e)
+		{
+			if (SelectedHistory == null)
+				return;
+
+			DisplayRequest(SelectedHistory);
+		}
+
+		public void AddToSelectedCollection()
+		{
+			int index = Collections.IndexOf(SelectedCollection);
+			if (index >= 0 && SelectedHistory != null)
+			{
+				List<Request> updatedRequests = Collections[index].Requests;
+				updatedRequests.Add(SelectedHistory);
+				Collections[index] = new RequestCollection(Collections[index].Name, updatedRequests);
+				NotifyOfPropertyChange(() => Collections);
+				SaveCollections();
+			}
+		}
+
+		public void RemoveCollection(object e)
+		{
+			var collection = (RequestCollection)e;
+			Collections.Remove(collection);
+			SaveCollections();
+		}
+
 		public void AddCollection()
 		{
 			var settings = new Dictionary<string, object>
@@ -924,6 +1004,11 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 			_windowManager.ShowDialog(_addCollectionViewModel, settings: settings);
 			ActivateItem(_addCollectionViewModel);
+		}
+
+		private void SaveCollections()
+		{
+			_config.SaveCollections(Collections);
 		}
 
 		public void AddToken()

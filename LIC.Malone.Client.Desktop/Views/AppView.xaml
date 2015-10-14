@@ -10,6 +10,7 @@
 	xmlns:controls="clr-namespace:LIC.Malone.Client.Desktop.Controls"
 	xmlns:converters="clr-namespace:LIC.Malone.Client.Desktop.Converters"
 	xmlns:designData="clr-namespace:LIC.Malone.Client.Desktop.DesignData"
+    xmlns:local="clr-namespace:LIC.Malone.Core;assembly=LIC.Malone.Core"
 	mc:Ignorable="d"
 	Title="Malone"
 	TitleCaps="False"
@@ -61,6 +62,8 @@
 			<TabControl.Resources>
 				<converters:HideOnHistoryConverter x:Key="HideOnHistoryConverter" />
 				<converters:ShowOnHistoryConverter x:Key="ShowOnHistoryConverter" />
+				<converters:HideOnCollectionsConverter x:Key="HideOnCollectionsConverter" />
+				<converters:ShowOnCollectionsConverter x:Key="ShowOnCollectionsConverter" />
 				<Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource TabHeader}"></Style>
 			</TabControl.Resources>
 
@@ -81,36 +84,126 @@
 							IconData="{StaticResource IconTrash}" Content="Clear History"
 							Height="40" Width="40" Top="10" Left="10" />
 
-						<DockPanel Name="HistoryDockPanel" Grid.Column="0" LastChildFill="True" Visibility="{Binding History, Converter={StaticResource ShowOnHistoryConverter}}">
+                        <DockPanel Name="HistoryDockPanel" Grid.Column="0" LastChildFill="True" Visibility="{Binding History, Converter={StaticResource ShowOnHistoryConverter}}">
 
-							<ListBox x:Name="History" SelectionMode="Single"
+                            <ListBox x:Name="History" SelectionMode="Single"
 								HorizontalContentAlignment="Stretch"
 								ScrollViewer.HorizontalScrollBarVisibility="Disabled"
 								BorderThickness="0" Padding="0" Margin="-2"
 								cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action HistoryClicked($executionContext)]">
 
-								<ListBox.Resources>
-									<ResourceDictionary>
-										<Style x:Key="DeleteRequestBorder" TargetType="{x:Type Border}">
-											<Setter Property="Visibility" Value="Hidden" />
-											<Style.Triggers>
-												<DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}},Path=IsMouseOver}" Value="True">
-													<Setter Property="Visibility" Value="Visible" />
-												</DataTrigger>
-											</Style.Triggers>
-										</Style>
-									</ResourceDictionary>
-								</ListBox.Resources>
+                                <ListBox.Resources>
+                                    <ResourceDictionary>
+                                        <Style x:Key="DeleteRequestBorder" TargetType="{x:Type Border}">
+                                            <Setter Property="Visibility" Value="Hidden" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}},Path=IsMouseOver}" Value="True">
+                                                    <Setter Property="Visibility" Value="Visible" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ResourceDictionary>
+                                </ListBox.Resources>
 
-								<ListBox.ItemTemplate>
-									<DataTemplate>
-										<Grid Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBox}}, Path=Width}">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBox}}, Path=Width}">
+                                            <Grid.Resources>
+                                                <converters:HttpStatusCodeToBrushConverter x:Key="HttpStatusCodeToBrushConverter" />
+                                                <converters:HttpStatusCodeToIntConverter x:Key="HttpStatusCodeToIntConverter" />
+                                            </Grid.Resources>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="7" />
+                                                <ColumnDefinition Width="50" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition />
+                                                <RowDefinition />
+                                            </Grid.RowDefinitions>
+
+                                            <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding Method}" Style="{StaticResource History.BaseUrl}" VerticalAlignment="Bottom" />
+                                            <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding Response.HttpStatusCode, Converter={StaticResource HttpStatusCodeToIntConverter}}" Foreground="{Binding Response.HttpStatusCode, Converter={StaticResource HttpStatusCodeToBrushConverter}}" />
+
+                                            <TextBlock Grid.Column="2" Grid.Row="0" Text="{Binding BaseUrl}" Style="{StaticResource History.BaseUrl}" VerticalAlignment="Bottom" />
+                                            <TextBlock Grid.Column="2" Grid.Row="1" Text="{Binding ResourcePath}" Style="{StaticResource History.ResourcePath}" />
+
+                                            <Border
+												Style="{StaticResource DeleteRequestBorder}"
+												Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" Grid.RowSpan="2"
+												HorizontalAlignment="Right" VerticalAlignment="Center">
+                                                <controls:ClearButton
+													cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action RemoveFromHistory($this)]"
+													IconData="{StaticResource IconSquaredCross}"
+													Height="40" Width="40" Top="10" Left="10" />
+                                            </Border>
+
+                                        </Grid>
+
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+
+                            </ListBox>
+
+                        </DockPanel>
+                    </Grid>
+                </TabItem.Content>
+            </TabItem>
+
+            <TabItem Header="Collections">
+                <TabItem.Content>
+                    <Grid>
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <ContentControl Content="{StaticResource IconSmileyFrown}" />
+                            <TextBlock Style="{StaticResource EmptyListMessage}">Collections are super-nifty. Why not create one?</TextBlock>
+                        </StackPanel>
+
+                        <Button HorizontalAlignment="Right" VerticalAlignment="Top"
+								Margin="0 -45 0 0"
+								BorderThickness="0" Background="#efefef"
+								cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action AddCollection()]" ToolTip="Add collection">
+                           <Button.Template>
+                                <ControlTemplate TargetType="{x:Type Button}">
+                                    <Border Name="Border" Background="{TemplateBinding Background}" Height="40" Width="40">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="Border" Property="Background" Value="#449d44"></Setter>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Button.Template>
+                            <Path HorizontalAlignment="Center" VerticalAlignment="Center" Margin="-2 -2 0 0" Fill="White" Data="M10,1.6c-4.639,0-8.4,3.761-8.4,8.4s3.761,8.4,8.4,8.4s8.4-3.761,8.4-8.4S14.639,1.6,10,1.6z M15,11h-4v4H9 v-4H5V9h4V5h2v4h4V11z"/>
+                        </Button>
+
+						<DockPanel Name="CollectionsDockPanel" LastChildFill="True" Visibility="{Binding Collections, Converter={StaticResource ShowOnCollectionsConverter}}">
+                            <TreeView ItemsSource="{Binding Collections}" Name="treeView1"
+									  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+									  HorizontalContentAlignment="Stretch"
+                                      cal:Message.Attach="[Event SelectedItemChanged] = [Action CollectionClicked($this.SelectedItem)]">
+                                <TreeView.Resources>
+									<Style x:Key="DeleteRequestBorder" TargetType="{x:Type Border}">
+										<Setter Property="Visibility" Value="Hidden" />
+										<Style.Triggers>
+											<DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}},Path=IsMouseOver}" Value="True">
+												<Setter Property="Visibility" Value="Visible" />
+											</DataTrigger>
+										</Style.Triggers>
+									</Style>
+									
+									<HierarchicalDataTemplate DataType="{x:Type local:RequestCollection}" ItemsSource="{Binding Path=_Requests}">
+                                                <TextBlock Text="{Binding Path=Name}" FontWeight="Bold" Foreground="Black"></TextBlock>
+                                    </HierarchicalDataTemplate>
+
+									<DataTemplate DataType="{x:Type local:Request}">
+										<Grid
+											Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeView}}, Path=Width}">
 											<Grid.Resources>
 												<converters:HttpStatusCodeToBrushConverter x:Key="HttpStatusCodeToBrushConverter" />
 												<converters:HttpStatusCodeToIntConverter x:Key="HttpStatusCodeToIntConverter" />
 											</Grid.Resources>
 											<Grid.ColumnDefinitions>
-												<ColumnDefinition Width="7" />
 												<ColumnDefinition Width="50" />
 												<ColumnDefinition Width="*" />
 											</Grid.ColumnDefinitions>
@@ -119,72 +212,34 @@
 												<RowDefinition />
 											</Grid.RowDefinitions>
 
-											<TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding Method}" Style="{StaticResource History.BaseUrl}" VerticalAlignment="Bottom" />
-											<TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding Response.HttpStatusCode, Converter={StaticResource HttpStatusCodeToIntConverter}}" Foreground="{Binding Response.HttpStatusCode, Converter={StaticResource HttpStatusCodeToBrushConverter}}" />
+											<TextBlock Grid.Column="0" Grid.Row="0" Text="{Binding Method}" Style="{StaticResource History.BaseUrl}" VerticalAlignment="Bottom" />
+											<TextBlock Grid.Column="0" Grid.Row="1" Text="{Binding Response.HttpStatusCode, Converter={StaticResource HttpStatusCodeToIntConverter}}" Foreground="{Binding Response.HttpStatusCode, Converter={StaticResource HttpStatusCodeToBrushConverter}}" />
 
-											<TextBlock Grid.Column="2" Grid.Row="0" Text="{Binding BaseUrl}" Style="{StaticResource History.BaseUrl}" VerticalAlignment="Bottom" />
-											<TextBlock Grid.Column="2" Grid.Row="1" Text="{Binding ResourcePath}" Style="{StaticResource History.ResourcePath}" />
+											<TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding BaseUrl}" Style="{StaticResource History.BaseUrl}" VerticalAlignment="Bottom" />
+											<TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding ResourcePath}" Style="{StaticResource History.ResourcePath}" />
 
 											<Border
-												Style="{StaticResource DeleteRequestBorder}"
-												Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" Grid.RowSpan="2"
+												Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Grid.RowSpan="2"
 												HorizontalAlignment="Right" VerticalAlignment="Center">
 												<controls:ClearButton
-													cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action RemoveFromHistory($this)]"
+													cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action RemoveFromCollection($this)]"
 													IconData="{StaticResource IconSquaredCross}"
 													Height="40" Width="40" Top="10" Left="10" />
 											</Border>
 
 										</Grid>
-
 									</DataTemplate>
-								</ListBox.ItemTemplate>
+                                </TreeView.Resources>
+                            </TreeView>
+                        </DockPanel>
 
-							</ListBox>
+                    </Grid>
 
-						</DockPanel>
-					</Grid>
-				</TabItem.Content>
-			</TabItem>
+                </TabItem.Content>
+            </TabItem>
+        </TabControl>
 
-			<TabItem Header="Collections">
-				<TabItem.Content>
-					<Grid>
-						<StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
-							<ContentControl Content="{StaticResource IconSmileyFrown}" />
-							<TextBlock Style="{StaticResource EmptyListMessage}">Collections are super-nifty. Why not create one?</TextBlock>
-						</StackPanel>
-
-						<Button HorizontalAlignment="Right" VerticalAlignment="Top"
-								Margin="0 -45 0 0"
-								BorderThickness="0" Background="#efefef"
-								cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action AddCollection()]" ToolTip="Add collection">
-							<Button.Template>
-								<ControlTemplate TargetType="{x:Type Button}">
-									<Border Name="Border" Background="{TemplateBinding Background}" Height="40" Width="40">
-										<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-									</Border>
-									<ControlTemplate.Triggers>
-										<Trigger Property="IsMouseOver" Value="True">
-											<Setter TargetName="Border" Property="Background" Value="#449d44"></Setter>
-										</Trigger>
-									</ControlTemplate.Triggers>
-								</ControlTemplate>
-							</Button.Template>
-							<Path HorizontalAlignment="Center" VerticalAlignment="Center" Margin="-2 -2 0 0" Fill="White" Data="M10,1.6c-4.639,0-8.4,3.761-8.4,8.4s3.761,8.4,8.4,8.4s8.4-3.761,8.4-8.4S14.639,1.6,10,1.6z M15,11h-4v4H9 v-4H5V9h4V5h2v4h4V11z"/>
-						</Button>
-
-						<DockPanel Name="CollectionsDockPanel" LastChildFill="True" Visibility="{Binding History, Converter={StaticResource ShowOnHistoryConverter}}">
-
-						</DockPanel>
-
-					</Grid>
-
-				</TabItem.Content>
-			</TabItem>
-		</TabControl>
-
-		<GridSplitter Grid.Column="1" Width="3" HorizontalAlignment="Stretch" />
+        <GridSplitter Grid.Column="1" Width="3" HorizontalAlignment="Stretch" />
 
 		<DockPanel Grid.Column="2" LastChildFill="True">
 
@@ -206,43 +261,16 @@
 					<RowDefinition />
 					<RowDefinition Height="10"/>
 					<RowDefinition />
-					<RowDefinition Height="10"/>
-					<RowDefinition />
 				</Grid.RowDefinitions>
 
 				<ComboBox Grid.Row="0" Grid.Column="0" x:Name="Methods" Width="80" Style="{StaticResource DefaultComboBox}" />
 				<TextBox  Grid.Row="0" Grid.Column="2" x:Name="Url" metro:TextBoxHelper.Watermark="Enter URL or choose from history" Style="{StaticResource DefaultTextBox}" cal:Message.Attach="[Event KeyDown] = [Action ExecuteSend($eventArgs)]"/>
 				<ComboBox Grid.Row="0" Grid.Column="4" x:Name="Accepts" Width="130" Style="{StaticResource DefaultComboBox}" />
 
-				<!--<Label Grid.Row="2" Grid.Column="0" Content="Authentication" Style="{StaticResource FormLabel}" />-->
-				<ComboBox Grid.Row="2" Grid.Column="2" x:Name="Tokens" Style="{StaticResource DefaultComboBox}" VerticalAlignment="Bottom" Padding="3" >
-					<ComboBox.ItemTemplate>
-						<DataTemplate>
-							<DataTemplate.Resources>
-								<Style x:Key="Historical" TargetType="TextBlock" BasedOn="{StaticResource DefaultTextBlock}">
-									<Style.Triggers>
-										<DataTrigger Binding="{Binding IsHistorical}" Value="True">
-											<Setter Property="Text" Value="History"/>
-										</DataTrigger>
-										<DataTrigger Binding="{Binding IsHistorical}" Value="False">
-											<Setter Property="Text" Value="Session"/>
-										</DataTrigger>
-									</Style.Triggers>
-								</Style>
-							</DataTemplate.Resources>
-							<DockPanel>
-								<TextBlock Style="{StaticResource Historical}" Width="50" Foreground="#666666"/>
-								<TextBlock Text="{Binding Name}" />
-							</DockPanel>
-						</DataTemplate>
-					</ComboBox.ItemTemplate>
-				</ComboBox>
-
-				<controls:IconLink Grid.Row="2" Grid.Column="4" HorizontalAlignment="Left" VerticalAlignment="Bottom" Content="Add" IconData="{StaticResource IconPlus}" IconMargin="{StaticResource IconPlusMargin}" cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action AddToken()]" />
-
-				<StackPanel Grid.Row="4" Grid.Column="2" Orientation="Horizontal">
+				<StackPanel Grid.Row="2" Grid.Column="2" Orientation="Horizontal">
 					<controls:IconButton x:Name="Send" Content="Send" IconData="{StaticResource IconPaperPlane}" IconMargin="{StaticResource IconPaperPlaneMargin}" />
 					<controls:IconButton x:Name="Cancel" Content="Cancel" Margin="10 0 0 0" />
+					<controls:IconButton x:Name="AddToSelectedCollection" Content="Add To Selected Collection" Margin="10 0 0 0" Grid.Column="2" />
 				</StackPanel>
 			</Grid>
 
@@ -330,14 +358,39 @@
 									<TabItem Header="Authentication">
 
 										<DockPanel LastChildFill="True">
+
 											<Grid DockPanel.Dock="Top" Margin="0 0 0 10">
 												<controls:ClearButton
-							HorizontalAlignment="Right" VerticalAlignment="Top"
-							Margin="0"
-							cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action ClearAuth()]" ToolTip="Clear authentication"
-							IconData="{StaticResource IconTrash}" Content="Clear Authentication"
-							Height="40" Width="40" Top="10" Left="10" />
+													HorizontalAlignment="Right" VerticalAlignment="Top"
+													Margin="0"
+													cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action ClearAuth()]" ToolTip="Clear authentication"
+													IconData="{StaticResource IconTrash}" Content="Clear Authentication"
+													Height="40" Width="40" Top="10" Left="10" />
+												<ComboBox x:Name="Tokens" Style="{StaticResource DefaultComboBox}" VerticalAlignment="Bottom" Margin="5,0,130,0" Padding="3" Height="30" >
+													<ComboBox.ItemTemplate>
+														<DataTemplate>
+															<DataTemplate.Resources>
+																<Style x:Key="Historical" TargetType="TextBlock" BasedOn="{StaticResource DefaultTextBlock}">
+																	<Style.Triggers>
+																		<DataTrigger Binding="{Binding IsHistorical}" Value="True">
+																			<Setter Property="Text" Value="History"/>
+																		</DataTrigger>
+																		<DataTrigger Binding="{Binding IsHistorical}" Value="False">
+																			<Setter Property="Text" Value="Session"/>
+																		</DataTrigger>
+																	</Style.Triggers>
+																</Style>
+															</DataTemplate.Resources>
+															<DockPanel>
+																<TextBlock Style="{StaticResource Historical}" Width="50" Foreground="#666666"/>
+																<TextBlock Text="{Binding Name}" />
+															</DockPanel>
+														</DataTemplate>
+													</ComboBox.ItemTemplate>
+												</ComboBox>
+												<controls:IconLink HorizontalAlignment="Right" Margin="0,0,50,0" VerticalAlignment="Bottom" Content="Add" IconData="{StaticResource IconPlus}" IconMargin="{StaticResource IconPlusMargin}" cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action AddToken()]" />
 											</Grid>
+
 											<ae:TextEditor DockPanel.Dock="Top" Document="{Binding SelectedTokenJson, Mode=OneWay}" SyntaxHighlighting="JavaScript" />
 
 										</DockPanel>
@@ -420,7 +473,5 @@
 			</TabControl>
 
 		</DockPanel>
-
 	</Grid>
-
 </metro:MetroWindow>
