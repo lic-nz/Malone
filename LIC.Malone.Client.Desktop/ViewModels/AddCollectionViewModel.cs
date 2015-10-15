@@ -24,18 +24,21 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 		protected override void OnActivate()
 		{
-			this.DisplayName = "hwoeir";
+			this.DisplayName = "Add Collection";
 			base.OnActivate();
 		}
 
 		public void Create()
 		{
-			AppViewModel.Instance.Collections.Add(new Core.RequestCollection() { Name = this.CollectionName, Requests = new List<Request>() });
-			AppViewModel.Instance.Collections = AppViewModel.Instance.Collections;
+			if (!string.IsNullOrWhiteSpace(this.CollectionName))
+			{
+				AppViewModel.Instance.Collections.Add(new Core.RequestCollection() { Name = this.CollectionName, Requests = new List<Request>() });
+				AppViewModel.Instance.Collections = AppViewModel.Instance.Collections;
 
-			this.CollectionName = string.Empty;
+				this.CollectionName = string.Empty;
 
-			this.TryClose();
+				this.TryClose();
+			}
 		}
 
 		public string CollectionName { get; set; }
