@@ -475,6 +475,12 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 		private async void CheckForUpdates()
 		{
+			/*
+				Here be dragons!
+				Warning: Be *really* careful with changes to the updating code because you could break installed clients. Ensure
+				any changes are tested thoroughly.
+			*/
+
 			// Waiting on https://github.com/Squirrel/Squirrel.Windows/pull/464.
 			//var token = ConfigurationManager.AppSettings["GitHubPersonalAccessToken"];
 
@@ -487,6 +493,12 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 				using (var updateManager = await UpdateManager.GitHubUpdateManager("https://github.com/lic-nz/malone", prerelease: isCanary))
 				{
 					var currentVersion = updateManager.CurrentlyInstalledVersion();
+
+					if (currentVersion == null)
+					{
+						MaloneVersion = "Not installed, update disabled.";
+						return;
+					}
 
 					MaloneVersion = "Checking for update...";
 
@@ -520,7 +532,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 								return;
 							}
 
-							MaloneVersion = string.Format("Updating to v{0}", latestVersion);
+							MaloneVersion = string.Format("Updating from v{0} to v{1}...", currentVersion, latestVersion);
 
 							var releases = updateInfo.ReleasesToApply;
 							await updateManager.DownloadReleases(releases);
@@ -551,7 +563,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			{
 				if (e.Message.Contains("Update.exe not found"))
 				{
-					MaloneVersion = "Update disabled";
+					MaloneVersion = string.Format("Update disabled: {0}", e.Message);
 					return;
 				}
 
