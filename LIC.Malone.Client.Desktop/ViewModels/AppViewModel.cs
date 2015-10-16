@@ -529,7 +529,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 								return;
 							}
 
-							MaloneVersion = string.Format("Updating from v{0} to v{1}...", currentVersion, latestVersion);
+							MaloneVersion = string.Format("Updating from v{0} to v{1}", currentVersion, latestVersion);
 
 							var releases = updateInfo.ReleasesToApply;
 							await updateManager.DownloadReleases(releases);
