@@ -23,7 +23,7 @@ namespace LIC.Malone.Client.Desktop
 		private readonly string _oAuthUserCredentialsFile;
 		private readonly string _configFile;
 
-		public string GitHubPersonalAccessToken { get; private set; } = null;
+		public string GitHubPersonalAccessToken { get; private set; }
 
 		public Config()
 		{
