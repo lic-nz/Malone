@@ -74,6 +74,34 @@ namespace LIC.Malone.Client.Desktop.Packager
 			process.Close();
 		}
 
+		private void Clean(DirectoryInfo buildDirectoryInfo)
+		{
+			if (buildDirectoryInfo.FullName.StartsWith(@"C:\Windows", StringComparison.OrdinalIgnoreCase) || buildDirectoryInfo.FullName.StartsWith(@"C:\Program Files", StringComparison.OrdinalIgnoreCase))
+				throw new UnauthorizedAccessException("Danger!");
+
+			buildDirectoryInfo
+				.GetFiles("Malone*.nupkg")
+				.ToList()
+				.ForEach(p => p.Delete());
+
+			var releasesDirectoryInfos = buildDirectoryInfo.GetDirectories("Releases");
+
+			if (!releasesDirectoryInfos.Any())
+				return;
+
+			var releasesDirectoryInfo = releasesDirectoryInfos.Single();
+
+			var files = new List<FileInfo>();
+
+			files.AddRange(releasesDirectoryInfo.GetFiles("Malone*.nupkg"));
+			files.AddRange(releasesDirectoryInfo.GetFiles("RELEASES"));
+			files.AddRange(releasesDirectoryInfo.GetFiles("Setup-Malone*.exe"));
+
+			files.ForEach(f => f.Delete());
+
+			releasesDirectoryInfo.Delete();
+		}
+
 		private string CreateNugget()
 		{
 			var csproj = Path.GetFullPath(Path.Combine(ClientDirectory, "LIC.Malone.Client.Desktop.csproj"));
@@ -81,12 +109,8 @@ namespace LIC.Malone.Client.Desktop.Packager
 			var buildDirectoryInfo = Directory.CreateDirectory(BuildDirectory);
 
 			Directory.SetCurrentDirectory(buildDirectoryInfo.FullName);
-
-			// Clean out build directory.
-			buildDirectoryInfo
-				.GetFiles("*.nupkg")
-				.ToList()
-				.ForEach(p => p.Delete());
+			
+			Clean(buildDirectoryInfo);
 
 			// Rely on standard nuget process to build the project and create a starting package to copy metadata from.
 			StartProcess("nuget.exe", string.Format("pack {0} -Build -Prop Configuration=Release", csproj));
@@ -135,7 +159,7 @@ namespace LIC.Malone.Client.Desktop.Packager
 
 		private void Releasify(string nugget)
 		{
-			StartProcess(Squirrel, string.Format("--releasify={0} --setupIcon={1}", nugget, MaloneIco));
+			StartProcess(Squirrel, string.Format("--releasify={0} --setupIcon={1} --no-msi", nugget, MaloneIco));
 
 			var version = Path.GetFileNameWithoutExtension(nugget);
 			version = version.Replace("Malone.", string.Empty);
