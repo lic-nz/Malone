@@ -7,7 +7,6 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web;
 using System.Windows;
 using System.Windows.Input;
 using System.Xml.Linq;
@@ -561,6 +560,12 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 				if (e.Message.Contains("Update.exe not found"))
 				{
 					MaloneVersion = string.Format("Update disabled: {0}", e.Message);
+					return;
+				}
+
+				if (!string.IsNullOrEmpty(_config.GitHubPersonalAccessToken) && e.Message.Contains("Unauthorized"))
+				{
+					MaloneVersion = "Couldn't update, is your GitHub personal access token correct?";
 					return;
 				}
 
