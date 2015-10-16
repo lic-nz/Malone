@@ -11,11 +11,19 @@ namespace LIC.Malone.Client.Desktop
 {
 	public class Config
 	{
+		private class InternalConfig
+		{
+			public string GitHubPersonalAccessToken { get; set; }
+		}
+
 		private readonly string _historyFile;
 		private readonly string _collectionsFile;
 		private readonly string _oAuthApplicationsFile;
 		private readonly string _oAuthAuthenticationUrlsFile;
 		private readonly string _oAuthUserCredentialsFile;
+		private readonly string _configFile;
+
+		public string GitHubPersonalAccessToken { get; private set; } = null;
 
 		public Config()
 		{
@@ -38,6 +46,33 @@ namespace LIC.Malone.Client.Desktop
 			_oAuthApplicationsFile = Path.Combine(configFolder, "oauth-applications.json");
 			_oAuthAuthenticationUrlsFile = Path.Combine(configFolder, "oauth-authentication-urls.json");
 			_oAuthUserCredentialsFile = Path.Combine(configFolder, "oauth-user-credentials.json");
+			_configFile = Path.Combine(configFolder, "config.json");
+
+			Load();
+		}
+
+		private void Load()
+		{
+			if (!File.Exists(_configFile))
+				return;
+
+			var json = File.ReadAllText(_configFile);
+
+			if (!json.Any())
+				return;
+
+			InternalConfig config;
+
+			try
+			{
+				config = JsonConvert.DeserializeObject<InternalConfig>(json);
+			}
+			catch (Exception e)
+			{
+				throw new Exception("Could not deserialize config: " + _configFile, e);
+			}
+
+			GitHubPersonalAccessToken = config.GitHubPersonalAccessToken;
 		}
 
 		public List<Request> GetHistory()

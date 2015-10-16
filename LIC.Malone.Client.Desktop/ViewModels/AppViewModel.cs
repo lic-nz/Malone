@@ -477,12 +477,9 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 		{
 			/*
 				Here be dragons!
-				Warning: Be *really* careful with changes to the updating code because you could break installed clients. Ensure
-				any changes are tested thoroughly.
+				Warning: Be *really* careful with changes to the updating code because you could break installed clients from
+				updating. Ensure any changes are tested thoroughly.
 			*/
-
-			// Waiting on https://github.com/Squirrel/Squirrel.Windows/pull/464.
-			//var token = ConfigurationManager.AppSettings["GitHubPersonalAccessToken"];
 
 			bool isCanary;
 			if (!bool.TryParse(ConfigurationManager.AppSettings["IsCanary"], out isCanary))
@@ -490,7 +487,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 			try
 			{
-				using (var updateManager = await UpdateManager.GitHubUpdateManager("https://github.com/lic-nz/malone", prerelease: isCanary))
+				using (var updateManager = await UpdateManager.GitHubUpdateManager("https://github.com/lic-nz/malone", prerelease: isCanary, accessToken: _config.GitHubPersonalAccessToken))
 				{
 					var currentVersion = updateManager.CurrentlyInstalledVersion();
 
