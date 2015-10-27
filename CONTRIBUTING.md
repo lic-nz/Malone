@@ -17,3 +17,4 @@ You will be expected to canary test your changes.
 For whom the pull request tolls:
 
 - @stajs
+- @VladMukhitdinovLic
