@@ -7,6 +7,7 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 using System.Windows;
 using System.Windows.Input;
 using System.Xml.Linq;
@@ -474,11 +475,8 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 		private async void CheckForUpdates()
 		{
-			/*
-				Here be dragons!
-				Warning: Be *really* careful with changes to the updating code because you could break installed clients from
-				updating. Ensure any changes are tested thoroughly.
-			*/
+			// Waiting on https://github.com/Squirrel/Squirrel.Windows/pull/464.
+			//var token = ConfigurationManager.AppSettings["GitHubPersonalAccessToken"];
 
 			bool isCanary;
 			if (!bool.TryParse(ConfigurationManager.AppSettings["IsCanary"], out isCanary))
@@ -486,15 +484,9 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 			try
 			{
-				using (var updateManager = await UpdateManager.GitHubUpdateManager("https://github.com/lic-nz/malone", prerelease: isCanary, accessToken: _config.GitHubPersonalAccessToken))
+				using (var updateManager = await UpdateManager.GitHubUpdateManager("https://github.com/lic-nz/malone", prerelease: isCanary))
 				{
 					var currentVersion = updateManager.CurrentlyInstalledVersion();
-
-					if (currentVersion == null)
-					{
-						MaloneVersion = "Not installed, update disabled.";
-						return;
-					}
 
 					MaloneVersion = "Checking for update...";
 
@@ -528,7 +520,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 								return;
 							}
 
-							MaloneVersion = string.Format("Updating from v{0} to v{1}", currentVersion, latestVersion);
+							MaloneVersion = string.Format("Updating to v{0}", latestVersion);
 
 							var releases = updateInfo.ReleasesToApply;
 							await updateManager.DownloadReleases(releases);
@@ -559,13 +551,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			{
 				if (e.Message.Contains("Update.exe not found"))
 				{
-					MaloneVersion = string.Format("Update disabled: {0}", e.Message);
-					return;
-				}
-
-				if (!string.IsNullOrEmpty(_config.GitHubPersonalAccessToken) && e.Message.Contains("Unauthorized"))
-				{
-					MaloneVersion = "Couldn't update, is your GitHub personal access token correct?";
+					MaloneVersion = "Update disabled";
 					return;
 				}
 
