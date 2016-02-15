@@ -172,57 +172,16 @@
 
                         <DockPanel Name="CollectionsDockPanel" LastChildFill="True" Visibility="{Binding Collections, Converter={StaticResource ShowOnCollectionsConverter}}">
                             <TreeView ItemsSource="{Binding Collections}" Name="treeView1"
-									  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-									  HorizontalContentAlignment="Stretch"
                                       cal:Message.Attach="[Event SelectedItemChanged] = [Action CollectionClicked($this.SelectedItem)]">
                                 <TreeView.Resources>
-									<Style x:Key="DeleteRequestBorder" TargetType="{x:Type Border}">
-										<Setter Property="Visibility" Value="Hidden" />
-										<Style.Triggers>
-											<DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}},Path=IsMouseOver}" Value="True">
-												<Setter Property="Visibility" Value="Visible" />
-											</DataTrigger>
-										</Style.Triggers>
-									</Style>
-									
-									<HierarchicalDataTemplate DataType="{x:Type local:RequestCollection}" ItemsSource="{Binding Path=_Requests}">
-                                                <TextBlock Text="{Binding Path=Name}" FontWeight="Bold" Foreground="Black"></TextBlock>
+                                    <HierarchicalDataTemplate DataType="{x:Type local:RequestCollection}" ItemsSource="{Binding Path=_Requests}">
+                                                <TextBlock Text="{Binding Path=Name}" FontWeight="Bold" Foreground="White"></TextBlock>
                                     </HierarchicalDataTemplate>
 
-									<DataTemplate DataType="{x:Type local:Request}">
-										<Grid
-											Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeView}}, Path=Width}">
-											<Grid.Resources>
-												<converters:HttpStatusCodeToBrushConverter x:Key="HttpStatusCodeToBrushConverter" />
-												<converters:HttpStatusCodeToIntConverter x:Key="HttpStatusCodeToIntConverter" />
-											</Grid.Resources>
-											<Grid.ColumnDefinitions>
-												<ColumnDefinition Width="50" />
-												<ColumnDefinition Width="*" />
-											</Grid.ColumnDefinitions>
-											<Grid.RowDefinitions>
-												<RowDefinition />
-												<RowDefinition />
-											</Grid.RowDefinitions>
-
-											<TextBlock Grid.Column="0" Grid.Row="0" Text="{Binding Method}" Style="{StaticResource History.BaseUrl}" VerticalAlignment="Bottom" />
-											<TextBlock Grid.Column="0" Grid.Row="1" Text="{Binding Response.HttpStatusCode, Converter={StaticResource HttpStatusCodeToIntConverter}}" Foreground="{Binding Response.HttpStatusCode, Converter={StaticResource HttpStatusCodeToBrushConverter}}" />
-
-											<TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding BaseUrl}" Style="{StaticResource History.BaseUrl}" VerticalAlignment="Bottom" />
-											<TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding ResourcePath}" Style="{StaticResource History.ResourcePath}" />
-
-											<Border
-												
-												Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Grid.RowSpan="2"
-												HorizontalAlignment="Right" VerticalAlignment="Center">
-												<controls:HistoryButton
-													cal:Message.Attach="[Event PreviewMouseLeftButtonUp] = [Action RemoveFromCollection($this)]"
-													IconData="{StaticResource IconSquaredCross}"
-													Height="40" Width="40" Top="10" Left="10" />
-											</Border>
-
-										</Grid>
-									</DataTemplate>
+                                    <DataTemplate DataType="{x:Type local:Request}">
+                                        <TextBlock Text="{Binding Url}"></TextBlock>
+                                        
+                                    </DataTemplate>
 
                                 </TreeView.Resources>
                             </TreeView>
@@ -265,8 +224,7 @@
                 <StackPanel Grid.Row="2" Grid.Column="2" Orientation="Horizontal">
                     <controls:IconButton x:Name="Send" Content="Send" IconData="{StaticResource IconPaperPlane}" IconMargin="{StaticResource IconPaperPlaneMargin}" />
                     <controls:IconButton x:Name="Cancel" Content="Cancel" Margin="10 0 0 0" />
-					<controls:IconButton x:Name="AddToSelectedCollection" Content="Add To Selected Collection" Margin="10 0 0 0" Grid.Column="2" />
-				</StackPanel>
+                </StackPanel>
             </Grid>
 
             <TabControl DockPanel.Dock="Top" SelectedIndex="{Binding IsSending, Mode=OneWay, Converter={StaticResource ResponseTabIndexConverter}}">
@@ -463,6 +421,5 @@
 
         </DockPanel>
 
-
-	</Grid>
+    </Grid>
 </metro:MetroWindow>

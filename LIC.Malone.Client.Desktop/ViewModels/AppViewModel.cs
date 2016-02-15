@@ -439,8 +439,6 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 		#endregion
 
-		public static AppViewModel Instance;
-
 		public AppViewModel()
 		{
 			_windowManager = IoC.Get<WindowManager>();
@@ -468,8 +466,6 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			LoadConfig();
 
 			CheckForUpdates();
-
-			Instance = this;
 		}
 
 		private async void CheckForUpdates()
@@ -868,32 +864,16 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			DisplayRequest(SelectedHistory);
 		}
 
-		public void CollectionClicked(object e)
-		{
-			//if (e != null)
-			//	DisplayRequest(e);
-			if (e is RequestCollection)
-				this.SelectedCollection = (RequestCollection)e;
-		}
+        public void CollectionClicked(Request e)
+        {
+            DisplayRequest(e);
+        }
 
 		public void RemoveFromHistory(object e)
 		{
 			var request = (Request)e;
 			History.Remove(request);
 			SaveHistory();
-		}
-
-		public void RemoveFromCollection(Request r)
-		{
-			if (r != null && r.Collection != null)
-			{
-				int index = Collections.IndexOf(r.Collection);
-				List<Request> updatedRequests = Collections[index].Requests;
-				updatedRequests.Remove(r);
-				Collections[index] = new RequestCollection(Collections[index].Name, updatedRequests);
-				NotifyOfPropertyChange(() => Collections);
-				SaveCollections();
-			}
 		}
 
 		public void RemoveFromHeaders(object e)
@@ -937,17 +917,6 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 				return;
 
 			DisplayRequest(SelectedHistory);
-		}
-
-		public void AddToSelectedCollection()
-		{
-			var requests = SelectedCollection.Requests;
-			requests.Add(SelectedHistory);
-			Collections[Collections.IndexOf(SelectedCollection)].Requests = requests;
-			Collections = Collections;
-			NotifyOfPropertyChange(() => SelectedCollection.Requests);
-
-			this.SaveCollections();
 		}
 
 		public void CollectionsClicked(object e)

@@ -21,9 +21,6 @@ namespace LIC.Malone.Core
 		public List<Header> Headers { get; set; }
 		public Response Response { get; set; }
 
-		[JsonIgnore]
-		public RequestCollection Collection { get; set; }
-
 		public NamedAuthorizationState NamedAuthorizationState { get; set; }
 
 		// TODO: Don't pollute core with Caliburn shiz.
