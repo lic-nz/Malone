@@ -874,8 +874,6 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			//	DisplayRequest(e);
 			if (e is RequestCollection)
 				this.SelectedCollection = (RequestCollection)e;
-			else if (e is Request)
-				DisplayRequest((Request)e);
 		}
 
 		public void RemoveFromHistory(object e)
@@ -943,15 +941,18 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 		public void AddToSelectedCollection()
 		{
-			int index = Collections.IndexOf(SelectedCollection);
-			if (index >= 0 && SelectedHistory != null)
-			{
-				List<Request> updatedRequests = Collections[index].Requests;
-				updatedRequests.Add(SelectedHistory);
-				Collections[index] = new RequestCollection(Collections[index].Name, updatedRequests);
-				NotifyOfPropertyChange(() => Collections);
-				SaveCollections();
-			}
+			var requests = SelectedCollection.Requests;
+			requests.Add(SelectedHistory);
+			Collections[Collections.IndexOf(SelectedCollection)].Requests = requests;
+			Collections = Collections;
+			NotifyOfPropertyChange(() => SelectedCollection.Requests);
+
+			this.SaveCollections();
+		}
+
+		public void CollectionsClicked(object e)
+		{
+			// TODO: expand/collapse collection
 		}
 
 		public void RemoveCollection(object e)
@@ -959,6 +960,16 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			var collection = (RequestCollection)e;
 			Collections.Remove(collection);
 			SaveCollections();
+		}
+
+		public void RemoveRequestFromCollection(object e)
+		{
+			var request = (Request)e;
+			if (request != null && SelectedCollection != null)
+			{
+				SelectedCollection.Requests.Remove(request);
+				SaveCollections();
+			}
 		}
 
 		public void AddCollection()
