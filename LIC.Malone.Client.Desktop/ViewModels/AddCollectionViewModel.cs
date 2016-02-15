@@ -22,7 +22,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 		protected override void OnActivate()
 		{
-			this.DisplayName = "hwoeir";
+			//this.DisplayName = "hwoeir";
 			base.OnActivate();
 		}
 	}

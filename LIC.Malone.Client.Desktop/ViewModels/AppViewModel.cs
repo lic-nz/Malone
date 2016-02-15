@@ -69,17 +69,6 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			}
 		}
 
-		private IObservableCollection<RequestCollection> _collections = new BindableCollection<RequestCollection>();
-		public IObservableCollection<RequestCollection> Collections
-		{
-			get { return _collections; }
-			set
-			{
-				_collections = value;
-				NotifyOfPropertyChange(() => Collections);
-			}
-		}
-
 		private Request _selectedHistory;
 		public Request SelectedHistory
 		{
@@ -88,17 +77,6 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			{
 				_selectedHistory = value;
 				NotifyOfPropertyChange(() => SelectedHistory);
-			}
-		}
-
-		private RequestCollection _selectedCollection;
-		public RequestCollection SelectedCollection
-		{
-			get { return _selectedCollection; }
-			set
-			{
-				_selectedCollection = value;
-				NotifyOfPropertyChange(() => SelectedCollection);
 			}
 		}
 
@@ -532,9 +510,6 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			var history = _config.GetHistory();
 			History.AddRange(history);
 
-			var collections = _config.GetCollections();
-			Collections.AddRange(collections);
-
 			_applications = _config.GetOAuthApplications();
 			var authenticationUrls = _config.GetOAuthAuthenticationUrls();
 			var userCredentials = _config.GetUserCredentials();
@@ -864,11 +839,6 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			DisplayRequest(SelectedHistory);
 		}
 
-        public void CollectionClicked(Request e)
-        {
-            DisplayRequest(e);
-        }
-
 		public void RemoveFromHistory(object e)
 		{
 			var request = (Request)e;
@@ -911,36 +881,6 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			_config.SaveHistory(History);
 		}
 
-		public void CollectionRequestClicked(object e)
-		{
-			if (SelectedHistory == null)
-				return;
-
-			DisplayRequest(SelectedHistory);
-		}
-
-		public void CollectionsClicked(object e)
-		{
-			// TODO: expand/collapse collection
-		}
-
-		public void RemoveCollection(object e)
-		{
-			var collection = (RequestCollection)e;
-			Collections.Remove(collection);
-			SaveCollections();
-		}
-
-		public void RemoveRequestFromCollection(object e)
-		{
-			var request = (Request)e;
-			if (request != null && SelectedCollection != null)
-			{
-				SelectedCollection.Requests.Remove(request);
-				SaveCollections();
-			}
-		}
-
 		public void AddCollection()
 		{
 			var settings = new Dictionary<string, object>
@@ -951,11 +891,6 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 			_windowManager.ShowDialog(_addCollectionViewModel, settings: settings);
 			ActivateItem(_addCollectionViewModel);
-		}
-
-		private void SaveCollections()
-		{
-			_config.SaveCollections(Collections);
 		}
 
 		public void AddToken()

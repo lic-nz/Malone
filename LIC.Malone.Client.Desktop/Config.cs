@@ -17,7 +17,6 @@ namespace LIC.Malone.Client.Desktop
 		}
 
 		private readonly string _historyFile;
-		private readonly string _collectionsFile;
 		private readonly string _oAuthApplicationsFile;
 		private readonly string _oAuthAuthenticationUrlsFile;
 		private readonly string _oAuthUserCredentialsFile;
@@ -42,7 +41,6 @@ namespace LIC.Malone.Client.Desktop
 			}
 
 			_historyFile = Path.Combine(configFolder, "history.json");
-			_collectionsFile = Path.Combine(configFolder, "collections.json");
 			_oAuthApplicationsFile = Path.Combine(configFolder, "oauth-applications.json");
 			_oAuthAuthenticationUrlsFile = Path.Combine(configFolder, "oauth-authentication-urls.json");
 			_oAuthUserCredentialsFile = Path.Combine(configFolder, "oauth-user-credentials.json");
@@ -110,44 +108,6 @@ namespace LIC.Malone.Client.Desktop
 			catch (Exception e)
 			{
 				throw new Exception("Could not write history: " + _historyFile, e);
-			}
-		}
-
-		public List<RequestCollection> GetCollections()
-		{
-			var collections = new List<RequestCollection>();
-
-			if (!File.Exists(_collectionsFile))
-				return collections;
-
-			var json = File.ReadAllText(_collectionsFile);
-
-			if (!json.Any())
-				return collections;
-
-			try
-			{
-				collections = JsonConvert.DeserializeObject<List<RequestCollection>>(json);
-			}
-			catch (Exception e)
-			{
-				throw new Exception("Could not deserialize collections: " + _collectionsFile, e);
-			}
-
-			return collections;
-		}
-
-		public void SaveCollections(IEnumerable<RequestCollection> collections)
-		{
-			var json = JsonConvert.SerializeObject(collections, Formatting.Indented);
-
-			try
-			{
-				File.WriteAllText(_collectionsFile, json);
-			}
-			catch (Exception e)
-			{
-				throw new Exception("Could not write collections: " + _collectionsFile, e);
 			}
 		}
 

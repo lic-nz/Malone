@@ -9,7 +9,6 @@ namespace LIC.Malone.Client.Desktop.DesignData
 		public AppViewModelDesignData()
 		{
 			History = new BindableCollection<Request>(new HistoryDesignData());
-			Collections = new BindableCollection<RequestCollection>(new CollectionsDesignData());
 		}
 	}
 }
