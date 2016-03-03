@@ -448,55 +448,102 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 		private async void CheckForUpdates()
 		{
-			var updateUrl = ConfigurationManager.AppSettings["UpdateUrl"];
+			/*
+				Here be dragons!
+				Warning: Be *really* careful with changes to the updating code because you could break installed clients from
+				updating. Ensure any changes are tested thoroughly.
+			*/
 
-			using (var updateManager = new UpdateManager(updateUrl, "Malone"))
+			bool isCanary;
+			if (!bool.TryParse(ConfigurationManager.AppSettings["IsCanary"], out isCanary))
+				isCanary = false;
+
+			try
 			{
-				if (!updateManager.IsInstalledApp)
+				using (var updateManager = await UpdateManager.GitHubUpdateManager("https://github.com/lic-nz/malone", prerelease: isCanary, accessToken: _config.GitHubPersonalAccessToken))
 				{
-					MaloneVersion = "Update disabled";
+					var currentVersion = updateManager.CurrentlyInstalledVersion();
+
+					if (currentVersion == null)
+					{
+						MaloneVersion = "Not installed, update disabled.";
+						return;
+					}
+
+					MaloneVersion = "Checking for update...";
+
+					var hasFailed = false;
+					var failTitle = "";
+					var failMessage = "";
+
+					try
+					{
+						var updateInfo = await updateManager.CheckForUpdate();
+
+						if (updateInfo == null)
+						{
+							MaloneVersion = string.Format("No updates found, staying on v{0}", currentVersion);
+						}
+						else if (!updateInfo.ReleasesToApply.Any())
+						{
+							MaloneVersion = string.Format("You're up to date! v{0}", currentVersion);
+						}
+						else
+						{
+							var latestVersion = updateInfo
+								.ReleasesToApply
+								.OrderByDescending(u => u.Version)
+								.First()
+								.Version;
+
+							if (currentVersion != null && currentVersion > latestVersion)
+							{
+								MaloneVersion = string.Format("Only found earlier version v{0}, staying on v{1}", latestVersion, currentVersion);
+								return;
+							}
+
+							MaloneVersion = string.Format("Updating from v{0} to v{1}", currentVersion, latestVersion);
+
+							var releases = updateInfo.ReleasesToApply;
+							await updateManager.DownloadReleases(releases);
+							await updateManager.ApplyReleases(updateInfo);
+
+							IsMaloneUpdateAvailable = true;
+							MaloneVersion = string.Format("Restart to finish update from v{0} to v{1}", currentVersion, latestVersion);
+						}
+					}
+					catch (Exception e)
+					{
+						// TODO: Have better error handling.
+						MaloneVersion = "Couldn't update, see https://github.com/lic-nz/Malone/wiki/Help-with-updating-Malone";
+
+						hasFailed = true;
+						failTitle = e.Message;
+						failMessage = string.Format("currentVersion: {0}\n\n{1}", currentVersion, e.StackTrace);
+					}
+
+					if (hasFailed && isCanary)
+					{
+						// Can't await in a catch block. Move back when on C# 6.
+						await _dialogManager.Show(failTitle, failMessage);
+					}
+				}
+			}
+			catch (Exception e)
+			{
+				if (e.Message.Contains("Update.exe not found"))
+				{
+					MaloneVersion = string.Format("Update disabled: {0}", e.Message);
 					return;
 				}
 
-				var currentVersion = updateManager.CurrentlyInstalledVersion();
-				
-				MaloneVersion = "Checking for update...";
-
-				try
+				if (!string.IsNullOrEmpty(_config.GitHubPersonalAccessToken) && e.Message.Contains("Unauthorized"))
 				{
-					var updateInfo = await updateManager.CheckForUpdate();
-
-					if (updateInfo == null)
-					{
-						MaloneVersion = string.Format("No updates found, staying on v{0}", currentVersion);
-					}
-					else if (!updateInfo.ReleasesToApply.Any())
-					{
-						MaloneVersion = string.Format("You're up to date! v{0}", currentVersion);
-					}
-					else
-					{
-						var latestVersion = updateInfo
-							.ReleasesToApply
-							.OrderByDescending(u => u.Version)
-							.First()
-							.Version;
-
-						MaloneVersion = string.Format("Updating to v{0}", latestVersion);
-
-						var releases = updateInfo.ReleasesToApply;
-						await updateManager.DownloadReleases(releases);
-						await updateManager.ApplyReleases(updateInfo);
-
-						IsMaloneUpdateAvailable = true;
-						MaloneVersion = string.Format("Restart to finish update from v{0} to v{1}", currentVersion, latestVersion);
-					}
+					MaloneVersion = "Couldn't update, is your GitHub personal access token correct?";
+					return;
 				}
-				catch (Exception e)
-				{
-					// TODO: Have better error handling.
-					MaloneVersion = e.Message;
-				}
+
+				throw;
 			}
 		}
 
