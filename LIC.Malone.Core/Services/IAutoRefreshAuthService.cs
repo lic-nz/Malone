@@ -6,8 +6,7 @@ namespace LIC.Malone.Core.Services
 	{
 		event AuthRefreshEventHandler TokenChanged;
 
-      void UpdateTokens(params NamedAuthorizationState[] tokens);
-
+		void UpdateTokens(params NamedAuthorizationState[] tokens);
 		void Start();
 		void Stop();
 	}

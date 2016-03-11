@@ -468,6 +468,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 				if (_autoRefreshAuthService != null)
 					_autoRefreshAuthService.UpdateTokens(Tokens.ToArray());
 			};
+
 			Tokens.PropertyChanged += (sender, args) =>
 			{
 				if (_autoRefreshAuthService != null)
@@ -478,8 +479,8 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 		private async void CheckForUpdates()
 		{
 			/*
-				Here be dragons!
-				Warning: Be *really* careful with changes to the updating code because you could break installed clients from
+				********* WARNING: Here be dragons! *********
+				Be *really* careful with changes to the updating code because you could break installed clients from
 				updating. Ensure any changes are tested thoroughly.
 			*/
 

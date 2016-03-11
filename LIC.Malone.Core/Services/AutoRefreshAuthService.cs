@@ -5,13 +5,11 @@ using System.Linq;
 using Caliburn.Micro;
 using LIC.Malone.Core.Authentication.OAuth;
 using LIC.Malone.Core.Scheduling;
-using Action = System.Action;
 
 namespace LIC.Malone.Core.Services
 {
 	/// <summary>
-	/// A long-living backend service which is trying to refresh the expired tokens 
-	/// and the soon-to-expire tokens
+	/// A long-living backend service which is trying to refresh expired/soon-to-expire tokens.
 	/// </summary>
 	public class AutoRefreshAuthService : IAutoRefreshAuthService
 	{
@@ -21,12 +19,12 @@ namespace LIC.Malone.Core.Services
 		private RepeatingTimerTask _task;
 
 		/// <summary>
-		/// How often does this service refresh all tokens
+		/// How often does this service refresh all tokens.
 		/// </summary>
 		public double RepeatingIntervalMinutes = 1;
 
 		/// <summary>
-		/// Refresh the tokens which is about to expire within this time frame
+		/// Refresh the tokens which is about to expire within this time frame.
 		/// </summary>
 		public TimeSpan RefreshTimeFrame = TimeSpan.FromMinutes(3);
 
@@ -73,28 +71,28 @@ namespace LIC.Malone.Core.Services
 
 				var expirationUtc = token.AuthorizationState.AccessTokenExpirationUtc;
 
-				var expiraionOffset = expirationUtc - DateTime.UtcNow;
-				if (expiraionOffset < TimeSpan.Zero || expiraionOffset < RefreshTimeFrame)
-				{
-					var app =
-						_authApplications.FirstOrDefault(a => a.ClientIdentifier == token.AuthorizationState.GetClientIdentifier());
-					if (app == null)	continue;
+				var expirationOffset = expirationUtc - DateTime.UtcNow;
 
-					var result = app.Refresh(token.Url, token.AuthorizationState);
+				if (!(expirationOffset < TimeSpan.Zero) && !(expirationOffset < RefreshTimeFrame))
+					continue;
 
-					if (result != null && !result.HasError)
-					{
-						NotifyTokeChange(new AuthRefreshEventArgs(token));
-               }
-				}
+				var app = _authApplications.FirstOrDefault(a => a.ClientIdentifier == token.AuthorizationState.GetClientIdentifier());
+
+				if (app == null)
+					continue;
+
+				var result = app.Refresh(token.Url, token.AuthorizationState);
+
+				if (result != null && !result.HasError)
+					NotifyTokenChange(new AuthRefreshEventArgs(token));
 			}
 
 			return DateTime.UtcNow.AddMinutes(RepeatingIntervalMinutes);
 		}
 
-		private void NotifyTokeChange(AuthRefreshEventArgs args)
+		private void NotifyTokenChange(AuthRefreshEventArgs args)
 		{
-			if(TokenChanged == null)
+			if (TokenChanged == null)
 				return;
 
 			Execute.OnUIThread(() =>
