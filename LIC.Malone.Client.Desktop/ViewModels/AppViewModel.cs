@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Configuration;
 using System.IO;
 using System.Linq;
@@ -8,12 +9,14 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Xml.Linq;
 using Caliburn.Micro;
 using DotNetOpenAuth.OAuth2;
 using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Highlighting;
+using LIC.Malone.Client.Desktop.Converters;
 using LIC.Malone.Client.Desktop.Extensions;
 using LIC.Malone.Client.Desktop.Messages;
 using LIC.Malone.Core;
@@ -68,6 +71,17 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			{
 				_history = value;
 				NotifyOfPropertyChange(() => History);
+			}
+		}
+
+		private ICollectionView _historyView;
+		public ICollectionView HistoryView
+		{
+			get { return _historyView; }
+			set
+			{
+				_historyView = value;
+				NotifyOfPropertyChange(() => HistoryView);
 			}
 		}
 
@@ -587,6 +601,12 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			var history = _config.GetHistory();
 			History.AddRange(history);
 
+			HistoryView = (CollectionView)CollectionViewSource.GetDefaultView(History);
+			if (HistoryView.GroupDescriptions != null)
+			{
+				HistoryView.GroupDescriptions.Add(new PropertyGroupDescription(Request.HistoryGroupKey, new HistoryGroupConverter()));
+			}
+
 			_applications = _config.GetOAuthApplications();
 			var authenticationUrls = _config.GetOAuthAuthenticationUrls();
 			var userCredentials = _config.GetUserCredentials();
@@ -863,6 +883,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 		{
 			History.Insert(0, request);
 			NotifyOfPropertyChange(() => History);
+			NotifyOfPropertyChange(() => HistoryView);
 			SelectedHistory = History.First();
 			SaveHistory();
 		}
@@ -920,6 +941,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 		{
 			var request = (Request)e;
 			History.Remove(request);
+			
 			SaveHistory();
 		}
 

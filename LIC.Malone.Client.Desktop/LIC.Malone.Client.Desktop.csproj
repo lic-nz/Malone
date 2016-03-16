@@ -152,6 +152,7 @@
     <Compile Include="Controls\IconLink.xaml.cs">
       <DependentUpon>IconLink.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\HistoryGroupConverter.cs" />
     <Compile Include="Converters\ResponseBodyTabIndexConverter.cs" />
     <Compile Include="Converters\ResponseTabIndexConverter.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
