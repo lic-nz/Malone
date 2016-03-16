@@ -267,7 +267,16 @@
 									<TabItem Header="Body">
 										<Grid>
 											<ComboBox x:Name="ContentTypes" Margin="0 -42 10 0" HorizontalAlignment="Right" VerticalAlignment="Top" Width="130" Style="{StaticResource DefaultComboBox}" />
-											<ae:TextEditor Document="{Binding RequestBody}" SyntaxHighlighting="{Binding RequestBodyHighlighting}" IsReadOnly="False" />
+											<ae:TextEditor Document="{Binding RequestBody}" SyntaxHighlighting="{Binding RequestBodyHighlighting}" IsReadOnly="False">
+												<ae:TextEditor.ContextMenu>
+													<ContextMenu>
+														<ContextMenu.Items>
+															<MenuItem Header="Refresh GUIDs" Command="{Binding RefreshGuidsCommand}">
+															</MenuItem>
+														</ContextMenu.Items>
+													</ContextMenu>
+												</ae:TextEditor.ContextMenu>
+											</ae:TextEditor>
 										</Grid>
 									</TabItem>
 

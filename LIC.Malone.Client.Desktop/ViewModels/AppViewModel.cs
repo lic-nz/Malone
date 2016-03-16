@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -38,6 +39,7 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 		private static IEnumerable<string> _defaultAccepts = new List<string> { "text/xml", "application/json" };
 		private static IEnumerable<string> _defaultContentTypes = new List<string> { "text/xml", "application/json" };
 		private IEnumerable<Header> _defaultHeaders;
+		private static Dictionary<string, string> _assignedGuids;
 
 		private AddCollectionViewModel _addCollectionViewModel = new AddCollectionViewModel();
 		private AddTokenViewModel _addTokenViewModel;
@@ -60,6 +62,19 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 
 		#region Databound properties
 
+		private ICommand _refreshGuidsCommand;
+		public ICommand RefreshGuidsCommand
+		{
+			get
+			{
+				if (_refreshGuidsCommand == null)
+				{
+					_refreshGuidsCommand = new RelayCommand(param => RefreshGuids());
+				}
+				return _refreshGuidsCommand;
+			}
+		}
+		
 		private IObservableCollection<Request> _history = new BindableCollection<Request>();
 		public IObservableCollection<Request> History
 		{
@@ -742,12 +757,18 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 				}
 			}
 
+			_assignedGuids = new Dictionary<string, string>();
+
 			// There was something strange going on with Headers being a BindableCollection or something - it would somehow overwrite the headers
 			// for previous requests in the History when just calling Headers.ToList(). This is begging for a unit test, but for now make a copy.
 			var headers = Headers.Select(h => new Header(h.Name, h.Value)).ToList();
 
+			RequestBody.Text = ReplaceGuidVariables(RequestBody.Text);
+
 			RequestBody = new TextDocument(await Prettify(RequestBody.Text, SelectedContentType));
 
+			Url = ReplaceGuidVariables(Url);
+			
 			var request = new Request(Url, SelectedMethod)
 			{
 				Headers = headers,
@@ -1060,5 +1081,36 @@ namespace LIC.Malone.Client.Desktop.ViewModels
 			//if (ratio > 3)
 			//	historyColumn.Width = width;
 		}
+
+		private void RefreshGuids()
+		{
+			_assignedGuids = new Dictionary<string, string>();
+			
+			const string pattern = @"(\$GUID[0-9]*)|([A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-F0-9]{12})";
+			var rgx = new Regex(pattern, RegexOptions.IgnoreCase);
+			Url = rgx.Replace(Url, ReplaceGuid);
+			RequestBody.Text = rgx.Replace(RequestBody.Text, ReplaceGuid);
+		}
+
+		private string ReplaceGuidVariables(string content)
+		{
+			const string pattern = @"\$GUID[0-9]*";
+			var rgx = new Regex(pattern, RegexOptions.IgnoreCase);
+			return rgx.Replace(content, ReplaceGuid);
+		}
+
+		public static string ReplaceGuid(Match m)
+		{
+			if (m.Value.ToUpper() == "$GUID")
+			{
+				return Guid.NewGuid().ToString();
+			}
+			
+			if (!_assignedGuids.Keys.Contains(m.Value))
+			{
+				_assignedGuids[m.Value] = Guid.NewGuid().ToString();
+			}
+			return _assignedGuids[m.Value];
+		}   
 	}
 }

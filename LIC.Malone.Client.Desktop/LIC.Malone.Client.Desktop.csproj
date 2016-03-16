@@ -171,6 +171,7 @@
     <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="Messages\ConfigurationLoaded.cs" />
     <Compile Include="Messages\TokenAdded.cs" />
+    <Compile Include="RelayCommand.cs" />
     <Compile Include="ViewModels\AddTokenViewModel.cs" />
     <Compile Include="ViewModels\AddCollectionViewModel.cs" />
     <Compile Include="ViewModels\AppViewModel.cs" />
