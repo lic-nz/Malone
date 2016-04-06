@@ -18,4 +18,3 @@ For whom the pull request tolls:
 
 - @stajs
 - @VladMukhitdinovLic
-- @cforlic01
