@@ -10,8 +10,8 @@ Postman is awesome, seriously, you should probably [just go and use that](https:
 
 The following comparison were factors at the time of creating Malone, and may no longer be relevant.
 
-|Postman|Malone|
-|-|
+| Postman |Malone |
+| --- | --- |
 |Started life as a [Chrome browser extension](https://github.com/postmanlabs/postman-chrome-extension-legacy), then became a closed source packaged app.|Open source.|
 |Cross-platform.|Windows only.|
 |Had a few limitations because Chrome wouldn't let you override certain things like the `User-Agent` header. This may be resolved as it looks like they have since moved to an Electron app.|Should hopefully have less limitations with access to lower-level .NET APIs.|
