@@ -1,0 +1,16 @@
+name: "Build And Push Artifact"
+
+on:
+  push:
+    branches: 
+      - "master"
+
+  workflow_dispatch:
+
+jobs:
+  call-workflow:
+    uses: lic-nz/shared-github-actions/.github/workflows/service-boundary-reusable.yml@octopus_not_required
+    with:
+      run_on_self_hosted: false
+      create_octopus_release: false
+    secrets: inherit
